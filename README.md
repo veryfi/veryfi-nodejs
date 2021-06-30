@@ -22,10 +22,10 @@
 
 ## Installation
 
+### Install the package from npm:
+
 (Coming soon) Install from [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), a
 package manager for Javascript.
-
-Install the package from npm:
 
 ```bash
 npm install veryfi
@@ -33,7 +33,7 @@ npm install veryfi
 
 You may need to run the above commands with `sudo`.
 
-Install manually
+### Install the package manually
 
 Clone the repository into your project.
 
