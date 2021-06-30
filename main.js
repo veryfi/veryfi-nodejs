@@ -21,7 +21,7 @@ function Client(
         client_secret,
         username,
         api_key,
-        base_url="https://devapi.veryfi.com/api/",
+        base_url="https://api.veryfi.com/api/",
         api_version="v7",
         timeout=120,) {
     this.client_id = client_id;
