@@ -1,0 +1,20 @@
+{
+  "name": "veryfi-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest",
+    "doc": "jsdoc -d docs --configure jsconf.json main.js",
+    "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^27.0.5",
+    "jsdoc": "^3.6.7"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
