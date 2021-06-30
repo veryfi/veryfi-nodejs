@@ -52,7 +52,7 @@ If you don't have an account with Veryfi, please go ahead and register here: [ht
 
 ### Node.js API Client Library
 
-The **veryfi** library can be used to communicate with Veryfi API. All available functionality is described here <https://veryfi.github.io/veryfi-python/reference/veryfi/#client>
+The **veryfi** library can be used to communicate with Veryfi API. All available functionality is described here <https://veryfi.github.io/veryfi-nodejs/Client.html>
 
 Below is the sample script using **veryfi** to OCR and extract data from a document:
 
