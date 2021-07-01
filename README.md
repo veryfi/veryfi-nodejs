@@ -62,7 +62,7 @@ const file_path = './test/receipt.png'
 This submits a document for processing (3-5 seconds for a response)
 
 ```js
-let veryfi_client = Client(client_id, client_secret, username, api_key);
+let veryfi_client = new Client(client_id, client_secret, username, api_key);
 let response = veryfi_client.process_document(file_path, categories=categories);
 console.log(response);
 ```
