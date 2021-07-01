@@ -23,26 +23,16 @@
 
 ## Installation
 
-(Coming soon) Install from [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), a
+Install from [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), a
 package manager for Javascript.
 
 Install the package from npm:
 
 ```bash
-npm install veryfi
+npm install veryfi-sdk
 ```
 
 You may need to run the above commands with `sudo`.
-
-Install manually
-
-Clone the repository into your project.
-
-Add the following line to the top of your code:
-
-```js
-const Client = require('/location/of/module/veryfi-nodejs')
-```
 
 ## Getting Started
 
@@ -59,7 +49,7 @@ Below is the sample script using **veryfi** to OCR and extract data from a docum
 ### Extracting Data
 
 ```js
-const Client = require('veryfi');
+const Client = require('veryfi-sdk');
 const client_id = 'your_client_id';
 const client_secret = 'your_client_secret';
 const username = 'your_username';
