@@ -26,7 +26,6 @@
     "jsdoc": "^3.6.7"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "form-data": "^3.0.1"
+    "axios": "^0.21.1"
   }
 }
