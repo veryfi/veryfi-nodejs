@@ -2,66 +2,51 @@
  * Test main functions and input parameters
  */
 
-const Client = require('../../veryfi-nodejs');
-const client_id = 'YOUR_ID';
-const client_secret = 'YOUR_SECRET';
-const username = 'YOUR_USERNAME';
-const api_key = 'YOUR_KEY';
-const doc_id =  'ID_TO_MODIFY';
-const delete_id = 'ID_TO_DELETE';
+const Client = require('veryfi-sdk');
+const client_id = 'your_client_id';
+const client_secret = 'your_client_secret';
+const username = 'your_username';
+const api_key = 'your_api_key';
 
-var categories = ['Grocery', 'Utilities', 'Travel']
-let veryfi_client;
+let doc_id = 0;
+let delete_id = 0;
 
-beforeEach(() => {
-    veryfi_client = new Client(client_id, client_secret, username, api_key);
-});
-
-describe('Managing documents', () => {
-    test('Get documents', async () => {
-        try {
-            const docs = await veryfi_client.get_documents();
-            console.log(docs)
-        } catch (error) {
-            console.log(error)
-        }
-    });
-
-    test.skip(`Get document with id ${doc_id}`, async () => {
-        try {
-            const doc = await veryfi_client.get_document(doc_id);
-        } catch (error) {
-            console.log(error);
-        }
-    });
-});
+//Creating the Client
+let veryfi_client = new Client(client_id, client_secret, username, api_key);
 
 describe('Processing documents', () => {
     test('Upload invoice for processing', async () => {
-        try {
-            jest.setTimeout(8000);
-            const request = await veryfi_client.process_document('test/reciept_1.png');
-        } catch (error) {
-            console.log(error);
-        }
+        const response = await veryfi_client.process_document('test/reciept_1.png');
+        console.log(response);
     });
 
     test('Process document from URL', async () => {
-        try {
-            jest.setTimeout(8000);
-            const request = await veryfi_client.process_document_url('https://live.staticflickr.com/5441/17496936886_b32615002d_b.jpg');
-        } catch (error) {
-            console.log(error);
-        }
+        const response = await veryfi_client.process_document_url('https://live.staticflickr.com/5441/17496936886_b32615002d_b.jpg');
+        console.log(response);
     });
 });
 
-describe.skip('Editing Documents', () => {
-    test('Delete a document by id', async () => {
-        await veryfi_client.delete_document(delete_id);
+
+describe('Managing documents', () => {
+    test('Get documents', async () => {
+        const docs = await veryfi_client.get_documents();
+        console.log(docs);
     });
 
+    test(`Get document with id`, async () => {
+        const doc = await veryfi_client.get_document(doc_id);
+        console.log(doc);
+    });
+});
+
+
+describe('Editing Documents', () => {
     test('Update a document\'s entries', async () => {
-        const new_doc = await veryfi_client.update_document(doc_id,{"category":"Education"});
+        const response = await veryfi_client.update_document(doc_id, {category:"Education",date:"2019-10-10 00:00:00"});
+        console.log(response);
+    });
+
+    test.only('Delete a document by id', async () => {
+        await veryfi_client.delete_document(delete_id);
     });
 })
