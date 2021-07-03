@@ -49,7 +49,7 @@ Below is the sample script using **veryfi** to OCR and extract data from a docum
 ### Extracting Data
 
 ```js
-const Client = require('veryfi-sdk');
+const Client = require('@veryfi/veryfi-sdk');
 const client_id = 'your_client_id';
 const client_secret = 'your_client_secret';
 const username = 'your_username';
