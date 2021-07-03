@@ -40,7 +40,7 @@ Clone the repository into your project.
 Add the following line to the top of your code:
 
 ```js
-const Veryfi = require('/location/of/module/veryfi-nodejs')
+const Client = require('/location/of/module/veryfi-nodejs')
 ```
 
 ## Getting Started

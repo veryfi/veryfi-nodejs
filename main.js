@@ -64,7 +64,7 @@ Client.prototype._get_headers = function (has_files=false){
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Client-Id": this.client_id,
-        "Authorization": `apikey ${this.username}:${this.api_key}`
+        "Authorization": `apikey ${this.username}:${this.api_key}`,
     };
     if (has_files){
         final_headers["Content-Type"] = "application/x-www-form-urlencoded"
@@ -112,7 +112,7 @@ Client.prototype._generate_signature = function (payload_params, timestamp){
  * @private
  * @param {string} http_verb HTTP Method
  * @param {string} endpoint_name Endpoint name such as 'documents', 'users', etc.
- * @param {JSON} request_arguments JSON payload to send to Veryfi
+ * @param {JSON | FormData} request_arguments JSON payload to send to Veryfi
  * @returns {JSON} A JSON of the response data.
  */
 Client.prototype._request = async function (http_verb, endpoint_name, request_arguments, file_stream=null){
@@ -130,7 +130,8 @@ Client.prototype._request = async function (http_verb, endpoint_name, request_ar
     if (has_files==false) {
         request_arguments = JSON.stringify(request_arguments);
     } else {
-        headers = request_arguments.getHeaders(headers);
+        Object.assign(headers,{...request_arguments.getHeaders()});
+        // headers = request_arguments.getHeaders(headers);
     }
 
     try {
@@ -139,7 +140,7 @@ Client.prototype._request = async function (http_verb, endpoint_name, request_ar
             url : api_url,
             headers : headers,
             data : request_arguments,
-            timeout : this.timeout * 10000
+            timeout : this.timeout * 1000
         });
         return response;
     } catch (response) {
@@ -213,47 +214,47 @@ Client.prototype.process_document = async function (
     return document['data']
 }
 
-/**
- * Process document by sending it to Veryfi as a multipart form
- * @memberof Client
- * @param {string} file_path Path on disk to a file to submit for data extraction
- * @param {Array} categories List of categories Veryfi can use to categorize the document
- * @param {boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
- * @param {Object} kwargs Additional request parameters
- * @return {JSON} Data extracted from the document
- * @function
- */
-Client.prototype.process_document_file = async function (
-        file_path,
-        categories = null,
-        delete_after_processing = false,
-        {...kwargs} = {},
-    ) {
-    var _this = this; 
-    const endpoint_name = "/documents/"
-    if (!Boolean(categories)) {
-        categories = CATEGORIES;
-    }
+// /**
+//  * Process document by sending it to Veryfi as a multipart form
+//  * @memberof Client
+//  * @param {string} file_path Path on disk to a file to submit for data extraction
+//  * @param {Array} categories List of categories Veryfi can use to categorize the document
+//  * @param {boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+//  * @param {Object} kwargs Additional request parameters
+//  * @return {JSON} Data extracted from the document
+//  * @function
+//  */
+// Client.prototype.process_document_file = async function (
+//         file_path,
+//         categories = null,
+//         delete_after_processing = false,
+//         {...kwargs} = {},
+//     ) {
+//     var _this = this; 
+//     const endpoint_name = "/documents/"
+//     if (!Boolean(categories)) {
+//         categories = CATEGORIES;
+//     }
     
-    const file_stream = fs.createReadStream(file_path);
-    const size = fs.statSync(file_path)['size']
+//     const file_stream = fs.createReadStream(file_path);
+//     // const size = fs.statSync(file_path)['size'] Move to headers
 
-    let file_name = path.basename(file_path)
-    var request_arguments = new FormData();
-    request_arguments.append("file_name", file_name);
-    request_arguments.append("categories", JSON.stringify(categories));
-    request_arguments.append("auto_delete", String(delete_after_processing));
-    request_arguments.append("Content-Length", String(size));
+//     let file_name = path.basename(file_path)
+//     var request_arguments = new FormData();
+//     request_arguments.append("file_name", file_name);
+//     request_arguments.append("categories", JSON.stringify(categories));
+//     request_arguments.append("auto_delete", String(Number(delete_after_processing)));
+//     // request_arguments.append("Content-Length", String(size)); Move to headers
 
-    for (key in kwargs) {
-        request_arguments.append(key, String(kwargs[key]));
-    }
+//     for (key in kwargs) {
+//         request_arguments.append(key, String(kwargs[key]));
+//     }
 
-    request_arguments.append('file',file_stream);
+//     request_arguments.append('file',file_stream);
 
-    let document = await _this._request("POST", endpoint_name, request_arguments, file_stream)
-    return document
-}
+//     let document = await _this._request("POST", endpoint_name, request_arguments, file_stream)
+//     return document
+// }
 
 /**
  * Process document from url and extract all the fields from it.
