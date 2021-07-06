@@ -1,15 +1,26 @@
 {
-  "name": "veryfi-nodejs",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "name": "veryfi-sdk",
+  "version": "1.0.1",
+  "description": "Node.js module for communicating with the Veryfi OCR API",
+  "main": "lib/main.js",
   "scripts": {
     "test": "jest",
     "doc": "jsdoc -d docs --configure jsconf.json main.js",
     "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Veryfi",
+    "email": "support@veryfi.com",
+    "url": "https://www.veryfi.com"
+  },
+  "homepage": "https://veryfi.github.io/veryfi-nodejs/",
+  "contributors": [
+    "Matthew Eng <matthew@veryfi.com>"
+  ],
+  "license": "MIT",
+  "directories": {
+    "lib": "lib"
+  },
   "devDependencies": {
     "jest": "^27.0.5",
     "jsdoc": "^3.6.7"
