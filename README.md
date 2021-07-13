@@ -29,7 +29,7 @@ package manager for Javascript.
 Install the package from npm:
 
 ```bash
-npm install veryfi-sdk
+npm i @veryfi/veryfi-sdk
 ```
 
 You may need to run the above commands with `sudo`.
