@@ -8,6 +8,7 @@
 
 ## Table of Contents
 
+
 - [Veryfi SDK for Node.js](#veryfi-sdk-for-nodejs)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
@@ -23,16 +24,13 @@
 
 ## Installation
 
-Install from [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), a
-package manager for Javascript.
-
-Install the package from npm:
+Install from [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), a package manager for Javascript.
 
 ```bash
 npm i @veryfi/veryfi-sdk
 ```
 
-You may need to run the above commands with `sudo`.
+You may need to run the above command with `sudo`.
 
 ## Getting Started
 
@@ -49,7 +47,7 @@ Below is the sample script using **veryfi** to OCR and extract data from a docum
 ### Extracting Data
 
 ```js
-const Client = require('veryfi-sdk');
+const Client = require('@veryfi/veryfi-sdk');
 const client_id = 'your_client_id';
 const client_secret = 'your_client_secret';
 const username = 'your_username';
