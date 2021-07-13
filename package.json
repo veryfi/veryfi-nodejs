@@ -1,25 +1,22 @@
 {
-  "name": "veryfi-sdk",
-  "version": "1.0.1",
+  "name": "@veryfi/veryfi-sdk",
+  "version": "1.0.0",
   "description": "Node.js module for communicating with the Veryfi OCR API",
   "main": "lib/main.js",
   "scripts": {
     "test": "jest",
     "doc": "jsdoc -d docs --configure jsconf.json main.js",
-    "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
+    "generate-docs": "jsdoc --configure .jsdoc.json --verbose"
   },
-  "author": {
-    "name": "Veryfi",
-    "email": "support@veryfi.com",
-    "url": "https://www.veryfi.com"
-  },
+  "author": "Veryfi <support@veryfi.com> (https://www.veryfi.com)",
   "homepage": "https://veryfi.github.io/veryfi-nodejs/",
   "contributors": [
     "Matthew Eng <matthew@veryfi.com>"
   ],
   "license": "MIT",
   "directories": {
-    "lib": "lib"
+    "lib": "lib",
+    "test": "test"
   },
   "devDependencies": {
     "jest": "^27.0.5",
@@ -27,5 +24,22 @@
   },
   "dependencies": {
     "axios": "^0.21.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/veryfi/veryfi-nodejs.git"
+  },
+  "keywords": [
+    "nodejs",
+    "api",
+    "ocr",
+    "receipt",
+    "invoice",
+    "sdk-nodejs",
+    "veryfi",
+    "veryfi-api"
+  ],
+  "bugs": {
+    "url": "https://github.com/veryfi/veryfi-nodejs/issues"
   }
 }
