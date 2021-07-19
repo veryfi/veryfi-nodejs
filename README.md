@@ -8,17 +8,14 @@
 
 ## Table of Contents
 
-
-- [Veryfi SDK for Node.js](#veryfi-sdk-for-nodejs)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Getting Started](#getting-started)
-    - [Obtaining Client ID and user keys](#obtaining-client-id-and-user-keys)
-    - [Node.js API Client Library](#nodejs-api-client-library)
-    - [Extracting Data](#extracting-data)
-    - [Response](#response)
-    - [Updating a document](#updating-a-document)
-  - [Need help?](#need-help)
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+  - [Obtaining Client ID and user keys](#obtaining-client-id-and-user-keys)
+  - [Node.js API Client Library](#nodejs-api-client-library)
+  - [Extracting Data](#extracting-data)
+  - [Response](#response)
+  - [Updating a document](#updating-a-document)
+- [Need help?](#need-help)
 
 **veryfi-nodejs** is a Node.js module for communicating with the [Veryfi OCR API](https://veryfi.com/api/)
 
