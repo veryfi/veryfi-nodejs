@@ -8,7 +8,6 @@
 
 ## Table of Contents
 
-
 - [Installation](#installation)
 - [Getting Started](#getting-started)
   - [Obtaining Client ID and user keys](#obtaining-client-id-and-user-keys)
