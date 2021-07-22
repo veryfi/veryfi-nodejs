@@ -8,8 +8,10 @@ const client_secret = 'YOUR_SECRET';
 const username = 'YOUR_USERNAME';
 const api_key = 'YOUR_API_KEY';
 
-const doc_id =  'ID_TO_MODIFY';
-const delete_id = 'ID_TO_DELETE';
+let doc_id =  'ID_TO_MODIFY';
+let delete_id = 'ID_TO_DELETE';
+
+let mockResponses = true; // Change to “false” if you want to test your personal credentials
 
 
 //Creating the Client
@@ -19,19 +21,35 @@ describe('Processing documents', () => {
     jest.setTimeout(10000)
     test('Upload invoice for processing', async () => {
         try {
-            const request = await veryfi_client.process_document('test/receipt.png');
-            expect(request['vendor']['name']).toBe('The Home Depot');
+            let response;
+            if (mockResponses) {
+                const processDocumentJson = require('./processDocument.json');
+                const veryfi_process_document = jest.fn();
+                veryfi_process_document.mockReturnValue(processDocumentJson);
+                response = veryfi_process_document();
+            } else {
+                response = await veryfi_client.process_document('test/receipt.png');
+            }
+            expect(response['vendor']['name']).toBe('The Home Depot');
         } catch (error) {
-            console.log(error);
+            throw new Error(error);
         }
     });
 
     test('Process document from URL', async () => {
         try {
-            const request = await veryfi_client.process_document_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
-            expect(request['vendor']['name']).toBe('Rumpke');
+            let response;
+            if (mockResponses) {
+                const processDocumentUrlJson = require('./processDocumentUrl.json');
+                const veryfi_process_document_url = jest.fn();
+                veryfi_process_document_url.mockReturnValue(processDocumentUrlJson);
+                response = veryfi_process_document_url();
+            } else {
+                response = await veryfi_client.process_document_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
+            }
+            expect(response['vendor']['name']).toBe('Rumpke Waste & Recycling');
         } catch (error) {
-            console.log(error);
+            throw new Error(error);
         }
     });
 });
@@ -39,9 +57,16 @@ describe('Processing documents', () => {
 describe('Managing documents', () => {
     test('Get documents', async () => {
         try {
-            const docs = await veryfi_client.get_documents();
+            let docs;
+            if (mockResponses) {
+                const getDocumentsJson = require('./getDocuments.json');
+                const veryfi_get_documents = jest.fn();
+                veryfi_get_documents.mockReturnValue(getDocumentsJson);
+                docs = veryfi_get_documents();
+            } else {
+                docs = await veryfi_client.get_documents();
+            }
             expect(docs.length).toBeGreaterThan(0);
-
             expect(docs).toEqual(
                 expect.arrayContaining([
                     expect.objectContaining({
@@ -50,41 +75,63 @@ describe('Managing documents', () => {
                     })
                 ])
             );
-
         } catch (error) {
-            console.log(error);
+            throw new Error(error);
         }
     });
 
     test(`Get document with id ${doc_id}`, async () => {
         try {
-            const doc = await veryfi_client.get_document(doc_id);
+            let doc;
+            if (mockResponses) {
+                doc_id = 31727276;
+                const getDocumentJson = require('./getDocument.json');
+                const veryfi_get_document = jest.fn();
+                veryfi_get_document.mockReturnValue(getDocumentJson);
+                doc = veryfi_get_document();
+            } else {
+                doc = await veryfi_client.get_document(doc_id);
+            }
             expect(doc['id']).toBe(doc_id)
         } catch (error) {
-            console.log(error);
+            throw new Error(error);
         }
     });
 });
 
 describe('Editing Documents', () => {
     test('Update a document\'s entries', async () => {
-        let params = {'category':'Education'};
-        const new_doc = await veryfi_client.update_document(doc_id,params);
-        expect(new_doc).toEqual(expect.objectContaining(params));
+        let params = {'notes':'Note updated'};
+        try {
+            let response;
+            if (mockResponses) {
+                const updateDocumentJson = require('./updateDocument.json');
+                const veryfi_update_document = jest.fn();
+                veryfi_update_document.mockReturnValue(updateDocumentJson);
+                response = veryfi_update_document();
+            } else {
+                response = await veryfi_client.update_document(doc_id, params);
+            }
+            expect(response).toEqual(expect.objectContaining(params));
+        } catch (error) {
+            throw new Error(error);
+        }
     });
 
     test('Delete a document by id', async () => {
-        const docs_prev = await veryfi_client.get_documents();
-        await veryfi_client.delete_document(delete_id);
-        const docs_new = await veryfi_client.get_documents();
-        expect(docs_new).toEqual(
-            expect.arrayContaining([
-                expect.not.objectContaining({
-                    'id':`${delete_id}`
-                })
-            ])
-        );
-
-        expect(docs_prev.length).toBeGreaterThan(docs_new.length);
+        try {
+            let response;
+            if (mockResponses) {
+                const deleteDocumentJson = require('./deleteDocument.json');
+                const veryfi_delete_document = jest.fn();
+                veryfi_delete_document.mockReturnValue(deleteDocumentJson);
+                response = veryfi_delete_document();
+            } else {
+                response = await veryfi_client.delete_document(delete_id);
+            }
+            expect(response['status']).toBe('ok')
+        } catch (error) {
+            throw new Error(error);
+        }
     });
 })
