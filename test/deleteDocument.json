@@ -1,1 +1,4 @@
-{"status": "ok", "message": "Document has been deleted"}
+{
+  "status":"ok",
+  "message":"Document has been deleted"
+}
