@@ -1,21 +1,25 @@
 # Veryfi SDK for Node.js
 
-[![Node.js - version](https://img.shields.io/badge/node-%3E%3D%206.0.0-brightgreen)](https://pypi.python.org/pypi/veryfi/)
-[![npm](https://img.shields.io/badge/npm-v7.0.0-blue)](https://pypi.python.org/pypi/veryfi)
+[![Node.js - version](https://img.shields.io/badge/node-%3E%3D%206.0.0-brightgreen)](https://www.npmjs.com/package/@veryfi/veryfi-sdk)
+[![npm](https://img.shields.io/badge/npm-v7.0.0-blue)](https://www.npmjs.com/package/@veryfi/veryfi-sdk)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ![Veryfi Logo](https://cdn.veryfi.com/logos/veryfi-logo-wide-github.png)
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Getting Started](#getting-started)
-  - [Obtaining Client ID and user keys](#obtaining-client-id-and-user-keys)
-  - [Node.js API Client Library](#nodejs-api-client-library)
-  - [Extracting Data](#extracting-data)
-  - [Response](#response)
-  - [Updating a document](#updating-a-document)
-- [Need help?](#need-help)
+- [Veryfi SDK for Node.js](#veryfi-sdk-for-nodejs)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Getting Started](#getting-started)
+    - [Obtaining Client ID and user keys](#obtaining-client-id-and-user-keys)
+    - [Node.js API Client Library](#nodejs-api-client-library)
+    - [Extracting Data](#extracting-data)
+    - [Response](#response)
+    - [Updating a document](#updating-a-document)
+  - [Need help?](#need-help)
+    - [Learn more at our blog](#learn-more-at-our-blog)
+  - [Tutorial Video](#tutorial-video)
 
 **veryfi-nodejs** is a Node.js module for communicating with the [Veryfi OCR API](https://veryfi.com/api/)
 
@@ -37,9 +41,9 @@ If you don't have an account with Veryfi, please go ahead and register here: [ht
 
 ### Node.js API Client Library
 
-The **veryfi** library can be used to communicate with Veryfi API. All available functionality is described here <https://veryfi.github.io/veryfi-nodejs/Client.html>
+The **veryfi** library can be used to communicate with Veryfi API. All available functionality is described here: <https://veryfi.github.io/veryfi-nodejs/Client.html>
 
-Below is the sample script using **veryfi** to OCR and extract data from a document:
+Below is a sample script using **Veryfi** for OCR and extracting data from a document:
 
 ### Extracting Data
 
@@ -50,8 +54,8 @@ const client_secret = 'your_client_secret';
 const username = 'your_username';
 const api_key = 'your_password';
 
-const categories = ['Grocery', 'Utilities', 'Travel']
-const file_path = './test/receipt.png'
+const categories = ['Grocery', 'Utilities', 'Travel'];
+const file_path = './test/receipt.png';
 ```
 
 This submits a document for processing (3-5 seconds for a response)
@@ -226,9 +230,9 @@ console.log(response);
 ### Updating a document
 
 ```js
-let = new_vendor = {"name": "Starbucks", "address": "123 Easy Str, San Francisco, CA 94158"}
-let category = "Meals & Entertainment"
-let new_total = 11.23
+let new_vendor = {"name": "Starbucks", "address": "123 Easy Str, San Francisco, CA 94158"};
+let category = "Meals & Entertainment";
+let new_total = 11.23;
 veryfi_client.update_document(id=12345,
     {
         'vendor': new_vendor,
@@ -243,4 +247,8 @@ If you run into any issue or need help installing or using the library, please c
 
 If you found a bug in this library or would like new features added, then open an issue or pull requests against this repo!
 
-To learn more about Veryfi visit <https://www.veryfi.com/>
+### [Learn more at our blog](https://www.veryfi.com/nodejs/)
+
+## Tutorial Video
+
+[![Veryfi Tutorial](https://img.youtube.com/vi/PcJdgnvyfBc/maxresdefault.jpg)](https://www.youtube.com/watch?v=PcJdgnvyfBc)
