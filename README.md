@@ -75,7 +75,7 @@ console.log(response);
 
 ### Response
 
-```json
+```js
 >>> {
       abn_number: '',
       account_number: '',
