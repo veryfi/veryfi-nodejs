@@ -3,6 +3,7 @@
  */
 
 const Client = require('../lib/main');
+const fs = require('fs');
 const client_id = 'YOUR_ID';
 const client_secret = 'YOUR_SECRET';
 const username = 'YOUR_USERNAME';
@@ -29,6 +30,29 @@ describe('Processing documents', () => {
                 response = veryfi_process_document();
             } else {
                 response = await veryfi_client.process_document('test/receipt.png');
+            }
+            expect(response['vendor']['name']).toBe('The Home Depot');
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process document from buffer', async () => {
+        try {
+            let response;
+            if (mockResponses) {
+                const processDocumentJson = require('./processDocument.json');
+                const process_document_buffer = jest.fn();
+                process_document_buffer.mockReturnValue(processDocumentJson);
+                response = process_document_buffer();
+            } else { 
+                const file_path = 'test/receipt.png';
+                const image_file = fs.readFileSync(file_path, { encoding: 'base64' });
+                const base64_encoded_string = Buffer.from(image_file).toString('utf-8');
+                response = await veryfi_client.process_document_buffer(
+                    base64_encoded_string,
+                    'receipt.png'
+                );
             }
             expect(response['vendor']['name']).toBe('The Home Depot');
         } catch (error) {
