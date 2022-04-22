@@ -15,6 +15,10 @@
     "Matthew Eng <matthew@veryfi.com>"
   ],
   "license": "MIT",
+  "files": [
+    "lib",
+    "types"
+  ],
   "directories": {
     "lib": "lib",
     "test": "test"
