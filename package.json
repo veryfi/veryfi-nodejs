@@ -3,6 +3,7 @@
   "version": "1.1.4",
   "description": "Node.js module for communicating with the Veryfi OCR API",
   "main": "lib/main.js",
+  "typings": "types/main.d.ts",
   "scripts": {
     "test": "jest",
     "doc": "jsdoc -d docs --configure jsconf.json main.js",
@@ -14,6 +15,10 @@
     "Matthew Eng <matthew@veryfi.com>"
   ],
   "license": "MIT",
+  "files": [
+    "lib",
+    "types"
+  ],
   "directories": {
     "lib": "lib",
     "test": "test"
