@@ -2,8 +2,8 @@
  * Test main functions and input parameters
  */
 import {VeryfiDocument} from "../types/main";
-const Client = require('../types/main');
-import {describe, expect, test} from '@jest/globals';
+const Client = require('../lib/main');
+import {describe, expect, test, jest} from '@jest/globals';
 
 const client_id = 'YOUR_ID';
 const client_secret = 'YOUR_SECRET';
@@ -17,9 +17,10 @@ let mockResponses = false; // Change to “false” if you want to test your per
 
 
 //Creating the Client
-let veryfi_client = Client(client_id, client_secret, username, api_key, "https://devapi.veryfi.com/", "v8");
+let veryfi_client = new Client(client_id, client_secret, username, api_key);
 
 describe('Processing documents', () => {
+    jest.setTimeout(10000)
     test('Upload invoice for processing', async () => {
         try {
             let response: VeryfiDocument;
