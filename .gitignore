@@ -2,3 +2,4 @@ node_modules
 .idea/jsLibraryMappings.xml
 .idea/veryfi-nodejs.iml
 package-lock.json
+*.xml

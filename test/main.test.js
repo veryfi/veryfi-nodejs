@@ -45,7 +45,7 @@ describe('Processing documents', () => {
                 const process_document_buffer = jest.fn();
                 process_document_buffer.mockReturnValue(processDocumentJson);
                 response = process_document_buffer();
-            } else { 
+            } else {
                 const file_path = 'test/receipt.png';
                 const image_file = fs.readFileSync(file_path, { encoding: 'base64' });
                 const base64_encoded_string = Buffer.from(image_file).toString('utf-8');
