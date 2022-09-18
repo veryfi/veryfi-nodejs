@@ -16,7 +16,10 @@ jobs:
         uses: andstor/jsdoc-action@v1
         with:
           source_dir: ./lib
+          recurse: true
           output_dir: ./docs
+          config_file: conf.json
+          template: minami
           front_page: README.md
 
       - name: Deploy
