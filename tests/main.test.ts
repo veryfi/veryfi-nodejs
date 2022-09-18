@@ -1,7 +1,7 @@
 /**
  * Test main functions and input parameters
  */
-import {VeryfiDocument} from "../types/main";
+import {VeryfiDocument} from "../lib/types/main";
 const Client = require('../lib/main');
 import {describe, expect, test, jest} from '@jest/globals';
 import fs from "fs";
@@ -143,7 +143,7 @@ describe('Managing w2', () => {
 
     test(`Get w2 with id`, async () => {
         try {
-           
+
         } catch (error) {
             throw new Error(error);
         }

@@ -12,12 +12,13 @@
   "author": "Veryfi <support@veryfi.com> (https://www.veryfi.com)",
   "homepage": "https://veryfi.github.io/veryfi-nodejs/",
   "contributors": [
-    "Matthew Eng <matthew@veryfi.com>"
+    "Matthew Eng <matthew@veryfi.com>",
+    "Alejandro Uribe <alejandro@veryfi.com>"
   ],
   "license": "MIT",
   "files": [
     "lib",
-    "types"
+    "lib/types"
   ],
   "directories": {
     "lib": "lib",
