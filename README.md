@@ -41,7 +41,7 @@ If you don't have an account with Veryfi, please go ahead and register here: [ht
 
 ### Node.js API Client Library
 
-The **veryfi** library can be used to communicate with Veryfi API. All available functionality is described here: <https://veryfi.github.io/veryfi-nodejs/Client.html>
+The **veryfi** library can be used to communicate with Veryfi API. All available functionality is described here: <https://veryfi.github.io/veryfi-nodejs/>
 
 Below is a sample script using **Veryfi** for OCR and extracting data from a document:
 
