@@ -5,34 +5,25 @@ import {VeryfiDocument} from "../types/main";
 const Client = require('../lib/main');
 import {describe, expect, test, jest} from '@jest/globals';
 
-const client_id = 'YOUR_ID';
-const client_secret = 'YOUR_SECRET';
-const username = 'YOUR_USERNAME';
-const api_key = 'YOUR_API_KEY';
-
-let doc_id =  'ID_TO_MODIFY';
-let delete_id = 'ID_TO_DELETE';
-
-let mockResponses = false; // Change to “false” if you want to test your personal credentials
+const client_id = process.env.VERYFI_CLIENT_ID;
+const client_secret = process.env.VERYFI_CLIENT_SECRET;
+const username = process.env.VERYFI_USERNAME;
+const api_key = process.env.VERYFI_API_KEY;
+const base_url = process.env.VERYFI_URL;
+const api_version = "v8"
 
 
 //Creating the Client
-let veryfi_client = new Client(client_id, client_secret, username, api_key);
+let veryfi_client = new Client(client_id, client_secret, username, api_key, base_url, api_version);
 
 describe('Processing documents', () => {
     jest.setTimeout(10000)
     test('Upload invoice for processing', async () => {
         try {
-            let response: VeryfiDocument;
-            if (mockResponses) {
-
-            } else {
-                response = await veryfi_client.process_document('tests/receipt.png');
-            }
-            expect(response['vendor']['name']).toBe('The Home Depot');
+            let response: VeryfiDocument = await veryfi_client.process_document('tests/receipt.png');
+            expect(response.vendor.name).toBe('The Home Depot');
         } catch (error) {
             throw new Error(error);
         }
     });
-
 })

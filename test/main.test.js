@@ -4,10 +4,10 @@
 
 const Client = require('../lib/main');
 const fs = require('fs');
-const client_id = 'YOUR_ID';
-const client_secret = 'YOUR_SECRET';
-const username = 'YOUR_USERNAME';
-const api_key = 'YOUR_API_KEY';
+const client_id = process.env.VERYFI_CLIENT_ID;
+const client_secret = process.env.VERYFI_CLIENT_SECRET;
+const username = process.env.VERYFI_USERNAME;
+const api_key = process.env.VERYFI_API_KEY;
 
 let doc_id =  'ID_TO_MODIFY';
 let delete_id = 'ID_TO_DELETE';
