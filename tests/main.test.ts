@@ -136,18 +136,4 @@ describe('Editing Documents', () => {
     });
 });
 
-describe('Managing w2', () => {
-    test('Get w2', async () => {
-
-    });
-
-    test(`Get w2 with id`, async () => {
-        try {
-
-        } catch (error) {
-            throw new Error(error);
-        }
-    });
-});
-
 
