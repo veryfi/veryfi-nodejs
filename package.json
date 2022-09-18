@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest",
     "doc": "jsdoc -d docs --configure jsconf.json main.js",
-    "generate-docs": "jsdoc --configure .jsdoc.json --verbose"
+    "generate-docs": "jsdoc --configure jsdoc.json --verbose"
   },
   "author": "Veryfi <support@veryfi.com> (https://www.veryfi.com)",
   "homepage": "https://veryfi.github.io/veryfi-nodejs/",
