@@ -18,7 +18,7 @@ jobs:
           source_dir: ./lib
           recurse: true
           output_dir: ./docs
-          config_file: .jsdoc.json
+          config_file: ./.jsdoc.json
           template: minami
 
       - name: Deploy
