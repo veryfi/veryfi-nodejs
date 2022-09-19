@@ -43,7 +43,6 @@
 const axios = require('axios').default;
 const path = require('path');
 const fs = require('fs');
-const VeryfiClientError = require('./errors');
 
 /**
  * Create instance of a Client
@@ -57,13 +56,13 @@ const VeryfiClientError = require('./errors');
  * @param {Number} timeout
  */
 function Client(
-        client_id,
-        client_secret,
-        username,
-        api_key,
-        base_url="https://api.veryfi.com/",
-        api_version="v8",
-        timeout=120,) {
+    client_id,
+    client_secret,
+    username,
+    api_key,
+    base_url = "https://api.veryfi.com/",
+    api_version = "v8",
+    timeout = 120,) {
     this.client_id = client_id;
     this.client_secret = client_secret;
     this.username = username;
@@ -96,7 +95,7 @@ function Client(
  * @param {Boolean} has_files Are there any files to be submitted as binary
  * @return {Object} Dictionary with headers
  */
-Client.prototype._get_headers = function (has_files=false){
+Client.prototype._get_headers = function (has_files = false) {
     let final_headers = {
         "User-Agent": "Node.js Veryfi-Nodejs/1.2.0",
         "Accept": "application/json",
@@ -104,7 +103,7 @@ Client.prototype._get_headers = function (has_files=false){
         "Client-Id": this.client_id,
         "Authorization": `apikey ${this.username}:${this.api_key}`,
     };
-    if (has_files){
+    if (has_files) {
         final_headers["Content-Type"] = "application/x-www-form-urlencoded";
     }
     return final_headers;
@@ -115,7 +114,7 @@ Client.prototype._get_headers = function (has_files=false){
  * @private
  * @returns {string} Base URL to Veryfi API
  */
-Client.prototype._get_url = function (){
+Client.prototype._get_url = function () {
     return this.base_url + "api/" + this.api_version;
 }
 
@@ -126,9 +125,9 @@ Client.prototype._get_url = function (){
  * @param {Number} timestamp Unix Long timestamp
  * @returns {string} Unique signature generated using the client_secret and the payload
  */
-Client.prototype._generate_signature = function (payload_params, timestamp){
+Client.prototype._generate_signature = function (payload_params, timestamp) {
     let payload = `timestamp:${timestamp}`;
-    for (let i=0; i&lt;Object.keys(payload_params).length; i++){
+    for (let i = 0; i &lt; Object.keys(payload_params).length; i++) {
         let key = Object.keys(payload_params)[i];
         let value = payload_params[key];
         payload = `${payload},${key}:${value}`;
@@ -153,7 +152,7 @@ Client.prototype._generate_signature = function (payload_params, timestamp){
  * @param file_stream file stream of the document
  * @returns {JSON} A JSON of the response data.
  */
-Client.prototype._request = async function (http_verb, endpoint_name, request_arguments, file_stream=null){
+Client.prototype._request = async function (http_verb, endpoint_name, request_arguments, file_stream = null) {
     let has_files = (Boolean(file_stream));
     let headers = this._get_headers(has_files);
     let api_url = `${this._get_url()}/partner${endpoint_name}`;
@@ -161,14 +160,16 @@ Client.prototype._request = async function (http_verb, endpoint_name, request_ar
     if (this.client_secret) {
         let timestamp = Date.now();
         let signature = this._generate_signature(request_arguments, timestamp);
-        headers = Object.assign(headers,{"X-Veryfi-Request-Timestamp": timestamp,
-                                        "X-Veryfi-Request-Signature": signature});
+        headers = Object.assign(headers, {
+            "X-Veryfi-Request-Timestamp": timestamp,
+            "X-Veryfi-Request-Signature": signature
+        });
     }
 
     if (has_files === false) {
         request_arguments = JSON.stringify(request_arguments);
     } else {
-        Object.assign(headers,{...request_arguments});
+        Object.assign(headers, {...request_arguments});
     }
 
     try {
@@ -180,9 +181,9 @@ Client.prototype._request = async function (http_verb, endpoint_name, request_ar
             timeout: this.timeout * 1000
         });
     } catch (response) {
-        let Err = new VeryfiClientError(response,response['response']['data']);
-        let err_msg = Err.from_response(response['response']);
-        throw new Error(err_msg['status'] + err_msg['error']);
+        let errorStatus = response['response']['status'];
+        let errorInfo = response['response']['data']['error'];
+        throw new Error(errorStatus + errorInfo);
     }
 }
 
@@ -192,11 +193,11 @@ Client.prototype._request = async function (http_verb, endpoint_name, request_ar
  * @memberof Client
  * @returns {JSON} JSON object of previously processed documents
  */
-Client.prototype.get_documents = async function (){
+Client.prototype.get_documents = async function () {
     let endpoint_name = "/documents/";
     let request_arguments = {};
     let documents = await this._request("GET", endpoint_name, request_arguments);
-    if ("data" in documents){
+    if ("data" in documents) {
         return documents["data"];
     }
     return documents;
@@ -231,14 +232,14 @@ Client.prototype.get_document = async function (document_id) {
  * @returns {JSON} Data extracted from the document
  */
 Client.prototype.process_document = async function (
-        file_path,
-        categories = null,
-        delete_after_processing = false,
-        {...kwargs} = {}
-    ) {
+    file_path,
+    categories = null,
+    delete_after_processing = false,
+    {...kwargs} = {}
+) {
 
     let endpoint_name = "/documents/";
-    if (!categories){
+    if (!categories) {
         categories = this.CATEGORIES;
     }
     let file_name = path.basename(file_path)
@@ -250,7 +251,7 @@ Client.prototype.process_document = async function (
         "categories": categories,
         "auto_delete": delete_after_processing,
     };
-    request_arguments = Object.assign(request_arguments,kwargs)
+    request_arguments = Object.assign(request_arguments, kwargs)
     let document = await this._request("POST", endpoint_name, request_arguments)
     return document['data'];
 }
@@ -273,15 +274,15 @@ Client.prototype.process_document = async function (
  * @returns {JSON} Data extracted from the document
  */
 Client.prototype.process_document_buffer = async function (
-        base64_encoded_string,
-        file_name,
-        categories = null,
-        delete_after_processing = false,
-        {...kwargs} = {}
-    ) {
+    base64_encoded_string,
+    file_name,
+    categories = null,
+    delete_after_processing = false,
+    {...kwargs} = {}
+) {
 
     let endpoint_name = "/documents/";
-    if (!categories){
+    if (!categories) {
         categories = this.CATEGORIES;
     }
     let request_arguments = {
@@ -290,7 +291,7 @@ Client.prototype.process_document_buffer = async function (
         "categories": categories,
         "auto_delete": delete_after_processing,
     };
-    request_arguments = Object.assign(request_arguments,kwargs)
+    request_arguments = Object.assign(request_arguments, kwargs)
     let document = await this._request("POST", endpoint_name, request_arguments)
     return document['data'];
 }
@@ -312,17 +313,17 @@ Client.prototype.process_document_buffer = async function (
  * @return {JSON} Data extracted from the document.
  */
 Client.prototype.process_document_url = async function (
-        file_url = "",
-        file_urls = null,
-        categories = null,
-        delete_after_processing = false,
-        boost_mode = 0,
-        external_id = "",
-        max_pages_to_process = 1,
-        {...kwargs} = {},
-    ) {
+    file_url = "",
+    file_urls = null,
+    categories = null,
+    delete_after_processing = false,
+    boost_mode = 0,
+    external_id = "",
+    max_pages_to_process = 1,
+    {...kwargs} = {},
+) {
     let endpoint_name = "/documents/";
-    if (!categories){
+    if (!categories) {
         categories = this.CATEGORIES;
     }
     let request_arguments = {
@@ -334,7 +335,7 @@ Client.prototype.process_document_url = async function (
         "file_urls": file_urls,
         "max_pages_to_process": max_pages_to_process,
     };
-    request_arguments = Object.assign(request_arguments,kwargs)
+    request_arguments = Object.assign(request_arguments, kwargs)
     let response = await this._request("POST", endpoint_name, request_arguments);
     return response['data'];
 }
@@ -382,7 +383,7 @@ module.exports = Client;
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Sun Sep 18 2022 02:55:51 GMT-0500 (Colombia Standard Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Sun Sep 18 2022 23:06:49 GMT-0500 (Colombia Standard Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
