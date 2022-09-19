@@ -40,6 +40,7 @@ export declare type VeryfiDocument = {
   notes?: null | string;
   ocr_text?: null | string;
   order_date?: null | string;
+  payment?: null | Payment;
   payment_display_name?: null | string;
   payment_terms?: null | string;
   payment_type?: null | string;
@@ -112,6 +113,13 @@ declare type Vendor = {
   vendor_reg_number?: null | string;
   vendor_type?: null | string;
   web?: null | string;
+};
+
+declare type Payment = {
+  card_number?: null | string;
+  display_name?: null | string;
+  terms?: null | number;
+  type?: null | string;
 };
 
 export declare class Client {

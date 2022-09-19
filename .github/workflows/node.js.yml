@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -28,4 +28,11 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
-    - run: npm test
+    - run: npm test -- --coverage
+      env:
+        CI: true
+        VERYFI_CLIENT_ID: ${{ secrets.VERYFI_CLIENT_ID }}
+        VERYFI_CLIENT_SECRET: ${{ secrets.VERYFI_CLIENT_SECRET }}
+        VERYFI_USERNAME: ${{ secrets.VERYFI_USERNAME }}
+        VERYFI_API_KEY: ${{ secrets.VERYFI_API_KEY }}
+        VERYFI_URL: ${{ secrets.VERYFI_URL }}
