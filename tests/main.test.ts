@@ -5,6 +5,7 @@ import {VeryfiDocument} from "../lib/types/main";
 const Client = require('../lib/main');
 import {describe, expect, test, jest} from '@jest/globals';
 import fs from "fs";
+import assert from "assert";
 
 const client_id = process.env.VERYFI_CLIENT_ID;
 const client_secret = process.env.VERYFI_CLIENT_SECRET;
@@ -173,5 +174,14 @@ describe('Process w2 documents', () => {
     })
 })
 
-
-
+describe('Test bad credentials',  () => {
+    test('Test bad credentials', async () => {
+        let veryfi_wrong_client = new Client('client_id', 'client_secret', 'username', 'api_key', base_url, api_version)
+        try {
+            let doc = await veryfi_wrong_client.get_documents()
+            assert(false)
+        } catch (error) {
+            assert(true)
+        }
+    })
+})
