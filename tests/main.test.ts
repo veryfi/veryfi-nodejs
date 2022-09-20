@@ -21,7 +21,7 @@ jest.setTimeout(10000);
 describe('Processing documents', () => {
     test('Upload invoice for processing', async () => {
         try {
-            let response: VeryfiDocument = await veryfi_client.process_document('tests/receipt.png');
+            let response: VeryfiDocument = await veryfi_client.process_document('resources/receipt.png');
             checkReceiptResponse(response);
         } catch (error) {
             throw new Error(error);
@@ -30,7 +30,7 @@ describe('Processing documents', () => {
 
     test('Process document from buffer', async () => {
         try {
-            const file_path = 'test/receipt.png';
+            const file_path = 'resources/receipt.png';
             const image_file = fs.readFileSync(file_path, { encoding: 'base64' });
             const base64_encoded_string = Buffer.from(image_file).toString('utf-8');
             let response = await veryfi_client.process_document_buffer(
@@ -129,11 +129,49 @@ describe('Editing Documents', () => {
             let docs = await veryfi_client.get_documents();
             const doc_id = docs.documents[0].id;
             let response = await veryfi_client.delete_document(doc_id);
-            expect(response['status']).toBe(200)
+            expect(response['status']).toBe(200);
         } catch (error) {
             throw new Error(error);
         }
     });
 });
+
+describe('Process w2 documents', () => {
+    test('Process a document from file_path', async () => {
+        try {
+            let doc = await veryfi_client.process_w2_document('resources/w2.png', true);
+            expect(doc['control_number']).toBe('A1B2');
+            expect(doc['employer_state_id']).toBe('1235');
+        } catch (error) {
+            throw new Error(error);
+        }
+    })
+    test('Get a documents and get a document by id', async () => {
+        try {
+            let docs = await veryfi_client.get_w2_documents();
+            expect(docs.length).toBeGreaterThan(1);
+            let doc_id = docs[0].id;
+            let doc = await veryfi_client.get_w2_document(doc_id);
+            expect(doc['id']).toBe(doc_id);
+        } catch (error) {
+            throw new Error(error);
+        }
+    })
+    test('Process a document from url', async () => {
+        try{
+            let doc = await veryfi_client.process_w2_document_from_url(
+                'w2.png',
+                'https://cdn.veryfi.com/wp-content/uploads/image.png',
+                null,
+                true
+            );
+            expect(doc['control_number']).toBe('A1B2');
+            expect(doc['employer_state_id']).toBe('1235');
+        } catch (error) {
+            throw new Error(error);
+        }
+    })
+})
+
 
 
