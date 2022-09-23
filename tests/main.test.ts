@@ -147,7 +147,7 @@ describe('Process w2 documents', () => {
             throw new Error(error);
         }
     })
-    test('Get a documents and get a document by id', async () => {
+    test('Get documents and get a document by id', async () => {
         try {
             let docs = await veryfi_client.get_w2_documents();
             expect(docs.length).toBeGreaterThan(1);
@@ -156,6 +156,14 @@ describe('Process w2 documents', () => {
             expect(doc['id']).toBe(doc_id);
         } catch (error) {
             throw new Error(error);
+        }
+    })
+    test('Get documents with page', async () => {
+        try {
+            let docs = await veryfi_client.get_w2_documents(3);
+            expect(docs.length).toBeGreaterThan(1);
+        } catch (error) {
+            throw new Error(error)
         }
     })
     test('Process a document from url', async () => {
