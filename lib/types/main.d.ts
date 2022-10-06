@@ -219,12 +219,12 @@ export declare class Client {
    */
   public process_document_url(
     file_url?: string,
+    file_urls?: string[],
     categories?: string[],
     delete_after_processing?: boolean,
     boost_mode?: number,
     external_id?: string,
     max_pages_to_process?: number,
-    file_urls?: string[],
     { ...kwargs }?: VeryfiExtraArgs
   ): Promise<VeryfiDocument>;
 
