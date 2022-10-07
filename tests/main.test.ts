@@ -77,7 +77,7 @@ describe('Processing documents', () => {
         expect(response.invoice_number).toBe('0998811');
         expect(response.total).toBe(329.74);
         expect(response.tax).toBe(23.47);
-        expect(response.subtotal).toBe(329.74);
+        expect(response.subtotal).toBe(306.27);
         expect(response.category).toBe('Rent & Lease');
         expect(response.document_type).toBe('invoice');
         expect(response.line_items[0].total).toBe(116.32);
