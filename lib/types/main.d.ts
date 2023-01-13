@@ -127,7 +127,7 @@ export declare class Client {
    * Create instance of a Client
    * @class
    * @param {string} client_id Your Veryfi client id
-   * @param {string} client_secret Your Veryfi client secret
+   * @param {string | undefined} client_secret Your Veryfi client secret
    * @param {string} username Your Veryfi username
    * @param {string} api_key Your Veryfi API key
    * @param {string} base_url
@@ -136,7 +136,7 @@ export declare class Client {
    */
   constructor(
     client_id: string,
-    client_secret: string,
+    client_secret: string | undefined,
     username: string,
     api_key: string,
     base_url?: string,
@@ -146,7 +146,7 @@ export declare class Client {
 
   client_id: string;
 
-  client_secret: string;
+  client_secret: string | undefined;
 
   username: string;
 
@@ -258,7 +258,7 @@ export declare class Client {
  * Create instance of a Client
  * @class
  * @param {string} client_id Your Veryfi client id
- * @param {string} client_secret Your Veryfi client secret
+ * @param {string | undefined} client_secret Your Veryfi client secret
  * @param {string} username Your Veryfi username
  * @param {string} api_key Your Veryfi API key
  * @param {string} base_url
@@ -267,7 +267,7 @@ export declare class Client {
  */
 export declare function Client(
   client_id: string,
-  client_secret: string,
+  client_secret: string | undefined,
   username: string,
   api_key: string,
   base_url?: string,
