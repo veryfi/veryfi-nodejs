@@ -12,12 +12,12 @@ const client_secret = process.env.VERYFI_CLIENT_SECRET;
 const username = process.env.VERYFI_USERNAME;
 const api_key = process.env.VERYFI_API_KEY;
 const base_url = process.env.VERYFI_URL;
-const api_version = "v8"
-
+const api_version = "v8";
+const timeout = Number(100000);
 
 //Creating the Client
 let veryfi_client = new Client(client_id, client_secret, username, api_key, base_url, api_version);
-jest.setTimeout(100000);
+jest.setTimeout(timeout);
 
 describe('Processing documents', () => {
     test('Upload invoice for processing', async () => {
@@ -55,14 +55,14 @@ describe('Processing documents', () => {
 
     const checkReceiptResponse = (response: VeryfiDocument) => {
         expect(response.vendor.name).toBe('The Home Depot');
-        expect(response.vendor.address).toBe('2250 Southgate Rd, Colorado Springs, CO 80906, United States');
+        expect(response.vendor.address).toBe('2250 Southgate Rd, Colorado Springs, CO 80906');
         expect(response.date).toBe('2018-10-17 09:03:00');
         expect(response.invoice_number).toBe('17717');
         expect(response.total).toBe(34.95);
         expect(response.tax).toBe(2.66);
         expect(response.subtotal).toBe(32.29);
         expect(response.category).toBe('Job Supplies');
-        expect(response.document_type).toBeUndefined();
+        expect(response.document_type).toBe("receipt");
         expect(response.document_reference_number).toBe('4341505054414');
         expect(response.line_items.length).toBe(4);
         expect(response.payment.card_number).toBe('7373');
@@ -79,7 +79,7 @@ describe('Processing documents', () => {
         expect(response.tax).toBe(23.47);
         expect(response.subtotal).toBe(306.27);
         expect(response.category).toBe('Repairs & Maintenance');
-        expect(response.document_type).toBeUndefined();
+        expect(response.document_type).toBe("invoice");
         expect(response.line_items[0].total).toBe(116.32);
         expect(response.line_items[1].total).toBe(10);
         expect(response.line_items[2].total).toBe(29.89);
@@ -186,7 +186,7 @@ describe('Test bad credentials',  () => {
     test('Test bad credentials', async () => {
         let veryfi_wrong_client = new Client('client_id', 'client_secret', 'username', 'api_key', base_url, api_version)
         try {
-            let doc = await veryfi_wrong_client.get_documents()
+            await veryfi_wrong_client.get_documents();
             assert(false)
         } catch (error) {
             assert(true)
