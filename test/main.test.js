@@ -12,11 +12,11 @@ const username = process.env.VERYFI_USERNAME;
 const api_key = process.env.VERYFI_API_KEY;
 const base_url = process.env.VERYFI_URL;
 const api_version = "v7"
-
+const timeout = 100000;
 
 //Creating the Client
 let veryfi_client = new Client(client_id, client_secret, username, api_key, base_url, api_version);
-jest.setTimeout(100000)
+jest.setTimeout(timeout)
 
 describe('Processing documents', () => {
     test('Upload invoice for processing', async () => {
@@ -104,7 +104,7 @@ describe('Editing Documents', () => {
 describe('Process w2 documents', () => {
     test('Process a document from file_path', async () => {
         try {
-            let doc = await veryfi_client.process_w2_document('resources/w2.png', true)
+            await veryfi_client.process_w2_document('resources/w2.png', true);
             assert(false)
         } catch (error) {
             assert(true)
@@ -112,7 +112,7 @@ describe('Process w2 documents', () => {
     })
     test('Get a documents and get a document by id', async () => {
         try {
-            let docs = await veryfi_client.get_w2_documents()
+            await veryfi_client.get_w2_documents()
             assert(false)
         } catch (error) {
             assert(true)
@@ -120,12 +120,12 @@ describe('Process w2 documents', () => {
     })
     test('Process a document from url', async () => {
         try{
-            let doc = await veryfi_client.process_w2_document_from_url(
+            await veryfi_client.process_w2_document_from_url(
                 'w2.png',
                 'https://cdn.veryfi.com/wp-content/uploads/image.png',
                 null,
                 true
-            )
+            );
             assert(false)
         } catch (error) {
             assert(true)
@@ -137,7 +137,7 @@ describe('Test bad credentials',  () => {
     test('Test bad credentials', async () => {
         let veryfi_wrong_client = new Client('client_id', 'client_secret', 'username', 'api_key', base_url, api_version)
         try {
-            let doc = await veryfi_wrong_client.get_documents()
+            await veryfi_wrong_client.get_documents();
             assert(false)
         } catch (error) {
             assert(true)
