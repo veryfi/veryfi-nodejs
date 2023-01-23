@@ -1,10 +1,11 @@
 # Veryfi SDK for Node.js
 
+<img src="https://user-images.githubusercontent.com/30125790/212157461-58bdc714-2f89-44c2-8e4d-d42bee74854e.png#gh-dark-mode-only" width="200">
+<img src="https://user-images.githubusercontent.com/30125790/212157486-bfd08c5d-9337-4b78-be6f-230dc63838ba.png#gh-light-mode-only" width="200">
+
 [![Node.js - version](https://img.shields.io/badge/node-%3E%3D%206.0.0-brightgreen)](https://www.npmjs.com/package/@veryfi/veryfi-sdk)
 [![npm](https://img.shields.io/badge/npm-v7.0.0-blue)](https://www.npmjs.com/package/@veryfi/veryfi-sdk)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-
-![Veryfi Logo](https://cdn.veryfi.com/logos/veryfi-logo-wide-github.png)
 
 ## Table of Contents
 
