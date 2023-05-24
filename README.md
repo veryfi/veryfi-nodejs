@@ -63,15 +63,17 @@ This submits a document for processing (3-5 seconds for a response)
 
 ```js
 let veryfi_client = new Client(client_id, client_secret, username, api_key);
-let response = veryfi_client.process_document(file_path, categories=categories);
-console.log(response);
+let response = veryfi_client.process_document(file_path, categories=categories).then(response => {
+  console.log(response)
+});
 ```
 
 ...or with a URL
 
 ```js
-let response = veryfi_client.process_document_url(url, external_id=some_id);
-console.log(response);
+let response = veryfi_client.process_document_url(url, external_id=some_id).then(response => {
+  console.log(response)
+});
 ```
 
 ### Response
@@ -239,7 +241,10 @@ veryfi_client.update_document(id=12345,
         'vendor': new_vendor,
         'category': new_category,
         'total': new_total
-    });
+    })
+.then(response => {
+  console.log(response)
+});
 ```
 
 ## Need help?
