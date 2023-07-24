@@ -1,10 +1,9 @@
 /**
  * Test main functions and input parameters
  */
-import { describe, expect, test, jest } from '@jest/globals';
-
-import fs from 'fs';
+import fs from 'node:fs';
 import assert from 'node:assert';
+import { describe, expect, test, jest } from '@jest/globals';
 
 import Client from '../lib/main';
 import { VeryfiDocument } from '../lib/types';
@@ -38,7 +37,9 @@ describe('Processing documents', () => {
 
     test('Process document from buffer', async () => {
         const file_path = 'resources/receipt.png';
-        const image_file = fs.readFileSync(file_path, { encoding: 'base64' });
+        const image_file = fs.readFileSync(file_path, {
+            encoding: 'base64',
+        });
         const base64_encoded_string = Buffer.from(image_file).toString('utf-8');
         const response = await veryfi_client.process_document_buffer(
             base64_encoded_string,
@@ -85,12 +86,12 @@ describe('Processing documents', () => {
         expect(response.subtotal).toBe(306.27);
         expect(response.category).toBe('Repairs & Maintenance');
         expect(response.document_type).toBe('invoice');
-        expect(response.line_items?.[0]?.total).toBe(116.32);
-        expect(response.line_items?.[1]?.total).toBe(10);
-        expect(response.line_items?.[2]?.total).toBe(29.89);
-        expect(response.line_items?.[3]?.total).toBe(116.32);
-        expect(response.line_items?.[4]?.total).toBe(5);
-        expect(response.line_items?.[5]?.total).toBe(28.74);
+        expect(response.line_items?.[0].total).toBe(116.32);
+        expect(response.line_items?.[1].total).toBe(10);
+        expect(response.line_items?.[2].total).toBe(29.89);
+        expect(response.line_items?.[3].total).toBe(116.32);
+        expect(response.line_items?.[4].total).toBe(5);
+        expect(response.line_items?.[5].total).toBe(28.74);
     };
 });
 
