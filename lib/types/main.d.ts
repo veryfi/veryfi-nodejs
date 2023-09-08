@@ -122,6 +122,11 @@ declare type Payment = {
   type?: null | string;
 };
 
+declare type Tag = {
+  id?: null | number;
+  name?: null | string;
+};
+
 export declare class Client {
   /**
    * Create instance of a Client
@@ -234,10 +239,10 @@ export declare class Client {
    * @param {string} document_id ID of the document you'd like to delete
    * @returns {Promise<VeryfiDocument>} Object of data extracted from the document
    */
-  public delete_document(document_id: string): Promise<VeryfiDocument>;
+  public delete_document(document_id: string): Promise<any>;
 
   /**
-   * Update data for a previously processed document, including almost any field like `vendor`, `date`, `notes` and etc.
+   * Update data for a previously processed document, including almost any field like `vendor`, `date`, `notes` etc.
    * @example
    * veryfi_client.update_document(
    *   id,
@@ -252,6 +257,24 @@ export declare class Client {
     document_id: string,
     { ...kwargs }?: VeryfiExtraArgs
   ): Promise<VeryfiDocument>;
+
+  /**
+   * Add a new tag on an existing document
+   *
+   * @param {number} document_id ID of the document you'd like to add a Tag
+   * @param {string} tag name to add
+   * @return {Promise<Tag>} response about tag added.
+   */
+  public add_tag(document_id: string, tag: string): Promise<Tag>;
+
+  /**
+   * Delete all tags on an existing document
+   *
+   * @param {number} document_id ID of the document you'd like to delete all Tags
+   * @return {Promise<any>} response about deleted tags.
+   */
+  public delete_tags(document_id: string): Promise<any>;
+
 }
 
 /**

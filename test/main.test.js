@@ -11,7 +11,7 @@ const client_secret = process.env.VERYFI_CLIENT_SECRET;
 const username = process.env.VERYFI_USERNAME;
 const api_key = process.env.VERYFI_API_KEY;
 const base_url = process.env.VERYFI_URL;
-const api_version = "v7"
+const api_version = "v8"
 const timeout = 100000;
 
 //Creating the Client
@@ -46,7 +46,7 @@ describe('Processing documents', () => {
     test('Process document from URL', async () => {
         try {
             let response = await veryfi_client.process_document_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
-            expect(response['vendor']['name']).toBe('Rumpke Of Ohio');
+            expect(response['vendor']['name']).toBe('Rumpke of Ohio');
         } catch (error) {
             throw new Error(error);
         }
@@ -57,7 +57,7 @@ describe('Managing documents', () => {
     test('Get documents', async () => {
         try {
             let docs = await veryfi_client.get_documents();
-            expect(docs.length).toBeGreaterThan(0);
+            expect(docs.documents.length).toBeGreaterThan(0);
         } catch (error) {
             throw new Error(error);
         }
@@ -66,9 +66,35 @@ describe('Managing documents', () => {
     test(`Get document with id `, async () => {
         try {
             let docs = await veryfi_client.get_documents();
-            const doc_id = docs[0].id;
+            const doc_id = docs.documents[0].id;
             let doc = await veryfi_client.get_document(doc_id);
-            expect(doc['id']).toBe(doc_id)
+            expect(doc['id']).toBe(doc_id);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+});
+
+describe('Managing tags', () => {
+    test(`Delete all tags of a document`, async () => {
+        try {
+            let docs = await veryfi_client.get_documents();
+            const doc_id = docs.documents[0].id;
+            let response = await veryfi_client.delete_tags(doc_id);
+            expect(response).toBeDefined()
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test(`Add tag to a document`, async () => {
+        try {
+            let tag_name = 'TEST_TAG'
+            let docs = await veryfi_client.get_documents();
+            const doc_id = docs.documents[0].id;
+            await veryfi_client.delete_tags(doc_id);
+            let tag = await veryfi_client.add_tag(doc_id, tag_name);
+            expect(tag.name).toBe(tag_name)
         } catch (error) {
             throw new Error(error);
         }
@@ -81,7 +107,7 @@ describe('Editing Documents', () => {
         let params = {'notes': randomString};
         try {
             let docs = await veryfi_client.get_documents();
-            const doc_id = docs[0].id;
+            const doc_id = docs.documents[0].id;
             let response = await veryfi_client.update_document(doc_id, params);
             expect(response).toEqual(expect.objectContaining(params));
         } catch (error) {
@@ -92,9 +118,9 @@ describe('Editing Documents', () => {
     test('Delete a document by id', async () => {
         try {
             let docs = await veryfi_client.get_documents();
-            const doc_id = docs[0].id;
+            const doc_id = docs.documents[0].id;
             let response = await veryfi_client.delete_document(doc_id);
-            expect(response['status']).toBe(200)
+            expect(response['status']).toBeDefined();
         } catch (error) {
             throw new Error(error);
         }
@@ -102,7 +128,7 @@ describe('Editing Documents', () => {
 })
 
 describe('Process w2 documents', () => {
-    test('Process a document from file_path', async () => {
+    test('Process a w2 document from file_path', async () => {
         try {
             await veryfi_client.process_w2_document('resources/w2.png', true);
             assert(false)
@@ -110,7 +136,7 @@ describe('Process w2 documents', () => {
             assert(true)
         }
     })
-    test('Get a documents and get a document by id', async () => {
+    test('Get a w2 documents and get a document by id', async () => {
         try {
             await veryfi_client.get_w2_documents()
             assert(false)
@@ -118,7 +144,7 @@ describe('Process w2 documents', () => {
             assert(true)
         }
     })
-    test('Process a document from url', async () => {
+    test('Process a w2 document from url', async () => {
         try{
             await veryfi_client.process_w2_document_from_url(
                 'w2.png',

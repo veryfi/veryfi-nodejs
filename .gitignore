@@ -3,3 +3,5 @@ node_modules
 coverage/
 package-lock.json
 *.xml
+.env
+.DS_Store
