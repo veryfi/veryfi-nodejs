@@ -189,6 +189,31 @@ export declare class Client {
   /**
    * Process a document and extract all the fields from it
    * @example
+   * veryfi_client.process_document_buffer('base64_encoded_string',
+   *                                'receipt.png',
+   *                                ['Entertainment','Food'],
+   *                                true,
+   *                                {'extra': 'parameters'})
+   *
+   * @memberof Client
+   * @param {String} base64_encoded_string Buffer of a file to submit for data extraction
+   * @param {String} file_name The file name including the extension
+   * @param {Array} categories List of categories Veryfi can use to categorize the document
+   * @param {Boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {Object} kwargs Additional request parameters
+   * @returns {JSON} Data extracted from the document
+   */
+  public process_document_buffer(
+      base64_encoded_string: string,
+      file_name: string,
+      categories?: string[],
+      delete_after_processing?: boolean,
+      { ...kwargs }?: VeryfiExtraArgs
+  ): Promise<VeryfiDocument>;
+
+  /**
+   * Process a document and extract all the fields from it
+   * @example
    * veryfi_client.process_document(
    *   'file/path',
    *   ['Entertainment', 'Food'],
