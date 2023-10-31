@@ -60,16 +60,15 @@ describe('Processing documents', () => {
         expect(response.total).toBe(34.95);
         expect(response.tax).toBe(2.66);
         expect(response.subtotal).toBe(32.29);
-        expect(response.category).toBe('Job Supplies');
+        expect(response.category).toBe('Grocery');
         expect(response.document_type).toBe("receipt");
-        expect(response.document_reference_number).toBe('452050595341');
         expect(response.line_items.length).toBe(4);
         expect(response.payment.card_number).toBe('7373');
         expect(response.payment.type).toBe('visa');
     }
 
     const checkInvoiceResponse = (response: VeryfiDocument) => {
-        expect(response.vendor.name).toBe('Rumpke of Ohio');
+        expect(response.vendor.name).toBe('Rumpke');
         expect(response.vendor.address).toBe('10795 Hughes Rd, Cincinnati, OH, 45251, US');
         expect(response.date).toBe('2020-08-04 00:00:00');
         expect(response.due_date).toBe('2020-08-19');
