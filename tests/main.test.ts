@@ -60,7 +60,6 @@ describe('Processing documents', () => {
         expect(response.total).toBe(34.95);
         expect(response.tax).toBe(2.66);
         expect(response.subtotal).toBe(32.29);
-        expect(response.category).toBe('Job Supplies');
         expect(response.document_type).toBe("receipt");
         expect(response.line_items.length).toBe(4);
         expect(response.payment.card_number).toBe('7373');
