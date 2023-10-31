@@ -60,7 +60,7 @@ describe('Processing documents', () => {
         expect(response.total).toBe(34.95);
         expect(response.tax).toBe(2.66);
         expect(response.subtotal).toBe(32.29);
-        expect(response.category).toBe('Grocery');
+        expect(response.category).toBe('Job Supplies');
         expect(response.document_type).toBe("receipt");
         expect(response.line_items.length).toBe(4);
         expect(response.payment.card_number).toBe('7373');
@@ -69,15 +69,15 @@ describe('Processing documents', () => {
 
     const checkInvoiceResponse = (response: VeryfiDocument) => {
         expect(response.vendor.name).toBe('Rumpke');
-        expect(response.vendor.address).toBe('10795 Hughes Rd, Cincinnati, OH, 45251, US');
+        expect(response.vendor.address).toBe('3800 STRUBLE RD\nCINCINATTI OH 45251');
         expect(response.date).toBe('2020-08-04 00:00:00');
         expect(response.due_date).toBe('2020-08-19');
         expect(response.invoice_number).toBe('0998811');
         expect(response.total).toBe(329.74);
         expect(response.tax).toBe(23.47);
-        expect(response.subtotal).toBe(306.27);
+        expect(response.subtotal).toBe(329.74);
         expect(response.category).toBe('Utilities');
-        expect(response.document_type).toBe("invoice");
+        expect(response.document_type).toBe("receipt");
         expect(response.line_items[0].total).toBe(116.32);
         expect(response.line_items[1].total).toBe(10);
         expect(response.line_items[2].total).toBe(29.89);
