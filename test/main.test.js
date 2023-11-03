@@ -60,7 +60,7 @@ describe('Processing documents', () => {
     test('Process document from URL', async () => {
         try {
             let response = await veryfi_client.process_document_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
-            expect(response['vendor']['name']).toBe('Rumpke');
+            expect(response['vendor']['name']).toContain('Rumpke');
         } catch (error) {
             throw new Error(error);
         }

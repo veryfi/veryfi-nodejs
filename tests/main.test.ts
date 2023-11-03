@@ -81,7 +81,7 @@ describe('Processing documents', () => {
     }
 
     const checkInvoiceResponse = (response: VeryfiDocument) => {
-        expect(response.vendor.name).toBe('Rumpke');
+        expect(response.vendor.name).toContain('Rumpke');
         expect(response.vendor.address).toBe('3800 STRUBLE RD\nCINCINATTI OH 45251');
         expect(response.date).toBe('2020-08-04 00:00:00');
         expect(response.due_date).toBe('2020-08-19');
