@@ -20,7 +20,7 @@ let veryfi_client = new Client(client_id, client_secret, username, api_key, base
 jest.setTimeout(timeout);
 
 describe('Processing documents', () => {
-    test('Upload receipt for processing', async () => {
+    test('Process document from file_path', async () => {
         try {
             let response: VeryfiDocument = await veryfi_client.process_document('resources/receipt.png');
             checkReceiptResponse(response);
@@ -29,12 +29,12 @@ describe('Processing documents', () => {
         }
     });
 
-    test('Process document from buffer', async () => {
+    test('Process document from base64 string', async () => {
         try {
             const file_path = 'resources/receipt.png';
             const image_file = fs.readFileSync(file_path, { encoding: 'base64' });
             const base64_encoded_string = Buffer.from(image_file).toString('utf-8');
-            let response = await veryfi_client.process_document_buffer(
+            let response = await veryfi_client.process_document_base64string(
                 base64_encoded_string,
                 'receipt.png'
             );
@@ -44,7 +44,21 @@ describe('Processing documents', () => {
         }
     });
 
-    test('Process invoice document from URL', async () => {
+    test('Process document from stream', async () => {
+        try {
+            const file_path = 'resources/receipt.png';
+            const file = fs.createReadStream(file_path);
+            let response = await veryfi_client.process_document_stream(
+                file,
+                'receipt.png'
+            );
+            checkReceiptResponse(response);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process document from URL', async () => {
         try {
             let response = await veryfi_client.process_document_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
             checkInvoiceResponse(response);
