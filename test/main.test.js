@@ -132,7 +132,7 @@ describe('Editing Documents', () => {
     test('Delete a document by id', async () => {
         try {
             let docs = await veryfi_client.get_documents();
-            const doc_id = docs.documents[0].id;
+            const doc_id = docs.documents[6].id;
             let response = await veryfi_client.delete_document(doc_id);
             expect(response['status']).toBeDefined();
         } catch (error) {

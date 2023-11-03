@@ -90,7 +90,7 @@ describe('Processing documents', () => {
         expect(response.tax).toBe(23.47);
         expect(response.subtotal).toBe(329.74);
         expect(response.category).toBe('Utilities');
-        expect(response.document_type).toBe("receipt");
+        expect(response.document_type).toBe("invoice");
         expect(response.line_items[0].total).toBe(116.32);
         expect(response.line_items[1].total).toBe(10);
         expect(response.line_items[2].total).toBe(29.89);
@@ -165,7 +165,7 @@ describe('Editing Documents', () => {
     test('Delete a document by id', async () => {
         try {
             let docs = await veryfi_client.get_documents();
-            const doc_id = docs.documents[0].id;
+            const doc_id = docs.documents[3].id;
             let response = await veryfi_client.delete_document(doc_id);
             expect(response['status']).toBe(200);
         } catch (error) {
