@@ -38,7 +38,7 @@ You may need to run the above command with `sudo`.
 
 ### Obtaining Client ID and user keys
 
-If you don't have an account with Veryfi, please go ahead and register here: [https://hub.veryfi.com/signup/api/](https://hub.veryfi.com/signup/api/)
+If you don't have an account with Veryfi, please go ahead and register here: [https://app.veryfi.com/signup/api/](https://app.veryfi.com/signup/api/)
 
 ### Node.js API Client Library
 
@@ -252,6 +252,8 @@ veryfi_client.update_document(id=12345,
 If you run into any issue or need help installing or using the library, please contact support@veryfi.com.
 
 If you found a bug in this library or would like new features added, then open an issue or pull requests against this repo!
+
+### [API Docs](https://docs.veryfi.com/)
 
 ### [Learn more at our blog](https://www.veryfi.com/nodejs/)
 
