@@ -1,3 +1,5 @@
+import fs from "fs";
+
 /**
  * Additional request parameters type
  */
@@ -44,6 +46,7 @@ export declare type VeryfiDocument = {
   payment_display_name?: null | string;
   payment_terms?: null | string;
   payment_type?: null | string;
+  pdf_url?: null | string;
   phone_number?: null | string;
   purchase_order_number?: null | string;
   rounding?: null | number;
@@ -185,6 +188,56 @@ export declare class Client {
    * @returns {Promise<VeryfiDocument>} Object of data extracted from the document
    */
   public get_document(document_id: string): Promise<VeryfiDocument>;
+
+  /**
+   * Process a document and extract all the fields from it
+   * @example
+   * veryfi_client.process_document_buffer('buffer',
+   *                                'receipt.png',
+   *                                ['Entertainment','Food'],
+   *                                true,
+   *                                {'extra': 'parameters'})
+   *
+   * @memberof Client
+   * @param {ReadStream} file ReadStream of a file to submit for data extraction
+   * @param {String} file_name The file name including the extension
+   * @param {Array} categories List of categories Veryfi can use to categorize the document
+   * @param {Boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {Object} kwargs Additional request parameters
+   * @returns {JSON} Data extracted from the document
+   */
+  public process_document_stream(
+      file: fs.ReadStream,
+      file_name: string,
+      categories?: string[],
+      delete_after_processing?: boolean,
+      { ...kwargs }?: VeryfiExtraArgs
+  ): Promise<VeryfiDocument>;
+
+  /**
+   * Process a document and extract all the fields from it
+   * @example
+   * veryfi_client.process_document_buffer_string('base64_encoded_string',
+   *                                'receipt.png',
+   *                                ['Entertainment','Food'],
+   *                                true,
+   *                                {'extra': 'parameters'})
+   *
+   * @memberof Client
+   * @param {String} base64_encoded_string Buffer string of a file to submit for data extraction
+   * @param {String} file_name The file name including the extension
+   * @param {Array} categories List of categories Veryfi can use to categorize the document
+   * @param {Boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {Object} kwargs Additional request parameters
+   * @returns {JSON} Data extracted from the document
+   */
+  public process_document_base64string(
+      base64_encoded_string: string,
+      file_name: string,
+      categories?: string[],
+      delete_after_processing?: boolean,
+      { ...kwargs }?: VeryfiExtraArgs
+  ): Promise<VeryfiDocument>;
 
   /**
    * Process a document and extract all the fields from it
