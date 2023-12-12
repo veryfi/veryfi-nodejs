@@ -10,7 +10,7 @@ const client_id = process.env.VERYFI_CLIENT_ID;
 const client_secret = process.env.VERYFI_CLIENT_SECRET;
 const username = process.env.VERYFI_USERNAME;
 const api_key = process.env.VERYFI_API_KEY;
-const base_url = process.env.VERYFI_URL;
+const base_url = process.env.VERYFI_BASE_URL;
 const api_version = "v8"
 const timeout = 100000;
 
@@ -109,6 +109,32 @@ describe('Managing tags', () => {
             await veryfi_client.delete_tags(doc_id);
             let tag = await veryfi_client.add_tag(doc_id, tag_name);
             expect(tag.name).toBe(tag_name)
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test(`Add multiple tags to a document`, async () => {
+        try {
+            let tags = ['TAG_1', 'TAG_2', 'TAG_3']
+            let docs = await veryfi_client.get_documents();
+            const doc_id = docs.documents[0].id;
+            await veryfi_client.delete_tags(doc_id);
+            let response = await veryfi_client.add_tags(doc_id, tags);
+            expect(response).toBeDefined()
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test(`Replace tags in a document`, async () => {
+        try {
+            let tags = ['TAG_1', 'TAG_2', 'TAG_3']
+            let docs = await veryfi_client.get_documents();
+            const doc_id = docs.documents[0].id;
+            await veryfi_client.delete_tags(doc_id);
+            let response = await veryfi_client.replace_tags(doc_id, tags);
+            expect(response).toBeDefined()
         } catch (error) {
             throw new Error(error);
         }
