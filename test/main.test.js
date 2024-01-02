@@ -10,7 +10,7 @@ const client_id = process.env.VERYFI_CLIENT_ID;
 const client_secret = process.env.VERYFI_CLIENT_SECRET;
 const username = process.env.VERYFI_USERNAME;
 const api_key = process.env.VERYFI_API_KEY;
-const base_url = process.env.VERYFI_BASE_URL;
+const base_url = process.env.VERYFI_URL;
 const api_version = "v8"
 const timeout = 100000;
 
