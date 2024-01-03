@@ -113,6 +113,32 @@ describe('Managing tags', () => {
             throw new Error(error);
         }
     });
+
+    test(`Add multiple tags to a document`, async () => {
+        try {
+            let tags = ['TAG_1', 'TAG_2', 'TAG_3']
+            let docs = await veryfi_client.get_documents();
+            const doc_id = docs.documents[0].id;
+            await veryfi_client.delete_tags(doc_id);
+            let response = await veryfi_client.add_tags(doc_id, tags);
+            expect(response).toBeDefined()
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test(`Replace tags in a document`, async () => {
+        try {
+            let tags = ['TAG_1', 'TAG_2', 'TAG_3']
+            let docs = await veryfi_client.get_documents();
+            const doc_id = docs.documents[0].id;
+            await veryfi_client.delete_tags(doc_id);
+            let response = await veryfi_client.replace_tags(doc_id, tags);
+            expect(response).toBeDefined()
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
 });
 
 describe('Editing Documents', () => {

@@ -328,6 +328,24 @@ export declare class Client {
    */
   public delete_tags(document_id: string): Promise<any>;
 
+  /**
+   * Add multiple tags on an existing document
+   *
+   * @param {number} document_id ID of the document you'd like to add a Tag
+   * @param {string[]} tags name to add
+   * @return {Promise<Tag>} response about tags added.
+   */
+  public add_tags(document_id: string, tags: string[]): Promise<Tag>;
+
+  /**
+   * Replace multiple tags on an existing document
+   *
+   * @param {number} document_id ID of the document you'd like to add a Tag
+   * @param {string[]} tags names to be added
+   * @return {Promise<Tag>} response about tags added.
+   */
+  public replace_tags(document_id: string, tags: string[]): Promise<Tag>;
+
 }
 
 /**
