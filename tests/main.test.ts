@@ -1,7 +1,7 @@
 /**
  * Test main functions and input parameters
  */
-import {VeryfiDocument, VeryfiExtraArgs} from "../lib/types/main";
+import {VeryfiDocument} from "../lib/types/main";
 const Client = require('../lib/main');
 import {describe, expect, test, jest} from '@jest/globals';
 import fs from "fs";
@@ -67,18 +67,6 @@ describe('Processing documents', () => {
         }
     });
 
-    test('Process document with with bounding boxes true', async () => {
-        try {
-            const settings: VeryfiExtraArgs = {
-                bounding_boxes: true
-            };
-            let response: VeryfiDocument = await veryfi_client.process_document('resources/receipt.png', null, null, settings);
-            checkReceiptResponseBoundingBoxes(response);
-        } catch (error) {
-            throw new Error(error);
-        }
-    });
-
     const checkReceiptResponse = (response: VeryfiDocument) => {
         expect(response.vendor.name).toBe('The Home Depot');
         expect(response.vendor.address).toBe('2250 Southgate Rd, Colorado Springs, CO 80906');
@@ -90,12 +78,6 @@ describe('Processing documents', () => {
         expect(response.line_items.length).toBe(4);
         expect(response.payment.card_number).toBe('7373');
         expect(response.payment.type).toBe('visa');
-    }
-
-    const checkReceiptResponseBoundingBoxes = (response: VeryfiDocument) => {
-        if (typeof response.vendor.name !== "string") {
-            expect(response.vendor.name.value).toBe('The Home Depot');
-        }
     }
 
     const checkInvoiceResponse = (response: VeryfiDocument) => {

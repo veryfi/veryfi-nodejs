@@ -8,167 +8,126 @@ export declare type VeryfiExtraArgs = Record<
   string | number | boolean
 >;
 
-export declare type BoundingElement = {
-  bounding_box?: null | number[];
-  bounding_region?: null | number[];
-  rotation?: null | number;
-  value?: null | number | string;
-}
-
 /**
  * Object of data extracted from the document
  */
 export declare type VeryfiDocument = {
-  abn_number?: null | string | BoundingElement;
-  account_number?: null | string | BoundingElement;
-  accounting_entry_type?: null | string;
-  balance?: null | string | BoundingElement;
-  barcodes?: null | string[] | BoundingElement[];
-  bill_to?: null | BillTo;
-  card_number?: null | string | BoundingElement;
-  cashback?: null | number | BoundingElement;
-  category?: null | string | BoundingElement;
-  created_date?: null | string;
-  currency_code?: null | string | BoundingElement;
-  custom_fields?: null | VeryfiExtraArgs;
-  date?: null | string | BoundingElement;
-  default_category?: null | string | BoundingElement;
-  delivery_date?: null | string | BoundingElement;
-  delivery_note_number?: null | string | BoundingElement;
-  discount?: null | number | BoundingElement;
-  document_reference_number?: null | string | BoundingElement;
-  document_title?: null | string | BoundingElement;
-  document_type?: null | string | BoundingElement;
-  due_date?: null | string | BoundingElement;
+  abn_number?: null | string;
+  account_number?: null | string;
+  bill_to_address?: null | string;
+  bill_to_name?: null | string;
+  bill_to_vat_number?: null | string;
+  card_number?: null | string;
+  cashback?: null | number;
+  category?: null | string;
+  created?: null | string;
+  currency_code?: null | string;
+  date?: null | string;
+  delivery_date?: null | string;
+  discount?: null | number;
+  document_reference_number?: null | string;
+  document_title?: null | string;
+  document_type?: null | string;
+  due_date?: null | string;
   duplicate_of?: null | number;
-  exch_rate?: null | number;
   external_id?: null | string;
-  final_balance?: null | number | BoundingElement;
-  guest_count?: null | number | BoundingElement;
   id?: null | number;
-  img_blur?: null | boolean;
   img_file_name?: null | string;
   img_thumbnail_url?: null | string;
   img_url?: null | string;
-  incoterms?: null | number | BoundingElement;
-  insurance?: null | number | BoundingElement;
-  invoice_number?: null | string | BoundingElement;
-  is_approved?: null | boolean;
-  is_blurry?: null | boolean[];
-  is_document?: null | boolean;
-  is_duplicate?: null | boolean;
-  is_money_in?: null | boolean | BoundingElement;
-  license_plate_number?: null | string | BoundingElement;
+  insurance?: null | number;
+  invoice_number?: null | string;
+  is_duplicate?: null | number;
   line_items?: null | LineItem[];
-  line_items_with_scores?: null | LineItem[];
   notes?: null | string;
   ocr_text?: null | string;
-  order_date?: null | string | BoundingElement;
+  order_date?: null | string;
   payment?: null | Payment;
+  payment_display_name?: null | string;
+  payment_terms?: null | string;
+  payment_type?: null | string;
   pdf_url?: null | string;
-  previous_balance?: null | number | BoundingElement;
-  purchase_order_number?: null | string | BoundingElement;
-  rounding?: null | number | BoundingElement;
-  server_name?: null | string | BoundingElement;
+  phone_number?: null | string;
+  purchase_order_number?: null | string;
+  rounding?: null | number;
   service_end_date?: null | string;
   service_start_date?: null | string;
-  ship_date?: null | string | BoundingElement;
-  ship_to?: null | ShipTo;
-  shipping?: null | number | BoundingElement;
-  status?: null | string;
-  store_number?: null | string | BoundingElement;
-  subtotal?: null | number | BoundingElement;
-  tags?: null | Tag[];
-  tax?: null | number | BoundingElement;
+  ship_date?: null | string;
+  ship_to_address?: null | string;
+  ship_to_name?: null | string;
+  shipping?: null | number;
+  store_number?: null | string;
+  subtotal?: null | number;
+  tax?: null | number;
   tax_lines?: null | TaxLine[];
-  tip?: null | number | BoundingElement;
-  total?: null | number | BoundingElement;
-  total_pages?: null | number;
-  total_quantity?: null | string | BoundingElement;
-  total_weight?: null | string | BoundingElement;
-  tracking_number?: null | string | BoundingElement;
-  tracking_numbers?: null | BoundingElement[];
-  updated_date?: null | string;
-  vending_person?: null | string | BoundingElement;
-  vending_person_number?: null | string | BoundingElement;
+  tip?: null | number;
+  total?: null | number;
+  total_weight?: null | string;
+  tracking_number?: null | string;
+  updated?: null | string;
   vat_number?: null | string;
   vendor?: null | Vendor;
-  vendors?: null | BoundingElement[];
-  vin_number?: null | string | BoundingElement;
-  warnings?: null | string[];
-  weights?: null | BoundingElement[];
+  vendor_account_number?: null | string;
+  vendor_bank_name?: null | string;
+  vendor_bank_number?: null | string;
+  vendor_bank_swift?: null | string;
+  vendor_iban?: null | string;
 };
 
 declare type LineItem = {
-  date?: null | string | BoundingElement;
-  description?: null | string | BoundingElement;
-  discount?: null | number | BoundingElement;
-  end_date?: null | string | BoundingElement;
+  date?: null | string;
+  description?: null | string;
+  discount?: null | number;
+  end_date?: null | string;
   hsn?: null | string;
   id?: null | number;
   order?: null | number;
-  price?: null | number | BoundingElement;
-  quantity?: null | number | BoundingElement;
-  reference?: null | string | BoundingElement;
+  price?: null | number;
+  quantity?: null | number;
+  reference?: null | string;
   section?: null | string;
-  sku?: null | string | BoundingElement;
+  sku?: null | string;
   start_date?: null | string;
   tags?: null | null[];
-  tax?: null | number| BoundingElement;
+  tax?: null | number;
   tax_rate?: null | number;
-  total?: null | number | BoundingElement;
+  total?: null | number;
   type?: null | string;
   unit_of_measure?: null | string;
 };
 
 declare type TaxLine = {
-  base?: null | number | BoundingElement;
-  name?: null | string | BoundingElement;
+  base?: null | number;
+  name?: null | string;
   order?: null | number;
-  rate?: null | number | BoundingElement;
-  total?: null | number | BoundingElement;
+  rate?: null | number;
+  total?: null | number;
 };
 
 declare type Vendor = {
-  address?: null | string | BoundingElement;
-  category?: null | string | BoundingElement;
-  email?: null | string | BoundingElement;
-  fax_number?: null | string | BoundingElement;
-  name?: null | string | BoundingElement;
-  phone_number?: null | string | BoundingElement;
+  address?: null | string;
+  category?: null | string;
+  email?: null | string;
+  fax_number?: null | string;
+  name?: null | string;
+  phone_number?: null | string;
   raw_name?: null | string;
-  vendor_logo?: null | string | BoundingElement;
-  vendor_reg_number?: null | string | BoundingElement;
+  vendor_logo?: null | string;
+  vendor_reg_number?: null | string;
   vendor_type?: null | string;
-  web?: null | string | BoundingElement;
+  web?: null | string;
 };
 
 declare type Payment = {
-  card_number?: null | string | BoundingElement;
-  display_name?: null | string | BoundingElement;
-  terms?: null | number | BoundingElement;
+  card_number?: null | string;
+  display_name?: null | string;
+  terms?: null | number;
   type?: null | string;
 };
 
 declare type Tag = {
   id?: null | number;
   name?: null | string;
-};
-
-declare type BillTo = {
-  address?: null | string | BoundingElement;
-  email?: null | string | BoundingElement;
-  name?: null | string | BoundingElement;
-  parsed_address?: null | string;
-  phone_number?: null | number | string | BoundingElement;
-  reg_number?: null | number | string | BoundingElement;
-  vat_number?: null | number | string | BoundingElement;
-};
-
-declare type ShipTo = {
-  address?: null | string | BoundingElement;
-  name?: null | string | BoundingElement;
-  parsed_address?: null | string;
 };
 
 export declare class Client {

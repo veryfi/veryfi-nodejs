@@ -65,18 +65,6 @@ describe('Processing documents', () => {
             throw new Error(error);
         }
     });
-
-    test('Process document with with bounding boxes true', async () => {
-        try {
-            const settings = {
-                bounding_boxes: true
-            };
-            let response = await veryfi_client.process_document('resources/receipt.png', null, null, settings);
-            expect(response).toBeDefined()
-        } catch (error) {
-            throw new Error(error);
-        }
-    });
 });
 
 describe('Managing documents', () => {
