@@ -222,4 +222,23 @@ describe('Test bad credentials',  () => {
         }
     })
 })
+describe('Processing any documents', () => {
+    test('Process any document from file_path', async () => {
+        try {
+            let response = await veryfi_client.process_any_document('resources/receipt.png');
+            expect(response['vendor']['name']).toBe('The Home Depot');
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process any document from URL', async () => {
+        try {
+            let response = await veryfi_client.process_any_document_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
+            expect(response['vendor']['name']).toContain('Rumpke');
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+});
 

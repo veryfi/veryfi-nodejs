@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 
 /**
  * Additional request parameters type
@@ -14,6 +15,8 @@ export declare type BoundingElement = {
   rotation?: null | number;
   value?: null | number | string;
 }
+
+export type JsonObject = Record<string, any>;
 
 /**
  * Object of data extracted from the document
@@ -252,7 +255,7 @@ export declare class Client {
       file_name: string,
       categories?: string[],
       delete_after_processing?: boolean,
-      { ...kwargs }?: VeryfiExtraArgs
+      {...kwargs}?: VeryfiExtraArgs
   ): Promise<VeryfiDocument>;
 
   /**
@@ -277,7 +280,7 @@ export declare class Client {
       file_name: string,
       categories?: string[],
       delete_after_processing?: boolean,
-      { ...kwargs }?: VeryfiExtraArgs
+      {...kwargs}?: VeryfiExtraArgs
   ): Promise<VeryfiDocument>;
 
   /**
@@ -300,7 +303,7 @@ export declare class Client {
       file_path: string,
       categories?: string[],
       delete_after_processing?: boolean,
-      { ...kwargs }?: VeryfiExtraArgs
+      {...kwargs}?: VeryfiExtraArgs
   ): Promise<VeryfiDocument>;
 
   /**
@@ -324,7 +327,7 @@ export declare class Client {
       boost_mode?: number,
       external_id?: string,
       max_pages_to_process?: number,
-      { ...kwargs }?: VeryfiExtraArgs
+      {...kwargs}?: VeryfiExtraArgs
   ): Promise<VeryfiDocument>;
 
   /**
@@ -349,7 +352,7 @@ export declare class Client {
    */
   public update_document(
       document_id: string,
-      { ...kwargs }?: VeryfiExtraArgs
+      {...kwargs}?: VeryfiExtraArgs
   ): Promise<VeryfiDocument>;
 
   /**
@@ -386,6 +389,44 @@ export declare class Client {
    * @return {Promise<Tag>} response about tags added.
    */
   public replace_tags(document_id: string, tags: string[]): Promise<Tag>;
+
+  /**
+   * Process any document and extract all the fields from it
+   * @example
+   * veryfi_client.process_any_document('file/path','template_name')
+   *
+   * @memberof Client
+   * @param {String} file_path Path on disk to a file to submit for data extraction
+   * @param {String} template_name name of the extraction templates.
+   * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
+   * @param {Object} kwargs Additional request parameters
+   * @returns {JSON} Data extracted from the document
+   */
+  public process_any_document(
+      file_path: string,
+      template_name?: string,
+      max_pages_to_process?: number,
+      {...kwargs}?: VeryfiExtraArgs
+  ): Promise<JsonObject>;
+
+  /**
+   * Process any document and extract all the fields from it
+   * @example
+   * veryfi_client.process_any_document_url('file_url','template_name')
+   *
+   * @memberof Client
+   * @param {String} file_url url file to submit for data extraction
+   * @param {String} template_name name of the extraction templates.
+   * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
+   * @param {Object} kwargs Additional request parameters
+   * @returns {JSON} Data extracted from the document
+   */
+  public process_any_document_ur(
+      file_url: string,
+      template_name?: string,
+      max_pages_to_process?: number,
+      {...kwargs}?: VeryfiExtraArgs
+  ): Promise<JsonObject>;
 
 }
 
