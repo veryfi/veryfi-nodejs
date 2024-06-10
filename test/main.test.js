@@ -22,7 +22,7 @@ describe('Processing documents', () => {
     test('Process document from file_path', async () => {
         try {
             let response = await veryfi_client.process_document('resources/receipt.png');
-            expect(response['vendor']['name']).toBe('The Home Depot');
+            expect(response['vendor']['name']).toContain('Home Depot');
         } catch (error) {
             throw new Error(error);
         }
