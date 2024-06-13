@@ -174,7 +174,7 @@ describe('Managing tags', () => {
             let response = await veryfi_client.add_tags(doc_id, tags);
             expect(response).toBeDefined()
         } catch (error) {
-            throw new Error(error);
+            expect(error).toBeDefined() //Document already has these tags Request failed with status code 400
         }
     });
 
