@@ -223,7 +223,12 @@ export declare class Client {
    * @memberof Client
    * @returns {Promise<VeryfiDocument>} Object of previously processed documents
    */
-  public get_documents(): Promise<VeryfiDocument[]>;
+  public get_documents(
+      page?: number,
+      page_size?: number,
+      bounding_boxes?: boolean,
+      confidence_details?: boolean
+  ): Promise<VeryfiDocument[]>;
 
   /**
    * Retrieve document by ID

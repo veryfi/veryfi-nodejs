@@ -222,11 +222,52 @@ describe('Test bad credentials',  () => {
         }
     })
 })
+
+describe('Processing bank statement', () => {
+    test('Process bank statement', async () => {
+        try {
+            let response = await veryfi_client.process_bank_statement('resources/bankstatement.pdf');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process bank statement from URL', async () => {
+        try {
+            let response = await veryfi_client.process_bank_statement_url('https://cdn-dev.veryfi.com/testing/veryfi-python/bankstatement.pdf');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Get bank statements', async () => {
+        try {
+            let docs = await veryfi_client.get_bank_statements();
+            expect(docs.results.length).toBeGreaterThan(0);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test(`Get bank statement with id `, async () => {
+        try {
+            let docs = await veryfi_client.get_bank_statements();
+            const doc_id = docs.results[0].id;
+            let doc = await veryfi_client.get_bank_statement(doc_id);
+            expect(doc['id']).toBe(doc_id);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+});
+
 describe('Processing any documents', () => {
     test('Process any document from file_path', async () => {
         try {
-            let response = await veryfi_client.process_any_document('resources/receipt.png');
-            expect(response['vendor']['name']).toBe('The Home Depot');
+            let response = await veryfi_client.process_any_document('resources/driver_license.png', 'us_driver_license');
+            expect(response).toBeDefined();
         } catch (error) {
             throw new Error(error);
         }
@@ -234,8 +275,28 @@ describe('Processing any documents', () => {
 
     test('Process any document from URL', async () => {
         try {
-            let response = await veryfi_client.process_any_document_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
-            expect(response['vendor']['name']).toContain('Rumpke');
+            let response = await veryfi_client.process_any_document_url('https://cdn-dev.veryfi.com/testing/veryfi-python/driver_license.png', 'us_driver_license');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Get any docs', async () => {
+        try {
+            let docs = await veryfi_client.get_any_documents();
+            expect(docs.results.length).toBeGreaterThan(0);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test(`Get any doc with id `, async () => {
+        try {
+            let docs = await veryfi_client.get_any_documents();
+            const doc_id = docs.results[0].id;
+            let doc = await veryfi_client.get_any_document(doc_id);
+            expect(doc['id']).toBe(doc_id);
         } catch (error) {
             throw new Error(error);
         }
