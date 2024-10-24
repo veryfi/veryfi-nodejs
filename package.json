@@ -3,7 +3,7 @@
   "version": "1.4.0",
   "description": "Node.js module for communicating with the Veryfi OCR API",
   "main": "lib/client/client.js",
-  "typings": "lib/types/main.d.ts",
+  "typings": "lib/types/Client.ts",
   "scripts": {
     "test": "jest",
     "doc": "jsdoc -d docs --configure jsconf.json main.js",
