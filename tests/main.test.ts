@@ -1,11 +1,13 @@
 /**
  * Test main functions and input parameters
  */
-import {VeryfiDocument, VeryfiExtraArgs} from "../lib/types/main";
+import {VeryfiDocument} from "../lib/types/VeryfiDocument";
+
 const Client = require('../lib/main');
 import {describe, expect, test, jest} from '@jest/globals';
 import fs from "fs";
 import assert from "assert";
+import {VeryfiExtraArgs} from "../lib/types/VeryfiExtraArgs";
 
 const client_id = process.env.VERYFI_CLIENT_ID;
 const client_secret = process.env.VERYFI_CLIENT_SECRET;

@@ -2,7 +2,7 @@
  * Test main functions and input parameters
  */
 
-const Client = require('../lib/main');
+const Client = require('../lib/client/Client');
 const fs = require('fs');
 const {expect, describe, test} = require("@jest/globals");
 const assert = require("assert");
@@ -182,7 +182,7 @@ describe('Editing Documents', () => {
 describe('Process w2 documents', () => {
     test('Process a w2 document from file_path', async () => {
         try {
-            await veryfi_client.process_w2_document('resources/w2.png', true);
+            await veryfi_client.process_w2('resources/w2.png', true);
             assert(false)
         } catch (error) {
             assert(true)
@@ -190,7 +190,7 @@ describe('Process w2 documents', () => {
     })
     test('Get a w2 documents and get a document by id', async () => {
         try {
-            await veryfi_client.get_w2_documents()
+            await veryfi_client.get_w2s()
             assert(false)
         } catch (error) {
             assert(true)
@@ -198,7 +198,7 @@ describe('Process w2 documents', () => {
     })
     test('Process a w2 document from url', async () => {
         try{
-            await veryfi_client.process_w2_document_from_url(
+            await veryfi_client.process_w2_url(
                 'w2.png',
                 'https://cdn.veryfi.com/wp-content/uploads/image.png',
                 null,
