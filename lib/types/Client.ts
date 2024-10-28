@@ -405,15 +405,11 @@ export declare class Client {
    *
    * @memberof Client
    * @param {String} file_path Path on disk to a file to submit for data extraction
-   * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
-   * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
   public process_business_card(
       file_path: string,
-      bounding_boxes?: boolean,
-      confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
 
@@ -424,15 +420,11 @@ export declare class Client {
    *
    * @memberof Client
    * @param {String} file_path Path on disk to a file to submit for data extraction
-   * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
-   * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
   public process_business_card_from_buffer(
       file_path: string,
-      bounding_boxes?: boolean,
-      confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
 
@@ -443,15 +435,11 @@ export declare class Client {
    *
    * @memberof Client
    * @param {String} file_url url file to submit for data extraction
-   * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
-   * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
   public process_business_card_url(
       file_url: string,
-      bounding_boxes?: boolean,
-      confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
 

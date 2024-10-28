@@ -223,7 +223,7 @@ describe('Editing Documents', () => {
 describe('Process w2 documents', () => {
     test('Process a w2 document from file_path', async () => {
         try {
-            let doc = await veryfi_client.process_w2_document('resources/w2.png', true);
+            let doc = await veryfi_client.process_w2('resources/w2.png', true);
             expect(doc['control_number']).toBe('A1B2');
             expect(doc['employer_state_id']).toBe('1235');
         } catch (error) {
@@ -232,10 +232,10 @@ describe('Process w2 documents', () => {
     })
     test('Get w2 documents and get a w2 document by id', async () => {
         try {
-            let docs = await veryfi_client.get_w2_documents();
+            let docs = await veryfi_client.get_w2s();
             expect(docs.length).toBeGreaterThan(1);
             let doc_id = docs[0].id;
-            let doc = await veryfi_client.get_w2_document(doc_id);
+            let doc = await veryfi_client.get_w2(doc_id);
             expect(doc['id']).toBe(doc_id);
         } catch (error) {
             throw new Error(error);
@@ -243,7 +243,7 @@ describe('Process w2 documents', () => {
     })
     test('Get w2 documents with page', async () => {
         try {
-            let docs = await veryfi_client.get_w2_documents(1);
+            let docs = await veryfi_client.get_w2s(1);
             expect(docs.length).toBeGreaterThan(1);
         } catch (error) {
             throw new Error(error)
@@ -251,7 +251,7 @@ describe('Process w2 documents', () => {
     })
     test('Process a w2 document from url', async () => {
         try{
-            let doc = await veryfi_client.process_w2_document_from_url(
+            let doc = await veryfi_client.process_w2_url(
                 'w2.png',
                 'https://cdn.veryfi.com/wp-content/uploads/image.png',
                 null,

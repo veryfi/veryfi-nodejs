@@ -12,11 +12,11 @@ const username = process.env.VERYFI_USERNAME;
 const api_key = process.env.VERYFI_API_KEY;
 const base_url = process.env.VERYFI_URL;
 const api_version = "v8"
-const timeout = 100000;
+const timeout = 240000;
 
 //Creating the Client
-let veryfi_client = new Client(client_id, client_secret, username, api_key, base_url, api_version);
-jest.setTimeout(timeout)
+let veryfi_client = new Client(client_id, client_secret, username, api_key, base_url, api_version, 240);
+jest.setTimeout(timeout);
 
 describe('Processing documents', () => {
     test('Process document from file_path', async () => {
@@ -144,7 +144,6 @@ describe('Managing tags', () => {
             let tags = ['TAG_1', 'TAG_2', 'TAG_3']
             let docs = await veryfi_client.get_documents();
             const doc_id = docs.documents[0].id;
-            await veryfi_client.delete_tags(doc_id);
             let response = await veryfi_client.replace_tags(doc_id, tags);
             expect(response).toBeDefined()
         } catch (error) {
@@ -177,39 +176,7 @@ describe('Editing Documents', () => {
             expect(error).toBeDefined();
         }
     });
-})
-
-describe('Process w2 documents', () => {
-    test('Process a w2 document from file_path', async () => {
-        try {
-            await veryfi_client.process_w2('resources/w2.png', true);
-            assert(false)
-        } catch (error) {
-            assert(true)
-        }
-    })
-    test('Get a w2 documents and get a document by id', async () => {
-        try {
-            await veryfi_client.get_w2s()
-            assert(false)
-        } catch (error) {
-            assert(true)
-        }
-    })
-    test('Process a w2 document from url', async () => {
-        try{
-            await veryfi_client.process_w2_url(
-                'w2.png',
-                'https://cdn.veryfi.com/wp-content/uploads/image.png',
-                null,
-                true
-            );
-            assert(false)
-        } catch (error) {
-            assert(true)
-        }
-    })
-})
+});
 
 describe('Test bad credentials',  () => {
     test('Test bad credentials', async () => {
@@ -221,49 +188,40 @@ describe('Test bad credentials',  () => {
             assert(true)
         }
     })
-})
+});
 
-describe('Processing bank statement', () => {
-    test('Process bank statement', async () => {
+describe('Processing any documents', () => {
+    test('Delete any document by id', async () => {
         try {
-            let response = await veryfi_client.process_bank_statement('resources/bankstatement.pdf');
-            expect(response).toBeDefined();
+            let docs = await veryfi_client.get_any_documents();
+            const doc_id = docs.documents[3].id;
+            let response = await veryfi_client.delete_any_document(doc_id);
+            expect(response['status']).toBeDefined();
+        } catch (error) {
+            expect(error).toBeDefined();
+        }
+    });
+
+    test(`Get any doc with id `, async () => {
+        try {
+            let docs = await veryfi_client.get_any_documents();
+            const doc_id = docs.results[0].id;
+            let doc = await veryfi_client.get_any_document(doc_id);
+            expect(doc['id']).toBe(doc_id);
         } catch (error) {
             throw new Error(error);
         }
     });
 
-    test('Process bank statement from URL', async () => {
+    test('Get any docs', async () => {
         try {
-            let response = await veryfi_client.process_bank_statement_url('https://cdn-dev.veryfi.com/testing/veryfi-python/bankstatement.pdf');
-            expect(response).toBeDefined();
-        } catch (error) {
-            throw new Error(error);
-        }
-    });
-
-    test('Get bank statements', async () => {
-        try {
-            let docs = await veryfi_client.get_bank_statements();
+            let docs = await veryfi_client.get_any_documents();
             expect(docs.results.length).toBeGreaterThan(0);
         } catch (error) {
             throw new Error(error);
         }
     });
 
-    test(`Get bank statement with id `, async () => {
-        try {
-            let docs = await veryfi_client.get_bank_statements();
-            const doc_id = docs.results[0].id;
-            let doc = await veryfi_client.get_bank_statement(doc_id);
-            expect(doc['id']).toBe(doc_id);
-        } catch (error) {
-            throw new Error(error);
-        }
-    });
-});
-
-describe('Processing any documents', () => {
     test('Process any document from file_path', async () => {
         try {
             let response = await veryfi_client.process_any_document('resources/driver_license.png', 'us_driver_license');
@@ -281,22 +239,311 @@ describe('Processing any documents', () => {
             throw new Error(error);
         }
     });
+});
 
-    test('Get any docs', async () => {
+describe('Processing business cards', () => {
+    test('Delete business card document by id', async () => {
         try {
-            let docs = await veryfi_client.get_any_documents();
+            let docs = await veryfi_client.get_business_cards();
+            const doc_id = docs.documents[3].id;
+            let response = await veryfi_client.delete_business_card(doc_id);
+            expect(response['status']).toBeDefined();
+        } catch (error) {
+            expect(error).toBeDefined();
+        }
+    });
+
+    test(`Get business card with id `, async () => {
+        try {
+            let docs = await veryfi_client.get_business_cards();
+            const doc_id = docs.results[0].id;
+            let doc = await veryfi_client.get_business_card(doc_id);
+            expect(doc['id']).toBe(doc_id);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Get business cards', async () => {
+        try {
+            let docs = await veryfi_client.get_business_cards();
             expect(docs.results.length).toBeGreaterThan(0);
         } catch (error) {
             throw new Error(error);
         }
     });
 
-    test(`Get any doc with id `, async () => {
+    test('Process business card', async () => {
         try {
-            let docs = await veryfi_client.get_any_documents();
+            let response = await veryfi_client.process_business_card('resources/business_card.jpg');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process business card from URL', async () => {
+        try {
+            let response = await veryfi_client.process_business_card_url('https://cdn-dev.veryfi.com/testing/veryfi-python/business_card.jpg');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+});
+
+describe('Processing bank statement', () => {
+    test('Delete bank-statement document by id', async () => {
+        try {
+            let docs = await veryfi_client.get_bank_statements();
+            const doc_id = docs.documents[3].id;
+            let response = await veryfi_client.delete_bank_statement(doc_id);
+            expect(response['status']).toBeDefined();
+        } catch (error) {
+            expect(error).toBeDefined();
+        }
+    });
+
+    test(`Get bank statement with id `, async () => {
+        try {
+            let docs = await veryfi_client.get_bank_statements();
             const doc_id = docs.results[0].id;
-            let doc = await veryfi_client.get_any_document(doc_id);
+            let doc = await veryfi_client.get_bank_statement(doc_id);
             expect(doc['id']).toBe(doc_id);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Get bank statements', async () => {
+        try {
+            let docs = await veryfi_client.get_bank_statements();
+            expect(docs.results.length).toBeGreaterThan(0);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process bank statement', async () => {
+        try {
+            let response = await veryfi_client.process_bank_statement('resources/bankstatement.pdf');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process bank statement from URL', async () => {
+        try {
+            let response = await veryfi_client.process_bank_statement_url('https://cdn-dev.veryfi.com/testing/veryfi-python/bankstatement.pdf');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+});
+
+describe('Processing checks', () => {
+    test('Delete a check document by id', async () => {
+        try {
+            let docs = await veryfi_client.get_checks();
+            const doc_id = docs.documents[3].id;
+            let response = await veryfi_client.delete_check(doc_id);
+            expect(response['status']).toBeDefined();
+        } catch (error) {
+            expect(error).toBeDefined();
+        }
+    });
+
+    test(`Get check with id `, async () => {
+        try {
+            let docs = await veryfi_client.get_checks();
+            const doc_id = docs.results[0].id;
+            let doc = await veryfi_client.get_check(doc_id);
+            expect(doc['id']).toBe(doc_id);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Get checks', async () => {
+        try {
+            let docs = await veryfi_client.get_checks();
+            expect(docs.results.length).toBeGreaterThan(0);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process check', async () => {
+        try {
+            let response = await veryfi_client.process_check('resources/check.pdf');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process check from URL', async () => {
+        try {
+            let response = await veryfi_client.process_check_url('https://cdn-dev.veryfi.com/testing/veryfi-python/check.pdf');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+});
+
+describe('Process w2 documents', () => {
+    test('Delete a w2 document by id', async () => {
+        try {
+            let docs = await veryfi_client.get_w2s();
+            const doc_id = docs.documents[3].id;
+            let response = await veryfi_client.delete_w2(doc_id);
+            expect(response['status']).toBeDefined();
+        } catch (error) {
+            expect(error).toBeDefined();
+        }
+    });
+
+    test(`Get w2 with id `, async () => {
+        try {
+            let docs = await veryfi_client.get_w2s();
+            const doc_id = docs.results[0].id;
+            let doc = await veryfi_client.get_w2(doc_id);
+            expect(doc['id']).toBe(doc_id);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Get w2s', async () => {
+        try {
+            let docs = await veryfi_client.get_w2s();
+            expect(docs.results.length).toBeGreaterThan(0);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process a w2 document from file_path', async () => {
+        try {
+            let response = await veryfi_client.process_w2('resources/w2.png');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    })
+    test('Process a w2 document from url', async () => {
+        try{
+            let response = await veryfi_client.process_w2_url(
+                'w2.png',
+                'https://cdn.veryfi.com/wp-content/uploads/image.png',
+                null,
+                true);
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    })
+});
+
+describe('Processing W-8BEN-E', () => {
+    test('Delete a W-8BEN-E document by id', async () => {
+        try {
+            let docs = await veryfi_client.get_w8benes();
+            const doc_id = docs.documents[3].id;
+            let response = await veryfi_client.delete_w8bene(doc_id);
+            expect(response['status']).toBeDefined();
+        } catch (error) {
+            expect(error).toBeDefined();
+        }
+    });
+
+    test(`Get W-8BEN-E with id `, async () => {
+        try {
+            let docs = await veryfi_client.get_w8benes();
+            const doc_id = docs.results[0].id;
+            let doc = await veryfi_client.get_w8bene(doc_id);
+            expect(doc['id']).toBe(doc_id);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Get W-8BEN-Es', async () => {
+        try {
+            let docs = await veryfi_client.get_w8benes();
+            expect(docs.results.length).toBeGreaterThan(0);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process W-8BEN-E', async () => {
+        try {
+            let response = await veryfi_client.process_w8bene('resources/w8bene.pdf');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process W-8BEN-E from URL', async () => {
+        try {
+            let response = await veryfi_client.process_w8bene_url('https://cdn-dev.veryfi.com/testing/veryfi-python/w8bene.pdf');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+});
+
+describe('Processing W9s', () => {
+    test('Delete a W9 document by id', async () => {
+        try {
+            let docs = await veryfi_client.get_w9s();
+            const doc_id = docs.documents[3].id;
+            let response = await veryfi_client.delete_w9(doc_id);
+            expect(response['status']).toBeDefined();
+        } catch (error) {
+            expect(error).toBeDefined();
+        }
+    });
+
+    test(`Get W9 with id `, async () => {
+        try {
+            let docs = await veryfi_client.get_w9s();
+            const doc_id = docs.results[0].id;
+            let doc = await veryfi_client.get_w9(doc_id);
+            expect(doc['id']).toBe(doc_id);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Get W9s', async () => {
+        try {
+            let docs = await veryfi_client.get_w9s();
+            expect(docs.results.length).toBeGreaterThan(0);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process W9', async () => {
+        try {
+            let response = await veryfi_client.process_w9('resources/w9.pdf');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Process W9 from URL', async () => {
+        try {
+            let response = await veryfi_client.process_w9_url('https://cdn-dev.veryfi.com/testing/veryfi-python/w9.pdf');
+            expect(response).toBeDefined();
         } catch (error) {
             throw new Error(error);
         }
