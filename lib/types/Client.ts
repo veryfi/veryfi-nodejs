@@ -34,10 +34,22 @@ export declare class Client {
   private _get_headers;
   private _get_url;
   private _generate_signature;
-  private _request;
 
   /**
-   * Delete document from Veryfi
+   * Submit the HTTP request.
+   * @private
+   * @param {string} http_verb HTTP Method
+   * @param {string} endpoint_name Endpoint name such as 'documents', 'users', etc.
+   * @param {{}} request_arguments JSON payload to send to Veryfi
+   * @param params {{}} query params.
+   * @param {Boolean} has_files Are there any files to be submitted as binary
+   * @returns {JSON} A JSON of the response data.
+   */
+  public _request(http_verb: String, endpoint_name: String, request_arguments: Object, params:Object, has_files:boolean): Promise<any>;
+
+
+  /**
+   * Delete document from Veryfi. https://docs.veryfi.com/api/receipts-invoices/delete-a-document/
    * @memberof Client
    * @param {string} document_id ID of the document you'd like to delete
    * @returns {Promise<VeryfiDocument>} Object of data extracted from the document
@@ -45,7 +57,7 @@ export declare class Client {
   public delete_document(document_id: string): Promise<any>;
 
   /**
-   * Retrieve document by ID
+   * Retrieve document by ID. https://docs.veryfi.com/api/receipts-invoices/get-a-document/
    * @memberof Client
    * @param {string} document_id ID of the document you'd like to retrieve
    * @param {Object} kwargs Additional request parameters
@@ -54,7 +66,7 @@ export declare class Client {
   public get_document(document_id: string,  {...kwargs}?: VeryfiExtraArgs): Promise<VeryfiDocument>;
 
   /**
-   * Get all documents
+   * Get all documents. https://docs.veryfi.com/api/receipts-invoices/search-documents/
    * @memberof Client
    * @returns {Promise<VeryfiDocument>} Object of previously processed documents
    */
@@ -66,7 +78,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process a document and extract all the fields from it
+   * Process a document and extract all the fields from it. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
    * @example
    * veryfi_client.process_document(
    *   'file/path',
@@ -89,7 +101,7 @@ export declare class Client {
   ): Promise<VeryfiDocument>;
 
   /**
-   * Process a document and extract all the fields from it
+   * Process a document and extract all the fields from it. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
    * @example
    * veryfi_client.process_document_buffer_string('base64_encoded_string',
    *                                'receipt.png',
@@ -114,7 +126,7 @@ export declare class Client {
   ): Promise<VeryfiDocument>;
 
   /**
-   * Process a document and extract all the fields from it
+   * Process a document and extract all the fields from it. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
    * @example
    * veryfi_client.process_document_buffer('buffer',
    *                                'receipt.png',
@@ -139,7 +151,7 @@ export declare class Client {
   ): Promise<VeryfiDocument>;
 
   /**
-   * Process document from url and extract all the fields from it.
+   * Process document from url and extract all the fields from it. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
    * @memberof Client
    * @param {string} file_url Required if file_urls isn't specified. Publicly accessible URL to a file, e.g. 'https://cdn.example.com/receipt.jpg'.
    * @param {string[]} file_urls Required if file_url isn't specified. List of publicly accessible URLs to multiple files, e.g. ['https://cdn.example.com/receipt1.jpg', 'https://cdn.example.com/receipt2.jpg']
@@ -164,6 +176,7 @@ export declare class Client {
 
   /**
    * Update data for a previously processed document, including almost any field like `vendor`, `date`, `notes` etc.
+   * https://docs.veryfi.com/api/receipts-invoices/update-a-document/
    * @example
    * veryfi_client.update_document(
    *   id,
@@ -181,7 +194,7 @@ export declare class Client {
 
 
   /**
-   * Delete any document from Veryfi
+   * Delete any document from Veryfi. https://docs.veryfi.com/api/receipts-invoices/delete-a-document/
    * @memberof Client
    * @param {string} document_id ID of the document you'd like to delete
    * @returns {Promise<any>} Object of data extracted from the document
@@ -189,7 +202,7 @@ export declare class Client {
   public delete_any_document(document_id: string): Promise<any>;
 
   /**
-   * Get a specific any document
+   * Get a specific any document. https://docs.veryfi.com/api/anydocs/get-a-%E2%88%80-doc/
    * @memberof Client
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
@@ -201,7 +214,7 @@ export declare class Client {
                           confidence_details?: boolean): Promise<JsonObject>;
 
   /**
-   * Get all any documents
+   * Get all any documents. https://docs.veryfi.com/api/anydocs/get-%E2%88%80-docs/
    * @memberof Client
    * @param {number} page The page number. The response is capped to maximum of 50 results per page.
    * @param {number} page_size The number of Documents per page.
@@ -215,7 +228,7 @@ export declare class Client {
                            confidence_details?: boolean): Promise<JsonObject>;
 
   /**
-   * Process any document and extract all the fields from it
+   * Process any document and extract all the fields from it. https://docs.veryfi.com/api/anydocs/process-%E2%88%80-doc/
    * @example
    * veryfi_client.process_any_document('file/path','template_name')
    *
@@ -253,7 +266,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process any document and extract all the fields from it
+   * Process any document and extract all the fields from it. https://docs.veryfi.com/api/anydocs/process-%E2%88%80-doc/
    * @example
    * veryfi_client.process_any_document_url('file_url','template_name')
    *
@@ -272,7 +285,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Delete bank statement document from Veryfi
+   * Delete bank statement document from Veryfi. https://docs.veryfi.com/api/bank-statements/delete-a-bank-statement/
    * @memberof Client
    * @param {string} document_id ID of the document you'd like to delete
    * @returns {Promise<any>} Object of data extracted from the document
@@ -280,7 +293,7 @@ export declare class Client {
   public delete_bank_statement(document_id: string): Promise<any>;
 
   /**
-   * Get a specific bank statement
+   * Get a specific bank statement. https://docs.veryfi.com/api/bank-statements/get-a-bank-statement/
    * @memberof Client
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
@@ -291,7 +304,7 @@ export declare class Client {
                             confidence_details?: boolean): Promise<JsonObject>;
 
   /**
-   * Get all bank statements
+   * Get all bank statements. https://docs.veryfi.com/api/bank-statements/get-bank-statements/
    * @memberof Client
    * @param {number} page The page number. The response is capped to maximum of 50 results per page.
    * @param {number} page_size The number of Documents per page.
@@ -307,7 +320,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process bank statement and extract all the fields from it
+   * Process bank statement and extract all the fields from it. https://docs.veryfi.com/api/bank-statements/process-a-bank-statement/
    * @example
    * veryfi_client.process_bank_statement('file/path')
    *
@@ -326,7 +339,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process bank statement and extract all the fields from it
+   * Process bank statement and extract all the fields from it. https://docs.veryfi.com/api/bank-statements/process-a-bank-statement/
    * @example
    * veryfi_client.process_bank_statement('file/path')
    *
@@ -345,7 +358,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process bank statement document and extract all the fields from it
+   * Process bank statement document and extract all the fields from it. https://docs.veryfi.com/api/bank-statements/process-a-bank-statement/
    * @example
    * veryfi_client.process_bank_statement_url('file_url')
    *
@@ -364,7 +377,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Delete business card document from Veryfi
+   * Delete business card document from Veryfi. https://docs.veryfi.com/api/business-cards/delete-a-business-card/
    * @memberof Client
    * @param {string} document_id ID of the document you'd like to delete
    * @returns {Promise<any>} Object of data extracted from the document
@@ -372,7 +385,7 @@ export declare class Client {
   public delete_business_card(document_id: string): Promise<any>;
 
   /**
-   * Get a specific business card
+   * Get a specific business card. https://docs.veryfi.com/api/business-cards/get-a-business-card/
    * @memberof Client
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
@@ -383,7 +396,7 @@ export declare class Client {
                            confidence_details?: boolean): Promise<JsonObject[]>;
 
   /**
-   * Get all business cards
+   * Get all business cards. https://docs.veryfi.com/api/business-cards/get-business-cards/
    * @memberof Client
    * @param {number} page The page number. The response is capped to maximum of 50 results per page.
    * @param {number} page_size The number of Documents per page.
@@ -399,7 +412,7 @@ export declare class Client {
   ): Promise<JsonObject[]>;
 
   /**
-   * Process business card and extract all the fields from it
+   * Process business card and extract all the fields from it. https://docs.veryfi.com/api/business-cards/process-a-business-card/
    * @example
    * veryfi_client.process_business_card('file/path')
    *
@@ -414,7 +427,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process business card and extract all the fields from it
+   * Process business card and extract all the fields from it. https://docs.veryfi.com/api/business-cards/process-a-business-card/
    * @example
    * veryfi_client.process_business_card_from_buffer('file/path')
    *
@@ -429,7 +442,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process business card document and extract all the fields from it
+   * Process business card document and extract all the fields from it. https://docs.veryfi.com/api/business-cards/process-a-business-card/
    * @example
    * veryfi_client.process_business_card_url('file_url')
    *
@@ -445,7 +458,7 @@ export declare class Client {
 
 
   /**
-   * Delete a check document from Veryfi
+   * Delete a check document from Veryfi. https://docs.veryfi.com/api/checks/delete-a-check/
    * @memberof Client
    * @param {string} document_id ID of the document you'd like to delete
    * @returns {Promise<any>} Object of data extracted from the document
@@ -453,7 +466,7 @@ export declare class Client {
   public delete_check(document_id: string): Promise<any>;
 
   /**
-   * Get a specific check
+   * Get a specific check. https://docs.veryfi.com/api/checks/get-a-check/
    * @memberof Client
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
@@ -464,7 +477,7 @@ export declare class Client {
                    confidence_details?: boolean): Promise<JsonObject[]>;
 
   /**
-   * Get all checks
+   * Get all checks. https://docs.veryfi.com/api/checks/get-checks/
    * @memberof Client
    * @param {number} page The page number. The response is capped to maximum of 50 results per page.
    * @param {number} page_size The number of Documents per page.
@@ -480,7 +493,7 @@ export declare class Client {
   ): Promise<JsonObject[]>;
 
   /**
-   * Process check and extract all the fields from it
+   * Process check and extract all the fields from it. https://docs.veryfi.com/api/checks/process-a-check/
    * @example
    * veryfi_client.process_check('file/path')
    *
@@ -499,7 +512,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process check and extract all the fields from it
+   * Process check and extract all the fields from it. https://docs.veryfi.com/api/checks/process-a-check/
    * @example
    * veryfi_client.process_check_from_buffer('file/path')
    *
@@ -518,7 +531,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process a check document and extract all the fields from it
+   * Process a check document and extract all the fields from it. https://docs.veryfi.com/api/checks/process-a-check/
    * @example
    * veryfi_client.process_check_url('file_url')
    *
@@ -537,7 +550,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Delete w2 document from Veryfi
+   * Delete w2 document from Veryfi. https://docs.veryfi.com/api/w2s/delete-a-w2/
    * @memberof Client
    * @param {string} document_id ID of the document you'd like to delete
    * @returns {Promise<any>} Object of data extracted from the document
@@ -545,7 +558,7 @@ export declare class Client {
   public delete_w2(document_id: string): Promise<any>;
 
   /**
-   * Get a specific w2
+   * Get a specific w2. https://docs.veryfi.com/api/w2s/get-a-w-2/
    * @memberof Client
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
@@ -556,7 +569,7 @@ export declare class Client {
                 confidence_details?: boolean): Promise<JsonObject[]>;
 
   /**
-   * Get all w2s
+   * Get all w2s. https://docs.veryfi.com/api/w2s/get-w-2-s/
    * @memberof Client
    * @param {number} page The page number. The response is capped to maximum of 50 results per page.
    * @param {number} page_size The number of Documents per page.
@@ -572,7 +585,7 @@ export declare class Client {
   ): Promise<JsonObject[]>;
 
   /**
-   * Process w2 and extract all the fields from it
+   * Process w2 and extract all the fields from it. https://docs.veryfi.com/api/w2s/process-a-w-2/
    * @example
    * veryfi_client.process_w2('file/path')
    *
@@ -591,7 +604,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process w2 and extract all the fields from it
+   * Process w2 and extract all the fields from it. https://docs.veryfi.com/api/w2s/process-a-w-2/
    * @example
    * veryfi_client.process_w2_from_buffer('file/path')
    *
@@ -612,7 +625,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process w2 document and extract all the fields from it
+   * Process w2 document and extract all the fields from it. https://docs.veryfi.com/api/w2s/process-a-w-2/
    * @example
    * veryfi_client.process_w2_url('file_url')
    *
@@ -636,7 +649,7 @@ export declare class Client {
 
 
   /**
-   * Delete  W-8BEN-E document from Veryfi
+   * Delete  W-8BEN-E document from Veryfi. https://docs.veryfi.com/api/w-8ben-e/delete-a-w-8-ben-e/
    * @memberof Client
    * @param {string} document_id ID of the document you'd like to delete
    * @returns {Promise<any>} Object of data extracted from the document
@@ -644,7 +657,7 @@ export declare class Client {
   public delete_w8bene(document_id: string): Promise<any>;
 
   /**
-   * Get a specific  W-8BEN-E
+   * Get a specific  W-8BEN-E. https://docs.veryfi.com/api/w-8ben-e/get-a-w-8-ben-e/
    * @memberof Client
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
@@ -655,7 +668,7 @@ export declare class Client {
                     confidence_details?: boolean): Promise<JsonObject[]>;
 
   /**
-   * Get all W-8BEN-E forms
+   * Get all W-8BEN-E. https://docs.veryfi.com/api/w-8ben-e/get-w-8-ben-es/
    * @memberof Client
    * @param {number} page The page number. The response is capped to maximum of 50 results per page.
    * @param {number} page_size The number of Documents per page.
@@ -671,7 +684,7 @@ export declare class Client {
   ): Promise<JsonObject[]>;
 
   /**
-   * Process W-8BEN-E and extract all the fields from it
+   * Process W-8BEN-E and extract all the fields from it. https://docs.veryfi.com/api/w-8ben-e/process-a-w-8-ben-e/
    * @example
    * veryfi_client.process_w8bene('file/path')
    *
@@ -690,7 +703,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process W-8BEN-E and extract all the fields from it
+   * Process W-8BEN-E and extract all the fields from it. https://docs.veryfi.com/api/w-8ben-e/process-a-w-8-ben-e/
    * @example
    * veryfi_client.process_w8bene_from_buffer('file/path')
    *
@@ -709,7 +722,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process W-8BEN-E document and extract all the fields from it
+   * Process W-8BEN-E document and extract all the fields from it. https://docs.veryfi.com/api/w-8ben-e/process-a-w-8-ben-e/
    * @example
    * veryfi_client.process_w8bene_url('file_url')
    *
@@ -729,7 +742,7 @@ export declare class Client {
 
 
   /**
-   * Delete W9 document from Veryfi
+   * Delete W9 document from Veryfi. https://docs.veryfi.com/api/w9s/delete-a-w-9/
    * @memberof Client
    * @param {string} document_id ID of the document you'd like to delete
    * @returns {Promise<any>} Object of data extracted from the document
@@ -737,7 +750,7 @@ export declare class Client {
   public delete_w9(document_id: string): Promise<any>;
 
   /**
-   * Get a specific w9
+   * Get a specific w9. https://docs.veryfi.com/api/w9s/get-a-w-9/
    * @memberof Client
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
@@ -748,7 +761,7 @@ export declare class Client {
                 confidence_details?: boolean): Promise<JsonObject[]>;
 
   /**
-   * Get all w9s
+   * Get all w9s. https://docs.veryfi.com/api/w9s/get-w-9-s/
    * @memberof Client
    * @param {number} page The page number. The response is capped to maximum of 50 results per page.
    * @param {number} page_size The number of Documents per page.
@@ -764,7 +777,7 @@ export declare class Client {
   ): Promise<JsonObject[]>;
 
   /**
-   * Process w9 and extract all the fields from it
+   * Process w9 and extract all the fields from it. https://docs.veryfi.com/api/w9s/process-a-w-9/
    * @example
    * veryfi_client.process_w9('file/path')
    *
@@ -783,7 +796,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process w9 and extract all the fields from it
+   * Process w9 and extract all the fields from it. https://docs.veryfi.com/api/w9s/process-a-w-9/
    * @example
    * veryfi_client.process_w9_from_buffer('file/path')
    *
@@ -802,7 +815,7 @@ export declare class Client {
   ): Promise<JsonObject>;
 
   /**
-   * Process w9 document and extract all the fields from it
+   * Process w9 document and extract all the fields from it. https://docs.veryfi.com/api/w9s/process-a-w-9/
    * @example
    * veryfi_client.process_w9_url('file_url')
    *
@@ -822,7 +835,7 @@ export declare class Client {
 
 
   /**
-   * Add a new tag on an existing document
+   * Add a new tag on an existing document. https://docs.veryfi.com/api/receipts-invoices/add-a-tag-to-a-document/
    *
    * @param {number} document_id ID of the document you'd like to add a Tag
    * @param {string} tag name to add
@@ -831,7 +844,7 @@ export declare class Client {
   public add_tag(document_id: string, tag: string): Promise<Tag>;
 
   /**
-   * Delete all tags on an existing document
+   * Delete all tags on an existing document. https://docs.veryfi.com/api/receipts-invoices/unlink-all-tags-from-a-document/
    *
    * @param {number} document_id ID of the document you'd like to delete all Tags
    * @return {Promise<any>} response about deleted tags.
@@ -839,7 +852,7 @@ export declare class Client {
   public delete_tags(document_id: string): Promise<any>;
 
   /**
-   * Add multiple tags on an existing document
+   * Add multiple tags on an existing document. https://docs.veryfi.com/api/receipts-invoices/add-tags-to-a-document/
    *
    * @param {number} document_id ID of the document you'd like to add a Tag
    * @param {string[]} tags name to add
@@ -848,7 +861,7 @@ export declare class Client {
   public add_tags(document_id: string, tags: string[]): Promise<Tag>;
 
   /**
-   * Replace multiple tags on an existing document
+   * Replace multiple tags on an existing document. https://docs.veryfi.com/api/receipts-invoices/add-tags-to-a-document/
    *
    * @param {number} document_id ID of the document you'd like to add a Tag
    * @param {string[]} tags names to be added
