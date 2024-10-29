@@ -63,7 +63,7 @@ export declare class Client {
       page_size?: number,
       bounding_boxes?: boolean,
       confidence_details?: boolean
-  ): Promise<VeryfiDocument[]>;
+  ): Promise<JsonObject>;
 
   /**
    * Process a document and extract all the fields from it
@@ -198,7 +198,7 @@ export declare class Client {
    */
   public get_any_document(document_id: number,
                           bounding_boxes?: boolean,
-                          confidence_details?: boolean): Promise<JsonObject[]>;
+                          confidence_details?: boolean): Promise<JsonObject>;
 
   /**
    * Get all any documents
@@ -212,7 +212,7 @@ export declare class Client {
   public get_any_documents(page?: number,
                            page_size?: number,
                            bounding_boxes?: boolean,
-                           confidence_details?: boolean): Promise<JsonObject[]>;
+                           confidence_details?: boolean): Promise<JsonObject>;
 
   /**
    * Process any document and extract all the fields from it
@@ -288,7 +288,7 @@ export declare class Client {
    * @returns {Promise<JsonObject>} Object of a previously processed blueprinted document.
    */
   public get_bank_statement(document_id: number, bounding_boxes?: boolean,
-                            confidence_details?: boolean): Promise<JsonObject[]>;
+                            confidence_details?: boolean): Promise<JsonObject>;
 
   /**
    * Get all bank statements
@@ -304,7 +304,7 @@ export declare class Client {
       page_size?: number,
       bounding_boxes?: boolean,
       confidence_details?: boolean
-  ): Promise<JsonObject[]>;
+  ): Promise<JsonObject>;
 
   /**
    * Process bank statement and extract all the fields from it
@@ -578,15 +578,15 @@ export declare class Client {
    *
    * @memberof Client
    * @param {String} file_path Path on disk to a file to submit for data extraction
-   * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
-   * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {int} max_pages_to_process When sending a long document to Veryfi for processing, this parameter controls how many pages of the document will be read and processed, starting from page 1.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
   public process_w2(
       file_path: string,
-      bounding_boxes?: boolean,
-      confidence_details?: boolean,
+      delete_after_processing?: boolean,
+      max_pages_to_process?: number,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
 
@@ -596,16 +596,18 @@ export declare class Client {
    * veryfi_client.process_w2_from_buffer('file/path')
    *
    * @memberof Client
-   * @param {String} file_path Path on disk to a file to submit for data extraction
-   * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
-   * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {String} file_name The file name including the extension
+   * @param {String} file_buffer Buffer of a file to submit for data extraction
+   * @param {boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {int} max_pages_to_process When sending a long document to Veryfi for processing, this parameter controls how many pages of the document will be read and processed, starting from page 1.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
   public process_w2_from_buffer(
-      file_path: string,
-      bounding_boxes?: boolean,
-      confidence_details?: boolean,
+      file_name: string,
+      file_buffer?: string,
+      delete_after_processing?: boolean,
+      max_pages_to_process?: number,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
 
@@ -615,16 +617,20 @@ export declare class Client {
    * veryfi_client.process_w2_url('file_url')
    *
    * @memberof Client
-   * @param {String} file_url url file to submit for data extraction
-   * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
-   * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {String} file_name The file name including the extension
+   * @param {string} file_url Required if file_urls isn't specified. Publicly accessible URL to a file, e.g. "https://cdn.example.com/receipt.jpg".
+   * @param {Array} file_urls Required if file_url isn't specified. List of publicly accessible URLs to multiple files, e.g. ["https://cdn.example.com/receipt1.jpg", "https://cdn.example.com/receipt2.jpg"]
+   * @param {boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {int} max_pages_to_process When sending a long document to Veryfi for processing, this parameter controls how many pages of the document will be read and processed, starting from page 1.
    * @param {Object} kwargs Additional request parameters
-   * @returns {JSON} Data extracted from the document
+   * @returns {JsonObject} Data extracted from the document
    */
   public process_w2_url(
+      file_name: string,
       file_url: string,
-      bounding_boxes?: boolean,
-      confidence_details?: boolean,
+      file_urls?: string[],
+      delete_after_processing?: boolean,
+      max_pages_to_process?: number,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
 
