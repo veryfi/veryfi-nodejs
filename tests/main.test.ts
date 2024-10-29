@@ -3,7 +3,7 @@
  */
 import {VeryfiDocument} from "../lib/types/VeryfiDocument";
 
-const Client = require('../lib/main');
+import Client from '../lib/types/Client';
 import {describe, expect, test, jest} from '@jest/globals';
 import fs from "fs";
 import assert from "assert";
@@ -15,10 +15,10 @@ const username = process.env.VERYFI_USERNAME;
 const api_key = process.env.VERYFI_API_KEY;
 const base_url = process.env.VERYFI_URL;
 const api_version = "v8";
-const timeout = Number(100000);
+const timeout = Number(240000);
 
 //Creating the Client
-let veryfi_client = new Client(client_id, client_secret, username, api_key, base_url, api_version);
+let veryfi_client = new Client(client_id, client_secret, username, api_key, base_url, api_version, 240);
 jest.setTimeout(timeout);
 
 describe('Processing documents', () => {
