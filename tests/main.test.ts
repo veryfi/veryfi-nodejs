@@ -3,7 +3,7 @@
  */
 import {VeryfiDocument} from "../lib/types/VeryfiDocument";
 
-import Client from '../lib/client/client';
+const Client = require('../lib/client/Client');
 import {describe, expect, test, jest} from '@jest/globals';
 import fs from "fs";
 import assert from "assert";
