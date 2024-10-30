@@ -12,7 +12,6 @@ export declare class Client {
    * @param {string} username Your Veryfi username
    * @param {string} api_key Your Veryfi API key
    * @param {string} base_url
-   * @param {string} api_version
    * @param {number} timeout
    */
   constructor(
@@ -21,7 +20,6 @@ export declare class Client {
       username: string,
       api_key: string,
       base_url?: string,
-      api_version?: string,
       timeout?: number
   );
   client_id: string;
@@ -30,7 +28,6 @@ export declare class Client {
   api_key: string;
   base_url: string;
   api_version: string;
-  CATEGORIES: string[];
   private _get_headers;
   private _get_url;
   private _generate_signature;
@@ -68,13 +65,19 @@ export declare class Client {
   /**
    * Get all documents. https://docs.veryfi.com/api/receipts-invoices/search-documents/
    * @memberof Client
+   * @param {number} page The page number. The response is capped to maximum of 50 results per page.
+   * @param {number} page_size The number of Documents per page.
+   * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
+   * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters
    * @returns {Promise<VeryfiDocument>} Object of previously processed documents
    */
   public get_documents(
       page?: number,
       page_size?: number,
       bounding_boxes?: boolean,
-      confidence_details?: boolean
+      confidence_details?: boolean,
+      {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
 
   /**
@@ -89,14 +92,14 @@ export declare class Client {
    * @memberof Client
    * @param {string} file_path Path on disk to a file to submit for data extraction
    * @param {string[]} categories List of categories Veryfi can use to categorize the document
-   * @param {boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {boolean} auto_delete Delete this document from Veryfi after data has been extracted
    * @param {VeryfiExtraArgs} kwargs Additional request parameters
    * @returns {Promise<VeryfiDocument>} Object of data extracted from the document
    */
   public process_document(
       file_path: string,
       categories?: string[],
-      delete_after_processing?: boolean,
+      auto_delete?: boolean,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<VeryfiDocument>;
 
@@ -113,7 +116,7 @@ export declare class Client {
    * @param {String} base64_encoded_string Buffer string of a file to submit for data extraction
    * @param {String} file_name The file name including the extension
    * @param {Array} categories List of categories Veryfi can use to categorize the document
-   * @param {Boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {Boolean} auto_delete Delete this document from Veryfi after data has been extracted
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
@@ -121,7 +124,7 @@ export declare class Client {
       base64_encoded_string: string,
       file_name: string,
       categories?: string[],
-      delete_after_processing?: boolean,
+      auto_delete?: boolean,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<VeryfiDocument>;
 
@@ -138,7 +141,7 @@ export declare class Client {
    * @param {ReadStream} file ReadStream of a file to submit for data extraction
    * @param {String} file_name The file name including the extension
    * @param {Array} categories List of categories Veryfi can use to categorize the document
-   * @param {Boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {Boolean} auto_delete Delete this document from Veryfi after data has been extracted
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
@@ -146,7 +149,7 @@ export declare class Client {
       file: fs.ReadStream,
       file_name: string,
       categories?: string[],
-      delete_after_processing?: boolean,
+      auto_delete?: boolean,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<VeryfiDocument>;
 
@@ -156,8 +159,8 @@ export declare class Client {
    * @param {string} file_url Required if file_urls isn't specified. Publicly accessible URL to a file, e.g. 'https://cdn.example.com/receipt.jpg'.
    * @param {string[]} file_urls Required if file_url isn't specified. List of publicly accessible URLs to multiple files, e.g. ['https://cdn.example.com/receipt1.jpg', 'https://cdn.example.com/receipt2.jpg']
    * @param {string[]} categories List of categories to use when categorizing the document
-   * @param {boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
-   * @param {number} boost_mode Flag that tells Veryfi whether boost mode should be enabled. When set to 1, Veryfi will skip data enrichment steps, but will process the document faster. Default value for this flag is 0
+   * @param {boolean} auto_delete Delete this document from Veryfi after data has been extracted
+   * @param {boolean} boost_mode Flag that tells Veryfi whether boost mode should be enabled. When set to 1, Veryfi will skip data enrichment steps, but will process the document faster. Default value for this flag is 0
    * @param {string} external_id Optional custom document identifier. Use this if you would like to assign your own ID to documents
    * @param {number} max_pages_to_process When sending a long document to Veryfi for processing, this parameter controls how many pages of the document will be read and processed, starting from page 1.
    * @param {VeryfiExtraArgs} kwargs Additional request parameters
@@ -167,8 +170,8 @@ export declare class Client {
       file_url?: string,
       file_urls?: string[],
       categories?: string[],
-      delete_after_processing?: boolean,
-      boost_mode?: number,
+      auto_delete?: boolean,
+      boost_mode?: boolean,
       external_id?: string,
       max_pages_to_process?: number,
       {...kwargs}?: VeryfiExtraArgs
@@ -207,11 +210,13 @@ export declare class Client {
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters
    * @returns {Promise<JsonObject>} Object of a previously processed blueprinted document.
    */
   public get_any_document(document_id: number,
                           bounding_boxes?: boolean,
-                          confidence_details?: boolean): Promise<JsonObject>;
+                          confidence_details?: boolean,
+                          {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
 
   /**
    * Get all any documents. https://docs.veryfi.com/api/anydocs/get-%E2%88%80-docs/
@@ -220,12 +225,14 @@ export declare class Client {
    * @param {number} page_size The number of Documents per page.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters
    * @returns {Promise<JsonObject>} Object of previously processed any documents
    */
   public get_any_documents(page?: number,
                            page_size?: number,
                            bounding_boxes?: boolean,
-                           confidence_details?: boolean): Promise<JsonObject>;
+                           confidence_details?: boolean,
+                           {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
 
   /**
    * Process any document and extract all the fields from it. https://docs.veryfi.com/api/anydocs/process-%E2%88%80-doc/
@@ -310,6 +317,7 @@ export declare class Client {
    * @param {number} page_size The number of Documents per page.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters
    * @returns {Promise<JsonObject>} Object of previously processed any documents
    */
   public get_bank_statements(
@@ -390,6 +398,7 @@ export declare class Client {
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters
    * @returns {Promise<JsonObject>} Object of a previously processed blueprinted document.
    */
   public get_business_card(document_id: number, bounding_boxes?: boolean,
@@ -402,6 +411,7 @@ export declare class Client {
    * @param {number} page_size The number of Documents per page.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters
    * @returns {Promise<JsonObject>} Object of previously processed any documents
    */
   public get_business_cards(
@@ -471,6 +481,7 @@ export declare class Client {
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters.
    * @returns {Promise<JsonObject>} Object of a previously processed blueprinted document.
    */
   public get_check(document_id: number, bounding_boxes?: boolean,
@@ -483,6 +494,7 @@ export declare class Client {
    * @param {number} page_size The number of Documents per page.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters.
    * @returns {Promise<JsonObject>} Object of previously processed any documents
    */
   public get_checks(
@@ -563,6 +575,7 @@ export declare class Client {
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters.
    * @returns {Promise<JsonObject>} Object of a previously processed blueprinted document.
    */
   public get_w2(document_id: number, bounding_boxes?: boolean,
@@ -575,6 +588,7 @@ export declare class Client {
    * @param {number} page_size The number of Documents per page.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters.
    * @returns {Promise<JsonObject>} Object of previously processed any documents
    */
   public get_w2s(
@@ -611,7 +625,7 @@ export declare class Client {
    * @memberof Client
    * @param {String} file_name The file name including the extension
    * @param {String} file_buffer Buffer of a file to submit for data extraction
-   * @param {boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {boolean} auto_delete Delete this document from Veryfi after data has been extracted
    * @param {int} max_pages_to_process When sending a long document to Veryfi for processing, this parameter controls how many pages of the document will be read and processed, starting from page 1.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
@@ -619,7 +633,7 @@ export declare class Client {
   public process_w2_from_buffer(
       file_name: string,
       file_buffer?: string,
-      delete_after_processing?: boolean,
+      auto_delete?: boolean,
       max_pages_to_process?: number,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
@@ -633,7 +647,7 @@ export declare class Client {
    * @param {String} file_name The file name including the extension
    * @param {string} file_url Required if file_urls isn't specified. Publicly accessible URL to a file, e.g. "https://cdn.example.com/receipt.jpg".
    * @param {Array} file_urls Required if file_url isn't specified. List of publicly accessible URLs to multiple files, e.g. ["https://cdn.example.com/receipt1.jpg", "https://cdn.example.com/receipt2.jpg"]
-   * @param {boolean} delete_after_processing Delete this document from Veryfi after data has been extracted
+   * @param {boolean} auto_delete Delete this document from Veryfi after data has been extracted
    * @param {int} max_pages_to_process When sending a long document to Veryfi for processing, this parameter controls how many pages of the document will be read and processed, starting from page 1.
    * @param {Object} kwargs Additional request parameters
    * @returns {JsonObject} Data extracted from the document
@@ -642,7 +656,7 @@ export declare class Client {
       file_name: string,
       file_url: string,
       file_urls?: string[],
-      delete_after_processing?: boolean,
+      auto_delete?: boolean,
       max_pages_to_process?: number,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
@@ -662,6 +676,7 @@ export declare class Client {
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters.
    * @returns {Promise<JsonObject>} Object of a previously processed blueprinted document.
    */
   public get_w8bene(document_id: number, bounding_boxes?: boolean,
@@ -674,6 +689,7 @@ export declare class Client {
    * @param {number} page_size The number of Documents per page.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters.
    * @returns {Promise<JsonObject>} Object of previously processed any documents
    */
   public get_w8benes(
@@ -755,6 +771,7 @@ export declare class Client {
    * @param {number} document_id The unique identifier of the document.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters.
    * @returns {Promise<JsonObject>} Object of a previously processed blueprinted document.
    */
   public get_w9(document_id: number, bounding_boxes?: boolean,
@@ -767,6 +784,7 @@ export declare class Client {
    * @param {number} page_size The number of Documents per page.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+   * @param {Object} kwargs Additional request parameters.
    * @returns {Promise<JsonObject>} Object of previously processed any documents
    */
   public get_w9s(
@@ -888,7 +906,6 @@ export declare function Client(
     username: string,
     api_key: string,
     base_url?: string,
-    api_version?: string,
     timeout?: number
 ): Client;
 
