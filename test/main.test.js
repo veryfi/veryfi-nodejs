@@ -2,7 +2,7 @@
  * Test main functions and input parameters
  */
 
-const Client = require('../lib/client/Client');
+const Client = require('../lib/client/client.js');
 const fs = require('fs');
 const {expect, describe, test} = require("@jest/globals");
 const assert = require("assert");
