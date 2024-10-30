@@ -258,15 +258,15 @@ export declare class Client {
    *
    * @memberof Client
    * @param {String} file_name The file name including the extension
-   * @param {String} file_buffer Buffer of a file to submit for data extraction
+   * @param {String} file_base64_string Base64 of a file to submit for data extraction
    * @param {String} template_name name of the extraction templates.
    * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
-  public process_any_document_from_buffer(
+  public process_any_document_from_base64(
       file_name: string,
-      file_buffer: string,
+      file_base64_string: string,
       template_name?: string,
       max_pages_to_process?: number,
       {...kwargs}?: VeryfiExtraArgs
@@ -353,15 +353,15 @@ export declare class Client {
    *
    * @memberof Client
    * @param {String} file_name The file name including the extension
-   * @param {String} file_buffer Buffer of a file to submit for data extraction
+   * @param {String} file_base64_string Base64 of a file to submit for data extraction
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
-  public process_bank_statement_from_buffer(
+  public process_bank_statement_from_base64(
       file_name: string,
-      file_buffer: string,
+      file_base64_string: string,
       bounding_boxes?: boolean,
       confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
@@ -441,17 +441,17 @@ export declare class Client {
   /**
    * Process business card and extract all the fields from it. https://docs.veryfi.com/api/business-cards/process-a-business-card/
    * @example
-   * veryfi_client.process_business_card_from_buffer('file/path')
+   * veryfi_client.process_business_card_from_base64('file/path')
    *
    * @memberof Client
    * @param {String} file_name The file name including the extension
-   * @param {String} file_buffer Buffer of a file to submit for data extraction
+   * @param {String} file_base64_string Base64 of a file to submit for data extraction
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
-  public process_business_card_from_buffer(
+  public process_business_card_from_base64(
       file_name: string,
-      file_buffer?: string,
+      file_base64_string?: string,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
 
@@ -530,19 +530,19 @@ export declare class Client {
   /**
    * Process check and extract all the fields from it. https://docs.veryfi.com/api/checks/process-a-check/
    * @example
-   * veryfi_client.process_check_from_buffer('file/path')
+   * veryfi_client.process_check_from_base64('file/path')
    *
    * @memberof Client
    * @param {String} file_name The file name including the extension
-   * @param {String} file_buffer Buffer of a file to submit for data extraction
+   * @param {String} file_base64_string Base64 of a file to submit for data extraction
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
-  public process_check_from_buffer(
+  public process_check_from_base64(
       file_name: string,
-      file_buffer: string,
+      file_base64_string: string,
       bounding_boxes?: boolean,
       confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
@@ -626,19 +626,19 @@ export declare class Client {
   /**
    * Process w2 and extract all the fields from it. https://docs.veryfi.com/api/w2s/process-a-w-2/
    * @example
-   * veryfi_client.process_w2_from_buffer('file/path')
+   * veryfi_client.process_w2_from_base64('file/path')
    *
    * @memberof Client
    * @param {String} file_name The file name including the extension
-   * @param {String} file_buffer Buffer of a file to submit for data extraction
+   * @param {String} file_base64_string Base64 of a file to submit for data extraction
    * @param {boolean} auto_delete Delete this document from Veryfi after data has been extracted
    * @param {int} max_pages_to_process When sending a long document to Veryfi for processing, this parameter controls how many pages of the document will be read and processed, starting from page 1.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
-  public process_w2_from_buffer(
+  public process_w2_from_base64(
       file_name: string,
-      file_buffer?: string,
+      file_base64_string?: string,
       auto_delete?: boolean,
       max_pages_to_process?: number,
       {...kwargs}?: VeryfiExtraArgs
@@ -727,19 +727,19 @@ export declare class Client {
   /**
    * Process W-8BEN-E and extract all the fields from it. https://docs.veryfi.com/api/w-8ben-e/process-a-w-8-ben-e/
    * @example
-   * veryfi_client.process_w8bene_from_buffer('file/path')
+   * veryfi_client.process_w8bene_from_base64('file/path')
    *
    * @memberof Client
    * @param {String} file_name The file name including the extension.
-   * @param {String} file_buffer Buffer of a file to submit for data extraction.
+   * @param {String} file_base64_string Base64 of a file to submit for data extraction.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
-  public process_w8bene_from_buffer(
+  public process_w8bene_from_base64(
       file_name: string,
-      file_buffer: string,
+      file_base64_string: string,
       bounding_boxes?: boolean,
       confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
@@ -824,19 +824,19 @@ export declare class Client {
   /**
    * Process w9 and extract all the fields from it. https://docs.veryfi.com/api/w9s/process-a-w-9/
    * @example
-   * veryfi_client.process_w9_from_buffer('file/path')
+   * veryfi_client.process_w9_from_base64('file/path')
    *
    * @memberof Client
    * @param {String} file_name The file name including the extension.
-   * @param {String} file_buffer Buffer of a file to submit for data extraction.
+   * @param {String} file_base64_string Base64 of a file to submit for data extraction.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
-  public process_w9_from_buffer(
+  public process_w9_from_base64(
       file_name: string,
-      file_buffer: string,
+      file_base64_string: string,
       bounding_boxes?: boolean,
       confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
