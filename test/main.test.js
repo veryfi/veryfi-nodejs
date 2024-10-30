@@ -6,7 +6,6 @@ const Client = require('../lib/client/Client');
 const fs = require('fs');
 const {expect, describe, test} = require("@jest/globals");
 const assert = require("assert");
-const mockResponse = require("../mocks/deleteDocument.json");
 const client_id = process.env.VERYFI_CLIENT_ID;
 const client_secret = process.env.VERYFI_CLIENT_SECRET;
 const username = process.env.VERYFI_USERNAME;
