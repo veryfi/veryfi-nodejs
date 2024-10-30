@@ -352,14 +352,16 @@ export declare class Client {
    * veryfi_client.process_bank_statement('file/path')
    *
    * @memberof Client
-   * @param {String} file_path Path on disk to a file to submit for data extraction
+   * @param {String} file_name The file name including the extension
+   * @param {String} file_buffer Buffer of a file to submit for data extraction
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
   public process_bank_statement_from_buffer(
-      file_path: string,
+      file_name: string,
+      file_buffer: string,
       bounding_boxes?: boolean,
       confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
@@ -442,12 +444,14 @@ export declare class Client {
    * veryfi_client.process_business_card_from_buffer('file/path')
    *
    * @memberof Client
-   * @param {String} file_path Path on disk to a file to submit for data extraction
+   * @param {String} file_name The file name including the extension
+   * @param {String} file_buffer Buffer of a file to submit for data extraction
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
   public process_business_card_from_buffer(
-      file_path: string,
+      file_name: string,
+      file_buffer?: string,
       {...kwargs}?: VeryfiExtraArgs
   ): Promise<JsonObject>;
 
@@ -529,14 +533,16 @@ export declare class Client {
    * veryfi_client.process_check_from_buffer('file/path')
    *
    * @memberof Client
-   * @param {String} file_path Path on disk to a file to submit for data extraction
+   * @param {String} file_name The file name including the extension
+   * @param {String} file_buffer Buffer of a file to submit for data extraction
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
   public process_check_from_buffer(
-      file_path: string,
+      file_name: string,
+      file_buffer: string,
       bounding_boxes?: boolean,
       confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
@@ -724,14 +730,16 @@ export declare class Client {
    * veryfi_client.process_w8bene_from_buffer('file/path')
    *
    * @memberof Client
-   * @param {String} file_path Path on disk to a file to submit for data extraction
+   * @param {String} file_name The file name including the extension.
+   * @param {String} file_buffer Buffer of a file to submit for data extraction.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
   public process_w8bene_from_buffer(
-      file_path: string,
+      file_name: string,
+      file_buffer: string,
       bounding_boxes?: boolean,
       confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
@@ -819,14 +827,16 @@ export declare class Client {
    * veryfi_client.process_w9_from_buffer('file/path')
    *
    * @memberof Client
-   * @param {String} file_path Path on disk to a file to submit for data extraction
+   * @param {String} file_name The file name including the extension.
+   * @param {String} file_buffer Buffer of a file to submit for data extraction.
    * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
    * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
    * @param {Object} kwargs Additional request parameters
    * @returns {JSON} Data extracted from the document
    */
   public process_w9_from_buffer(
-      file_path: string,
+      file_name: string,
+      file_buffer: string,
       bounding_boxes?: boolean,
       confidence_details?: boolean,
       {...kwargs}?: VeryfiExtraArgs
@@ -886,6 +896,23 @@ export declare class Client {
    * @return {Promise<Tag>} response about tags added.
    */
   public replace_tags(document_id: string, tags: string[]): Promise<Tag>;
+
+  /**
+   * Ensures a Base64 string includes a MIME type hint. If not present, uses the filename or filepath to add the appropriate MIME type.
+   *
+   * @param {string} base64String - The Base64 encoded string.
+   * @param {string} filename or filePath - The filename or filepath to derive the MIME type if missing.
+   * @returns {string} - Base64 string with MIME type prefix.
+   */
+  public add_mime_type(base64String: String, filename: String) : String;
+
+  /**
+   * Checks if a Base64 string contains any of the predefined MIME types.
+   *
+   * @param {string} base64String - The Base64 encoded string with a MIME type prefix.
+   * @returns {boolean} - Returns true if any predefined MIME type is found, false otherwise.
+   */
+  public check_mime_type(base64String: String) : Boolean;
 
 }
 
