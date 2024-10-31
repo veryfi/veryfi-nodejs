@@ -12,10 +12,10 @@ const username = process.env.VERYFI_USERNAME;
 const api_key = process.env.VERYFI_API_KEY;
 const base_url = process.env.VERYFI_URL;
 const timeout = 240000;
-const mock_responses = false;
+const mock_responses = true;
 
 //Creating the Client
-let veryfi_client = new Client(client_id, client_secret, "username", api_key, base_url, 240);
+let veryfi_client = new Client(client_id, client_secret, username, api_key, base_url, 240);
 jest.setTimeout(timeout);
 
 describe('Processing documents', () => {
