@@ -1,9 +1,9 @@
 {
   "name": "@veryfi/veryfi-sdk",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "Node.js module for communicating with the Veryfi OCR API",
-  "main": "lib/main.js",
-  "typings": "lib/types/main.d.ts",
+  "main": "lib/client/client.js",
+  "typings": "lib/types/Client.ts",
   "scripts": {
     "test": "jest",
     "doc": "jsdoc -d docs --configure jsconf.json main.js",
@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@jest/globals": "^29.0.3",
-    "axios": "^1.7.2",
+    "axios": "^1.7.4",
     "docdash": "^1.2.0",
     "form-data": "^4.0.0",
     "jest-config": "^29.0.3"

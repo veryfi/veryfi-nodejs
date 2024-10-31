@@ -1,0 +1,326 @@
+{ "data": {
+  "account_number": "test1",
+  "accounting_entry_type": "debit",
+  "balance": null,
+  "barcodes": [],
+  "bill_to": {
+    "address": null,
+    "email": null,
+    "name": null,
+    "parsed_address": null,
+    "phone_number": null,
+    "reg_number": null,
+    "vat_number": null
+  },
+  "cashback": null,
+  "category": "Grocery",
+  "created_date": "2024-10-22 01:25:27",
+  "currency_code": "COP",
+  "custom_fields": {
+    "box_number": null,
+    "dsadasas": "dasdsadas",
+    "foo": "bar"
+  },
+  "date": "2024-09-15 00:00:00",
+  "default_category": "Meals & Entertainment",
+  "delivery_date": null,
+  "delivery_note_number": null,
+  "discount": -40,
+  "document_reference_number": null,
+  "document_title": null,
+  "document_type": "receipt",
+  "due_date": null,
+  "duplicate_of": null,
+  "exch_rate": 0.00023739936623357158,
+  "external_id": null,
+  "final_balance": null,
+  "guest_count": null,
+  "id": 252469322,
+  "img_blur": false,
+  "img_file_name": "252469322.jpg",
+  "img_thumbnail_url": "https://scdn.veryfi.com/receipts/222782c2-58f1-4324-a0e1-fb75ed775e3a/thumbnail.jpg?Expires=1730212855&Signature=M2L9yhqN2H5dmri4KihWIUH8SaPuujAAfG7IBV1RXh-0cw3ZOV~Ktl3wwSzVHtCeSLIn4IDvadUtlHI7qMAKdUXI30v0btVMnlY~74zXtMsTavNQRXH24WcvYh8sy3EeLx5nOUu2cuy7yMiBLe3C0kxX-KZqQMmmtxOHbLUz6EURradcgW9nR~SqZLRxt2M7q74my-q7D7i7Vt-onlVThdzrqfx0N6xBD5HXm1DjwZTxAK8OArxIifw2II-z2HKrG9J-2ngbgGE7yKyHhVORjIkRLMHBEo4j6sjwbbhUBgAh~eST7-qS2YDhi7WAzKj48xLBm~xIQbKMvqCRQdZeBA__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ",
+  "img_url": "https://scdn.veryfi.com/receipts/222782c2-58f1-4324-a0e1-fb75ed775e3a/b3252b81-f60d-40ee-a29f-04982949f57d.jpg?Expires=1730212855&Signature=PKR1peq2bBYRIaAHU~03rzG0wvHVeVXUAN7zuvZk6VW0~pUl4Lqvrc2n6eIwdO~ZZD-xzNV4-NGg8xNtB5KwwuRnVWigOHn4UZQRAWC40e9RVrq4uE2CvC5nUc3GPHgiQmaItuJGuWLSVX1RMQbDnXXsYPJewqc2gbY~Wjoo~FTNYtWh54deyME1JB6zn5~BjP7aar8xtJS5O~8C4Zm5VQdbNXCAKPBe7hMRnEN0wEiHnoy7ZA~aXScw6DRsBYnJ5U4A2G5rygXgAVbyQZjaxjf3rUC8B1iPHJJMsH73SfR4oGPcbuv~DafE39SSf9tOvrZJK0oCAyyNoXbblbLxcw__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ",
+  "incoterms": "Nit",
+  "insurance": null,
+  "invoice_number": "R2F628461",
+  "is_approved": false,
+  "is_blurry": [],
+  "is_document": true,
+  "is_duplicate": false,
+  "is_money_in": false,
+  "is_transaction": false,
+  "license_plate_number": null,
+  "line_items": [
+    {
+      "category": "Grocery",
+      "country_of_origin": null,
+      "custom_fields": {},
+      "date": null,
+      "description": "MINI CROISSANT",
+      "discount": null,
+      "discount_price": null,
+      "discount_rate": null,
+      "end_date": null,
+      "full_description": "MINI CROISSANT",
+      "gross_total": null,
+      "hsn": null,
+      "id": 1133456985,
+      "lot": null,
+      "manufacturer": null,
+      "net_total": null,
+      "normalized_description": null,
+      "order": 0,
+      "price": 3800,
+      "quantity": 2,
+      "reference": null,
+      "section": null,
+      "sku": "07700304928064",
+      "start_date": null,
+      "subtotal": null,
+      "tags": [
+        "line_items_total_greater_than_1"
+      ],
+      "tax": null,
+      "tax_code": "6",
+      "tax_rate": null,
+      "text": "2 UN X $3,800\n07700304928064 MINI CROISSANT\t7,600 6",
+      "total": 7600,
+      "type": "food",
+      "unit_of_measure": "UN",
+      "upc": null,
+      "weight": null
+    },
+    {
+      "category": "Grocery",
+      "country_of_origin": null,
+      "custom_fields": {},
+      "date": null,
+      "description": "HUEVO TIPO A SO",
+      "discount": null,
+      "discount_price": null,
+      "discount_rate": null,
+      "end_date": null,
+      "full_description": "HUEVO TIPO A SO",
+      "gross_total": null,
+      "hsn": null,
+      "id": 1133456986,
+      "lot": null,
+      "manufacturer": null,
+      "net_total": null,
+      "normalized_description": null,
+      "order": 1,
+      "price": 13490,
+      "quantity": 1,
+      "reference": null,
+      "section": null,
+      "sku": "07700304323852",
+      "start_date": null,
+      "subtotal": null,
+      "tags": [
+        "line_items_total_greater_than_1"
+      ],
+      "tax": null,
+      "tax_code": "5",
+      "tax_rate": null,
+      "text": "1 UN X\t$13,490\n07700304323852 HUEVO TIPO A SO\t13,490 5",
+      "total": 13490,
+      "type": "food",
+      "unit_of_measure": "UN",
+      "upc": null,
+      "weight": null
+    }
+  ],
+  "meta": {
+    "device_id": "C92EBD0A-D384-4A00-84DC-C0AF870CD682",
+    "device_user_uuid": "3f026250-a975-422b-93bf-e2247d94ae82",
+    "duplicates": [],
+    "fraud": {
+      "attribution": null,
+      "color": "green",
+      "custom_types": [],
+      "decision": "Not Fraud",
+      "images": [
+        {}
+      ],
+      "pages": [
+        {}
+      ],
+      "score": 0.5,
+      "submissions": {},
+      "types": [],
+      "version": null
+    },
+    "handwritten_fields": [],
+    "language": [
+      "es"
+    ],
+    "owner": "devapitest",
+    "pages": [
+      {
+        "height": 3339,
+        "is_blurry": {
+          "value": null
+        },
+        "language": [
+          "es",
+          "en"
+        ],
+        "screenshot": {
+          "score": 0.9300000071525574,
+          "type": null
+        },
+        "width": 1827
+      }
+    ],
+    "processed_pages": 1,
+    "source": "lens.receipt",
+    "source_documents": [
+      {
+        "height": 3339,
+        "size_kb": 1894,
+        "width": 1827
+      }
+    ],
+    "total_pages": 1,
+    "warnings": []
+  },
+  "model": "2.49.3",
+  "notes": null,
+  "ocr_text": "NIT900276962-1 Gran contribuyente\nretenedor de IVA Res.012220/22\nD1 SAS\nAgente\tCL 30 A 80 62 MEDELLIN\ny\nDOMICILIO PRINCIPAL CRA 7 155C 30 North\nTorre E Piso 38 TEL: 018000120201\nPoint\tCLIENTE: Consumidor Final\nPoint\nC.C: 2222222222\nGeneracion: 2024-09-15 19:45:11\nValidacion Dian: 2024-09-15 19:45:16\nITEM CANT UND.MED VALOR UN\nCODIGO\tDESCRIPCION\tVALOR ID\n2 UN X $3,800\n07700304928064 MINI CROISSANT\t7,600 6\n2\t1 UN X\t$13,490\n07700304323852 HUEVO TIPO A SO\t13,490 5\nTOTAL\t\t\t21,090\nAJUSTE VUELTAS EXACTAS $\t-40\nVALOR PAGADO\t\t21,050\nFORMA DE PAGO: CONTADO\nEFECTIVO $\t\t40,000\nCAMBIO\t\t\t18,950\nRESUMEN DE IMPUESTOS\nID\tTOTAL\tBASE\tIVA\n6\t7,600\t7,600\t0\n5\t13.490\t13,490\t0\n\t21,090\t0\n6=EXCLU 5=EXENTO C=5% A=19% 0=NO GRAVADO\nID. CLIENTE: undefined\nSISTEMA P.O.S ARS - DESARROLLADO POR:\nNCR COLOMBIA LTDA NIT 860.005.074-8\nFACTURADOR ELECTRONICO:\nE factura Cadena Nit: 890.930.534\nATENDIDO POR: ISABEL PEREZ 602072\nNUM ART ENTREGADOS:3 TRX: 2071 02 6049\nRes.DIAN 18764063610933 de 20240111 R2F6\nDE 1 HASTA 1999999 18 Meses\nFactura Electronica de Venta R2F628461\n\nCUFE 3e08378d9b708b47332a87e7d196cbb2662\n282868712b295d0b8ac7c6249d2c68f9ee758d6b\n5cd27974f459103f05f\nBon",
+  "order_date": null,
+  "payment": {
+    "card_number": null,
+    "display_name": "Cash",
+    "terms": null,
+    "type": "cash"
+  },
+  "pdf_url": "https://scdn.veryfi.com/receipts/222782c2-58f1-4324-a0e1-fb75ed775e3a/48f261ac-bc9d-40e1-b55c-53ecd5ec6176.pdf?Expires=1730212855&Signature=HLj-A~ZW2vl9iQWwToBx6BUdk48Xeq1DcWflmDJKZNd50oDllJ38ZBkxMronnzwuIFAfm49vQmewuQLCswI96~l8rexYTjV3i5a2xMuXQQST~GbY0-DpWSRQ4aDqSDdmH8-j3K1mIvJU5tPHcDu-FnAQFtmrKhSpK1bLkoflmDI79YOl66yYtOTP5A4Syvys1JaNklDFyLzJmHQaU170ulYCyu~iqAF-jlnxU1z9JLw3AGgK96hPrWsT1Yt8jyKunJuU3NVikopf93ITJP2rNVU6wsfVLZzPTGLv-xDed-LhzF3EEfIygGpa8a8lxhFB-romojdiOFbU7jhgvJX~fA__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ",
+  "previous_balance": null,
+  "purchase_order_number": null,
+  "reference_number": "VCDEE-69322",
+  "rounding": null,
+  "server_name": null,
+  "service_end_date": null,
+  "service_start_date": null,
+  "ship_date": null,
+  "ship_to": {
+    "address": null,
+    "name": null,
+    "parsed_address": null
+  },
+  "shipping": null,
+  "status": "reviewed",
+  "store_number": null,
+  "subtotal": 21090,
+  "tags": [
+    {
+      "id": 9018171,
+      "name": "line_items_total_greater_than_1"
+    },
+    {
+      "id": 9018172,
+      "name": "is_document"
+    },
+    {
+      "id": 9018173,
+      "name": "total_greater_than_1"
+    },
+    {
+      "id": 9018396,
+      "name": "extract_tags"
+    },
+    {
+      "id": 9277238,
+      "name": "is_fraud_green"
+    },
+    {
+      "id": 9675131,
+      "name": "newtah"
+    },
+    {
+      "id": 11996332,
+      "name": "1.6 Liters part"
+    },
+    {
+      "id": 12926297,
+      "name": "test_rule_1_failure"
+    }
+  ],
+  "tax": null,
+  "tax_lines": [
+    {
+      "base": 7600,
+      "code": "6",
+      "name": null,
+      "order": 0,
+      "rate": null,
+      "total": 0,
+      "total_inclusive": 7600
+    },
+    {
+      "base": 13490,
+      "code": "5",
+      "name": null,
+      "order": 1,
+      "rate": null,
+      "total": 0,
+      "total_inclusive": 13490
+    }
+  ],
+  "tip": null,
+  "total": 21050,
+  "total_pages": 1,
+  "total_quantity": null,
+  "total_weight": null,
+  "tracking_number": null,
+  "tracking_numbers": [
+    null
+  ],
+  "updated_date": "2024-10-22 01:25:33",
+  "vending_person": "ISABEL PEREZ 602072",
+  "vending_person_number": null,
+  "vendor": {
+    "abn_number": null,
+    "account_currency": null,
+    "account_number": null,
+    "address": "Torre E Piso 38",
+    "bank_breakdown": [
+      {}
+    ],
+    "bank_name": null,
+    "bank_number": null,
+    "bank_swift": null,
+    "biller_code": null,
+    "category": "Grocery",
+    "country_code": "CO",
+    "email": null,
+    "external_id": null,
+    "external_ids": [],
+    "fax_number": null,
+    "iban": null,
+    "lat": null,
+    "lng": null,
+    "logo": "https://cdn.veryfi.com/logos/us/675164122.png",
+    "logo_name": null,
+    "map_url": null,
+    "name": "Tiendas D1",
+    "order_number": null,
+    "parsed_address": {},
+    "phone_number": "018000120201",
+    "raw_address": "Torre E Piso 38",
+    "raw_name": "D1 SAS",
+    "reg_number": null,
+    "type": "Grocery",
+    "vat_number": "Res.012220/22",
+    "web": null
+  },
+  "vendors": [
+    "Tiendas D1"
+  ],
+  "vin_number": null,
+  "warnings": [],
+  "weights": [
+    null
+  ]
+}
+}

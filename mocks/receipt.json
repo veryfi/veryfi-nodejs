@@ -1,0 +1,448 @@
+{ "data": {
+  "account_number": "test1",
+  "accounting_entry_type": "debit",
+  "balance": null,
+  "barcodes": [
+    {
+      "data": "101785617711518",
+      "type": "CODE128"
+    }
+  ],
+  "bill_to": {
+    "address": null,
+    "email": null,
+    "name": null,
+    "parsed_address": null,
+    "phone_number": null,
+    "reg_number": null,
+    "vat_number": null
+  },
+  "cashback": null,
+  "category": "Job Supplies",
+  "created_date": "2024-10-29 13:55:40",
+  "currency_code": "USD",
+  "custom_fields": {
+    "box_number": null,
+    "dsadasas": "dasdsadas",
+    "foo": "bar"
+  },
+  "date": "2018-10-17 09:03:00",
+  "default_category": "Job Supplies",
+  "delivery_date": null,
+  "delivery_note_number": null,
+  "discount": null,
+  "document_reference_number": null,
+  "document_title": null,
+  "document_type": "receipt",
+  "due_date": null,
+  "duplicate_of": null,
+  "exch_rate": 1,
+  "external_id": null,
+  "final_balance": null,
+  "guest_count": null,
+  "id": 254653085,
+  "img_blur": false,
+  "img_file_name": "254653085.png",
+  "img_thumbnail_url": "https://scdn.veryfi.com/receipts/919ba4778c039560/f2c8e3bb-1619-4ed4-a55f-20a4e12726fb/thumbnail.png?Expires=1730211055&Signature=FxKQuNHLB1Av9dtCxH9Qtklbg22m88y9doBPcrfVZIIWfpC3OO6IA5sO1BMY4iK71Sh5FGWGRaoZF4OtjvQMhiFeGFXnz9VASQ6GK7LXPwrfxyFoT33kjffbwA-7oqP6hD9eMSSd~XcV2mgOROFyk7eqUkrO~6QBTS8ltPXbULJQUkgTZCxGwnWF-00p172fP52VsZYCV75Vc5Wmzwh1WzHXXobFlX2vOFkvB~BYJxRXDYyWDyfpzQx5qtebnMA5SJ5HIzzKHHrKGVZM2kzRtmx3FL~gwQ07qOqAI6ochJ2mG21SHRdumiHNCFJOLLCXEJfFjhRD0s02QsA9dtwM4Q__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ",
+  "img_url": "https://scdn.veryfi.com/receipts/919ba4778c039560/f2c8e3bb-1619-4ed4-a55f-20a4e12726fb/ece9bb44-484e-4c16-a7eb-b072c08901b2.png?Expires=1730211055&Signature=V31FJEi-7EnOVzrOIDDFkrxRwCq~0geNqn5X2GvGXJYjM2mkL6JXHKgqFBHpFRxQnBG1GLQ1dGCoFybiExViObC2iPdvKJBIKjCoHQ8YeyD3O~i52r~74PfBOnyU3Am9fU61U3Rbxjr8TjGycEChkj2gmE9BpXNH7Bc0AN30GioFaytpXzXoVJj4~t4GCtXSByHmrR9MEk-PHnFzKunCWV1Ez-KjggyLKIgzDD1XkbQhXViRgzppSNT0p~MlH-VabMVuP6PorZ31Loe~uwUstO6Exm~mVEtkW5boJeumuz6vOx1Bw1LIfJNOr0iPR~SFm5VRvTm2EFYzEw43BDakpg__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ",
+  "incoterms": null,
+  "insurance": null,
+  "invoice_number": "17717",
+  "is_approved": false,
+  "is_blurry": [
+    false
+  ],
+  "is_document": true,
+  "is_duplicate": false,
+  "is_money_in": false,
+  "is_transaction": false,
+  "license_plate_number": null,
+  "line_items": [
+    {
+      "category": "Job Supplies",
+      "country_of_origin": null,
+      "custom_fields": {},
+      "date": null,
+      "description": "SNIP LEFT <A>\nWISS LEFT-CUT SNIPS",
+      "discount": 4,
+      "discount_price": null,
+      "discount_rate": null,
+      "end_date": null,
+      "full_description": "SNIP LEFT <A>\nWISS LEFT-CUT SNIPS",
+      "gross_total": null,
+      "hsn": null,
+      "id": 1143305931,
+      "lot": null,
+      "manufacturer": null,
+      "net_total": null,
+      "normalized_description": null,
+      "order": 0,
+      "price": null,
+      "quantity": 1,
+      "reference": null,
+      "section": null,
+      "sku": "037103136480",
+      "start_date": null,
+      "subtotal": null,
+      "tags": [
+        "line_items_total_greater_than_1"
+      ],
+      "tax": null,
+      "tax_code": null,
+      "tax_rate": null,
+      "text": "037103136480 SNIP LEFT <A>\t9.97\nWISS LEFT-CUT SNIPS$4.00",
+      "total": 9.97,
+      "type": "product",
+      "unit_of_measure": null,
+      "upc": null,
+      "weight": null
+    },
+    {
+      "category": "Job Supplies",
+      "country_of_origin": null,
+      "custom_fields": {},
+      "date": null,
+      "description": "MILW5PCKBLDG <A>\nMKE 5PK GENERAL PURPOSE BLADES",
+      "discount": null,
+      "discount_price": null,
+      "discount_rate": null,
+      "end_date": null,
+      "full_description": "MILW5PCKBLDG <A>\nMKE 5PK GENERAL PURPOSE BLADES",
+      "gross_total": null,
+      "hsn": null,
+      "id": 1143305932,
+      "lot": null,
+      "manufacturer": null,
+      "net_total": null,
+      "normalized_description": null,
+      "order": 1,
+      "price": null,
+      "quantity": 1,
+      "reference": null,
+      "section": null,
+      "sku": "045242268061",
+      "start_date": null,
+      "subtotal": null,
+      "tags": [
+        "line_items_total_greater_than_1"
+      ],
+      "tax": null,
+      "tax_code": null,
+      "tax_rate": null,
+      "text": "045242268061 MILW5PCKBLDG <A>\t1.18\nMKE 5PK GENERAL PURPOSE BLADES",
+      "total": 1.18,
+      "type": "product",
+      "unit_of_measure": null,
+      "upc": null,
+      "weight": null
+    },
+    {
+      "category": "Job Supplies",
+      "country_of_origin": null,
+      "custom_fields": {},
+      "date": null,
+      "description": "1LB. SCREW <A>\nEB NEO SELF-DRILLING 12X1",
+      "discount": null,
+      "discount_price": null,
+      "discount_rate": null,
+      "end_date": null,
+      "full_description": "1LB. SCREW <A>\nEB NEO SELF-DRILLING 12X1",
+      "gross_total": null,
+      "hsn": null,
+      "id": 1143305933,
+      "lot": null,
+      "manufacturer": null,
+      "net_total": null,
+      "normalized_description": null,
+      "order": 2,
+      "price": null,
+      "quantity": 1,
+      "reference": null,
+      "section": null,
+      "sku": "038902058966",
+      "start_date": null,
+      "subtotal": null,
+      "tags": [
+        "line_items_total_greater_than_1"
+      ],
+      "tax": null,
+      "tax_code": null,
+      "tax_rate": null,
+      "text": "038902058966 1LB. SCREW <A>\t10.57\nEB NEO SELF-DRILLING 12X1",
+      "total": 10.57,
+      "type": "product",
+      "unit_of_measure": null,
+      "upc": null,
+      "weight": null
+    },
+    {
+      "category": "Job Supplies",
+      "country_of_origin": null,
+      "custom_fields": {},
+      "date": null,
+      "description": "1LB. SCREW <A>\nEB NEO SELF-DRILLING 12X3/4",
+      "discount": null,
+      "discount_price": null,
+      "discount_rate": null,
+      "end_date": null,
+      "full_description": "1LB. SCREW <A>\nEB NEO SELF-DRILLING 12X3/4",
+      "gross_total": null,
+      "hsn": null,
+      "id": 1143305934,
+      "lot": null,
+      "manufacturer": null,
+      "net_total": null,
+      "normalized_description": null,
+      "order": 3,
+      "price": null,
+      "quantity": 1,
+      "reference": null,
+      "section": null,
+      "sku": "038902058959",
+      "start_date": null,
+      "subtotal": null,
+      "tags": [
+        "line_items_total_greater_than_1"
+      ],
+      "tax": null,
+      "tax_code": null,
+      "tax_rate": null,
+      "text": "038902058959 1LB. SCREW <A>\t10.57\nEB NEO SELF-DRILLING 12X3/4",
+      "total": 10.57,
+      "type": "product",
+      "unit_of_measure": null,
+      "upc": null,
+      "weight": null
+    }
+  ],
+  "meta": {
+    "device_id": null,
+    "device_user_uuid": null,
+    "duplicates": [
+      {
+        "id": 214960676,
+        "score": 1,
+        "url": "https://scdn.veryfi.com/receipts/919ba4778c039560/31eeef99-0ad5-48bd-9cca-9d35c4741ee5/103811a2-f894-4599-bce5-42ed686372c5.png?Expires=1730211055&Signature=ZOHZ-WpUd9aJU68PeNRbAgD31aji6D~MW8o-nh7MinC4dBXJo-7h6xXBJwQJ27yWPTWDRWzkQjNkRFFZTyzFjQkOTE9SldZhnmVBC5oPRSzQdpv8KgIAcWZQzqvjv~A4MjPtTbh261bvQy-OEVI1acOJB8c7xJQ7e4GiyQeFV09ny3wQxA4ck6s~UyiG2xsNMVraxGlMwCyw68CNzht~J0zi3ZVpW4eDJk7JpwcCznhyo4cX7JDUABC0eA7qSWi1jvRHdmbl7hPqlKtG3NVsmhKS7TOobrpNi8DJ1mncKNlEYAHtoQs4a4~zQOsQQ7Tbg9MPKjFwww~d7XN33sQN7A__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ"
+      },
+      {
+        "id": 214962976,
+        "score": 1,
+        "url": "https://scdn.veryfi.com/receipts/919ba4778c039560/f07d74bf-c61f-4d02-bcde-16b8bc7c4d44/0e916ffd-7803-45ef-84d9-1e0378d22353.png?Expires=1730211055&Signature=CJdRVekMo5fSqpQCJiOaWTPKAM~SAl9WqlsOYNHu~hhdGDqkI7pjVheg9123YVmXT1aGeFraX1TWVi4EmxRt2T3oBrv860SFB0dv9LVdev10vU-dyHZoW8nYOroovMAgN7Xo80hFo3~-qky65yFFrnoparliGU-clDJT0olzAA5XkK3goiSpdcui8KPOLGlwpRE3SXErjycHZwkNoqXH009UDq67ev8GDH2MFiMTzKAfBWtQltSNcFhgbDMFePzsTzgEHnFTYAaOiou1SaJFT5DijXn5XOE5Myd9KfnFhgN4oe-3UKKy4zdogqXG8RLeomjX3oWpNUHIlio8zpB0Dg__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ"
+      },
+      {
+        "id": 214963052,
+        "score": 1,
+        "url": "https://scdn.veryfi.com/receipts/919ba4778c039560/f12e860b-f7ce-42da-b35a-d0abb6eaaec0/f9048b3e-265e-4c47-9fc6-352459a9e2ab.png?Expires=1730211055&Signature=Yv2PY1eRnD3i3y-HTubmpXtBJbcunJFH9eV--SoT~-jKRtVPHjiW0TttKu1v5T5aB5-f4EGN2OG8OQ2TBfODeNlD3CbXOiqQUiFVbxzuMvn8WGpmhyB7vc8hO~bo8QCgWeLcGwMqysRSUafsNkWaXJvB3Jwz0CSOrHKb7WEDSrr4PqdruzAbkMNa5Gxt7Co1E-bl~AoRxBONa~5eryiiw8LhW3ighpSOGnx24GOVaHiKEXOau13TYTykMNVu7167JkWPshVF8kmozz5O~WNuOuCRI31oAr9dbM22V4IAIaSni3BK4y5AwkMEhtse5c98qb1rjlzDlKLu7xoRc66XAg__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ"
+      },
+      {
+        "id": 214963077,
+        "score": 1,
+        "url": "https://scdn.veryfi.com/receipts/919ba4778c039560/56a5466d-106c-407d-b068-5d1cc28b6712/11c283a0-db17-4b5f-abab-d026488aee15.png?Expires=1730211055&Signature=auNgVE2nEZc3KO8V59icKnp~0FnpJmrUNMCxXBZB7iLXuOabGijiNGW39SbLWbQ3TqyCTFM0p7AN3wFVOrqeJdm1-y41f~V9NpefVH1kQ4FZDtfRo1kMiu6NdLNyaCA-OamhYUBO0kZYCjpXtdKtwy1ULfyYynK6lbfp2uCt~YBxVNXcwQr36rv5zRuYq3bElxPx-dzc8GsqOo7ATgoRI85~eSPrM3oi86kr28dwO~MspjiZEZ21G2hTW9AgidOF2ksuB3Z0090mmRirCf4oiED39n8HLdR1zhnrGMyguFaCDzAfjKJ3su9xnmEGVznuhPgu9Y9zCqs7~L5ApsNuXg__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ"
+      },
+      {
+        "id": 214963164,
+        "score": 1,
+        "url": "https://scdn.veryfi.com/receipts/919ba4778c039560/fd637bf3-0046-4afa-9e6f-8581dffe2740/918c4982-af6a-4673-ae0d-66ab76ed5512.png?Expires=1730211055&Signature=QxfmjuTbUDtQrs5gvCc5kECsvEOot0Cog3oMBytGLur3RsPhyiOIvdjcjT9myBj-myIBF~KpmDZWL-zpyL8aR-5XsINxQsgAIAWl83TyYW8ACg89nBUyfyQnKw8mO5m~xJzKIzYjn6wMUp4Wh0-ERrBBwez6s11ULZEAk0E9m2LUdqlnAV44BGfmHHLxiLQ3P33-btszu3hW7Tr8lkFFraAtp6Zp6iBkptYZF2MJk62d20Hp8Dr02AebBub2BU7VPb6EVAjMQEoHyxTwnyZAF5iCpyxbBJE3g5KpnfCQM2HcubR0u-OKsOEbrbudrx23D2ZFFinFuhaZRsfYlAeyng__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ"
+      },
+      {
+        "id": 214965170,
+        "score": 1,
+        "url": "https://scdn.veryfi.com/receipts/919ba4778c039560/dc25c2f4-e67e-4e45-bd68-32e182ad686a/b07287a4-16e6-4103-be00-02c85df27106.png?Expires=1730211055&Signature=FHbk9ReqR4teYyIf1aSI8wgqMstOIlvsNslCKOgHxTzV3PH9uDNKrQQWC~CQTL5QGZEXrS8OpSoeJ8rTm2WkGotF0Hm9exyErNDI7re8r7b57PMnfDrV~XhukER-H4BRTJCdghkswWPiEBGI7wN74zIWm2AVAjIhMW35~NGZ69IArd2p67sp4BAbdtLOSugomqPz2pp-Jdf8h0bdt6cAXWVMkanGYlE09y6nJpEfg3W1ncvrLI7WZo8QYHUIa8wOJxd845deDxaMEBgzR9K78toVGGvbMMc01J2m7AEun4vpJ76Uzws~n51hWVWWM6xjOme~shdfFWRMGSNRzWWf1A__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ"
+      },
+      {
+        "id": 214966758,
+        "score": 1,
+        "url": "https://scdn.veryfi.com/receipts/919ba4778c039560/c6ec401e-a4f7-436a-86ce-9cd7f07e19c4/6a09b3ec-d306-4f76-9bcb-bd6e86db5f5e.png?Expires=1730211055&Signature=PCeoNGFbFIueorMMv5YXTZjYubyZlEJZFOnNxCJx985tpiUxxTJwSX-A3pDM0o-n46EiPeP-x9vOGYHnX4cDgWiRcW8tF4Q2jL2EMV7amCAVVfieGxS7e-pJyItoNJ-gdfERQ9ABnpnXwjtQZImwdKzK1Vp1Pu692i71J8fHaycD2UPcmuimHwDmK366Kvm15zTTsLHoR-J2e3i~cTu7SPuze3C5ON4AyLRnr~YER1Ixg5bEvHOqcQ5Pot0EOCFMhI7Wdc~y~UcUpAbtceLFzooftkw5ATXvntEdHoDFiVv39Y0wVg3XD~Dy~yQoPlV0KLvDumUpCQPWYL0lJuHi1A__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ"
+      },
+      {
+        "id": 214960843,
+        "score": 1,
+        "url": "https://scdn.veryfi.com/receipts/919ba4778c039560/66810aa1-2bd1-4e9e-91e6-f85e0f31450a/556b1f01-1f6b-4d03-bd7c-1cf772b372d8.png?Expires=1730211055&Signature=OZ6ueo5o7IhrN5vtiwFTa5Y6Ud5MwCbAPqJkiq6gm9CQeLvDQFTg6DA1ng9CjIii0FY7ZjzM5LHNH8v~dzQGGCexxWNpjRCZpl2IuFK9x63xfhaVO0leZh17BBddfxYmeUD7w79bdmkXgcGQv3lmt5hHmogGDyMNDsQD28-KXiZH2mD3TJfPEoNBq-E-TRuZsGkohnwgzOgBxILlfMZrBrIDVOmWYs1vXg1PWZcsQPCo6fmmQmAUV8QYw0RT3vPAZe0aapx2nlbhLLH~h8m8PoVfMWsHV3j7OP0X0h8ZPQiV3wz1uOelLebptiYBdEWv1rb0a~sZ8xBGYsFtFkQqtQ__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ"
+      },
+      {
+        "id": 214966890,
+        "score": 1,
+        "url": "https://scdn.veryfi.com/receipts/919ba4778c039560/b9d7c013-088d-4a83-b42d-122daa5abb91/9b61187d-b5d0-4bb9-8b2b-5a14cfbb4aa9.png?Expires=1730211055&Signature=GJvRE7K6KfZEwg6JRx9bYR8H63H~jxLJ9Ne9xSOdO9K489PCkwR4Czt1qCpLZ7N1H0gpj2KwrDdldzoD-E4v6WbrcZBW5IaGxUviweto64Eo3vY20RAV72qK03Dgogl8dIuQN95C9P2RWDq9vxyObp0jgP5XaIrtDWb1FG7zLPI5W4tSmQMnpELrDHmhUtCPAyDCKqtSb6JSo9Z6aDNQKQkZVzcZCwfZeWoa0fZYliRfT4MwBJSzFpL4d6XV-Mg4UZQ-4z1S5~2k5AcRXwzgXMI891Y1W6L-vZU3ShxTOBIWGGKb6zjBQ4Uj83QqkeJAFWHOvP1WzBs5KfhXhPLCSQ__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ"
+      },
+      {
+        "id": 214973909,
+        "score": 1,
+        "url": "https://scdn.veryfi.com/receipts/919ba4778c039560/d89264cc-f7d0-4499-9da4-51d049c6d68c/97fd3bd8-a9cb-4b6e-b554-34853e51f238.png?Expires=1730211055&Signature=cAeFPKtqhnWIEDT13aKbdmYrord9mmiaZYVgUyA1QkXDdxAW3fkswkwO0NC9AvcYWrhmcheJjhXDjk~46ytIhX7Ol3DFmKz83uj9ATSQvUZ6QEjK4DjwE97Go3V6qW5dGsebbq8r-CmZ~TrQRJbc6QU8pKVGFMlCite3~rOv2iH0OCcAlpx2gLKE-AkbblBGkQjv3HD~8I07B0SajtZPgCiYOwH0NemGorhm~t~IUgZH5Uvot6Jn86xTjeShmeLkVQEPrxHmIxvOhXgFFe~COUBFOHN-7qznBVwqBvEGORRTiy-J0avukVxJM~jQUMK4ae994zQe6lghe3HzzfpxTA__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ"
+      }
+    ],
+    "fraud": {
+      "attribution": null,
+      "color": "green",
+      "custom_types": [],
+      "decision": "Not Fraud",
+      "images": [
+        {
+          "is_lcd": false,
+          "score": 0.95
+        }
+      ],
+      "pages": [
+        {
+          "is_lcd": {
+            "score": 0.95,
+            "value": false
+          }
+        }
+      ],
+      "score": 0.05,
+      "submissions": {},
+      "types": [],
+      "version": null
+    },
+    "handwritten_fields": [],
+    "language": [
+      "en"
+    ],
+    "owner": "devapitest",
+    "pages": [
+      {
+        "height": 1848,
+        "is_blurry": {
+          "score": 0.97,
+          "value": false
+        },
+        "language": [
+          "en"
+        ],
+        "screenshot": {
+          "score": 0.9399999976158142,
+          "type": null
+        },
+        "width": 1048
+      }
+    ],
+    "processed_pages": 1,
+    "source": "api",
+    "source_documents": [
+      {
+        "height": 1848,
+        "size_kb": 990,
+        "width": 1048
+      }
+    ],
+    "total_pages": 1,
+    "warnings": [
+      {
+        "message": "Decoded Barcode numbers were not found on the document",
+        "type": "barcode_code_missing_in_ocr"
+      }
+    ]
+  },
+  "model": "2.50.0",
+  "notes": null,
+  "ocr_text": "HOME\nTHE\n\tMore saving.\n\tMore doing.\"\n\n2250 SOUTHGATE RD, COLORADO SPRINGS, CO\nBECKY NATION STOREMANAGER 719-471-0054\n1518 00000 17717 10/17/18 09:03 AM\nSELF CHECK OUT\n037103136480 SNIP LEFT <A>\t9.97\nWISS LEFT-CUT SNIPS\nNLP Savings\t$4.00\n045242268061 MILW5PCKBLDG <A>\t1.18\nMKE 5PK GENERAL PURPOSE BLADES\n038902058966 1LB. SCREW <A>\t10.57\nEB NEO SELF-DRILLING 12X1\n038902058959 1LB. SCREW <A>\t10.57\nEB NEO SELF-DRILLING 12X3/4\nSUBTOTAL\t32.29\nSALES TAX\t2.66\nTOTAL\t$34.95\nXXXXXXXXXXXX7373 VISA\n\tUSD$ 34.95\nAUTH CODE 025972/8585391\tTA\nAID A0000003131010\t4341505054414C204F4\nE452050595341\nDEPOT",
+  "order_date": null,
+  "payment": {
+    "card_number": "7373",
+    "display_name": "Visa ***7373",
+    "terms": null,
+    "type": "visa"
+  },
+  "pdf_url": "https://scdn.veryfi.com/receipts/919ba4778c039560/f2c8e3bb-1619-4ed4-a55f-20a4e12726fb/ceee38df-f102-4cad-960a-7afb2a8cb818.pdf?Expires=1730211055&Signature=cKBBlkeg4FXKc3QoF2EtaAFhqrpP6o5zz2LMzSDWUocZlxlTT43USuDxjQ4rg50-wKRuzIX2YcjpJAPq4OFcoH6HQYDvm~pr~C0~HYIhNN0zGjOmf7kxvzw7KExDLwPwI9hGYTS~TdlhTCRVpI0bQRKNpRPwBj5MDiXRuFOMe3rYs4DZyQvLsVcOW~cbeOWyLWnr4mrcHwI1PDtBGH7yo5hpphDGSrd5qHVgc1PqDtwrnpsfeRuJnDVLnq9Nk~~m3-sRuywgli2wysDDQXOIJHFeLGh17jnNY0wDFe7Qzm-gYnou8hm0gxEvLIA52MEtcChVnv0OJ5bsvQUz1bpjdg__&Key-Pair-Id=APKAJCILBXEJFZF4DCHQ",
+  "previous_balance": null,
+  "purchase_order_number": null,
+  "reference_number": "VCDGG-53085",
+  "rounding": null,
+  "server_name": null,
+  "service_end_date": null,
+  "service_start_date": null,
+  "ship_date": null,
+  "ship_to": {
+    "address": null,
+    "name": null,
+    "parsed_address": null
+  },
+  "shipping": null,
+  "status": "processed",
+  "store_number": "1518",
+  "subtotal": 32.29,
+  "tags": [
+    {
+      "id": 9018171,
+      "name": "line_items_total_greater_than_1"
+    },
+    {
+      "id": 9018172,
+      "name": "is_document"
+    },
+    {
+      "id": 9018173,
+      "name": "total_greater_than_1"
+    },
+    {
+      "id": 9018396,
+      "name": "extract_tags"
+    },
+    {
+      "id": 9277238,
+      "name": "is_fraud_green"
+    },
+    {
+      "id": 12926297,
+      "name": "test_rule_1_failure"
+    }
+  ],
+  "tax": 2.66,
+  "tax_lines": [],
+  "tip": null,
+  "total": 34.95,
+  "total_pages": 1,
+  "total_quantity": null,
+  "total_weight": null,
+  "tracking_number": null,
+  "tracking_numbers": [
+    null
+  ],
+  "updated_date": "2024-10-29 13:55:52",
+  "vending_person": null,
+  "vending_person_number": null,
+  "vendor": {
+    "abn_number": null,
+    "account_currency": null,
+    "account_number": null,
+    "address": "2250 SOUTHGATE RD, COLORADO SPRINGS, CO",
+    "bank_breakdown": [
+      {}
+    ],
+    "bank_name": null,
+    "bank_number": null,
+    "bank_swift": null,
+    "biller_code": null,
+    "category": "Nurseries & Gardening",
+    "country_code": "US",
+    "email": null,
+    "external_id": null,
+    "external_ids": [],
+    "fax_number": null,
+    "iban": null,
+    "lat": 38.798985,
+    "lng": -104.819856,
+    "logo": "https://cdn.veryfi.com/logos/us/051403134.jpg",
+    "logo_name": "the home depot",
+    "map_url": "https://www.google.com/maps/search/?api=1&query=Home+Depot+2250+SOUTHGATE+RD,+COLORADO+SPRINGS,+CO",
+    "name": "Home Depot",
+    "order_number": null,
+    "parsed_address": {},
+    "phone_number": "719-471-0054",
+    "raw_address": "2250 SOUTHGATE RD, COLORADO SPRINGS, CO\nBECKY NATION",
+    "raw_name": "DEPOT",
+    "reg_number": null,
+    "type": "Nurseries & Gardening",
+    "vat_number": "452050595341",
+    "web": null
+  },
+  "vendors": [
+    "Home Depot"
+  ],
+  "vin_number": null,
+  "warnings": [],
+  "weights": [
+    null
+  ]
+}
+}
