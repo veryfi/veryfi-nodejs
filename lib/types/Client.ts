@@ -237,14 +237,14 @@ export declare class Client {
      *
      * @memberof Client
      * @param {String} file_path Path on disk to a file to submit for data extraction
-     * @param {String} template_name name of the extraction templates.
+     * @param {String} blueprint_name name of the extraction templates.
      * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
     public process_any_document(
         file_path: string,
-        template_name?: string,
+        blueprint_name?: string,
         max_pages_to_process?: number,
         {...kwargs}?: VeryfiExtraArgs
     ): Promise<JsonObject>;
@@ -255,7 +255,7 @@ export declare class Client {
      * @memberof Client
      * @param {ReadStream} file ReadStream of a file to submit for data extraction
      * @param {String} file_name The file name including the extension
-     * @param {String} template_name name of the extraction templates.
+     * @param {String} blueprint_name name of the extraction templates.
      * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
@@ -263,7 +263,7 @@ export declare class Client {
     public process_any_document_from_stream(
         file: fs.ReadStream,
         file_name: string,
-        template_name?: string,
+        blueprint_name?: string,
         max_pages_to_process?: number,
         {...kwargs}?: VeryfiExtraArgs
     ): Promise<JsonObject>;
@@ -274,7 +274,7 @@ export declare class Client {
      * @memberof Client
      * @param {String} file_name The file name including the extension
      * @param {String} file_base64_string To submit a file for data extraction, encode the file in Base64 format and ensure it includes the MIME type. The Base64 string should follow this structure: data:${mimeType};base64,${base64String}
-     * @param {String} template_name name of the extraction templates.
+     * @param {String} blueprint_name name of the extraction templates.
      * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
@@ -282,7 +282,7 @@ export declare class Client {
     public process_any_document_from_base64(
         file_name: string,
         file_base64_string: string,
-        template_name?: string,
+        blueprint_name?: string,
         max_pages_to_process?: number,
         {...kwargs}?: VeryfiExtraArgs
     ): Promise<JsonObject>;
@@ -294,14 +294,14 @@ export declare class Client {
      *
      * @memberof Client
      * @param {String} file_url url file to submit for data extraction
-     * @param {String} template_name name of the extraction templates.
+     * @param {String} blueprint_name name of the extraction templates.
      * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
     public process_any_document_from_url(
         file_url: string,
-        template_name?: string,
+        blueprint_name?: string,
         max_pages_to_process?: number,
         {...kwargs}?: VeryfiExtraArgs
     ): Promise<JsonObject>;
