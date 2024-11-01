@@ -108,7 +108,7 @@ export declare class Client {
     /**
      * Process a document and extract all the fields from it. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
      * @example
-     * veryfi_client.process_document_buffer_string('base64_encoded_string',
+     * veryfi_client.process_document_from_base64('base64_encoded_string',
      *                                'receipt.png',
      *                                ['Entertainment','Food'],
      *                                true,
@@ -122,7 +122,7 @@ export declare class Client {
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
-    public process_document_base64string(
+    public process_document_from_base64(
         base64_encoded_string: string,
         file_name: string,
         categories?: string[],
@@ -132,22 +132,16 @@ export declare class Client {
 
     /**
      * Process a document and extract all the fields from it. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
-     * @example
-     * veryfi_client.process_document_buffer('buffer',
-     *                                'receipt.png',
-     *                                ['Entertainment','Food'],
-     *                                true,
-     *                                {'extra': 'parameters'})
      *
      * @memberof Client
-     * @param {ReadStream} file ReadStream of a file to submit for data extraction
+     * @param {fs.ReadStream} file ReadStream of a file to submit for data extraction
      * @param {String} file_name The file name including the extension
      * @param {Array} categories List of categories Veryfi can use to categorize the document
      * @param {Boolean} auto_delete Delete this document from Veryfi after data has been extracted
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
-    public process_document_stream(
+    public process_document_from_stream(
         file: fs.ReadStream,
         file_name: string,
         categories?: string[],
@@ -168,7 +162,7 @@ export declare class Client {
      * @param {VeryfiExtraArgs} kwargs Additional request parameters
      * @return {Promise<VeryfiDocument>} Object of data extracted from the document
      */
-    public process_document_url(
+    public process_document_from_url(
         file_url?: string,
         file_urls?: string[],
         categories?: string[],
@@ -243,14 +237,33 @@ export declare class Client {
      *
      * @memberof Client
      * @param {String} file_path Path on disk to a file to submit for data extraction
-     * @param {String} template_name name of the extraction templates.
+     * @param {String} blueprint_name The name of the extraction blueprints to use.
      * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
     public process_any_document(
         file_path: string,
-        template_name?: string,
+        blueprint_name?: string,
+        max_pages_to_process?: number,
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
+     * Process any document and extract all the fields from it. https://docs.veryfi.com/api/anydocs/process-%E2%88%80-doc/
+     *
+     * @memberof Client
+     * @param {ReadStream} file ReadStream of a file to submit for data extraction
+     * @param {String} file_name The file name including the extension
+     * @param {String} blueprint_name The name of the extraction blueprints to use.
+     * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
+     * @param {Object} kwargs Additional request parameters
+     * @returns {JSON} Data extracted from the document
+     */
+    public process_any_document_from_stream(
+        file: fs.ReadStream,
+        file_name: string,
+        blueprint_name?: string,
         max_pages_to_process?: number,
         {...kwargs}?: VeryfiExtraArgs
     ): Promise<JsonObject>;
@@ -261,7 +274,7 @@ export declare class Client {
      * @memberof Client
      * @param {String} file_name The file name including the extension
      * @param {String} file_base64_string To submit a file for data extraction, encode the file in Base64 format and ensure it includes the MIME type. The Base64 string should follow this structure: data:${mimeType};base64,${base64String}
-     * @param {String} template_name name of the extraction templates.
+     * @param {String} blueprint_name The name of the extraction blueprints to use.
      * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
@@ -269,7 +282,7 @@ export declare class Client {
     public process_any_document_from_base64(
         file_name: string,
         file_base64_string: string,
-        template_name?: string,
+        blueprint_name?: string,
         max_pages_to_process?: number,
         {...kwargs}?: VeryfiExtraArgs
     ): Promise<JsonObject>;
@@ -281,14 +294,14 @@ export declare class Client {
      *
      * @memberof Client
      * @param {String} file_url url file to submit for data extraction
-     * @param {String} template_name name of the extraction templates.
+     * @param {String} blueprint_name The name of the extraction blueprints to use.
      * @param {number} max_pages_to_process The number of pages to process for the document. The limit is 50 pages per document.
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
-    public process_any_document_url(
+    public process_any_document_from_url(
         file_url: string,
-        template_name?: string,
+        blueprint_name?: string,
         max_pages_to_process?: number,
         {...kwargs}?: VeryfiExtraArgs
     ): Promise<JsonObject>;
@@ -353,6 +366,25 @@ export declare class Client {
 
     /**
      * Process bank statement and extract all the fields from it. https://docs.veryfi.com/api/bank-statements/process-a-bank-statement/
+     *
+     * @memberof Client
+     * @param {fs.ReadStream} file file to submit for data extraction
+     * @param {String} file_name The file name including the extension
+     * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
+     * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+     * @param {Object} kwargs Additional request parameters
+     * @returns {JSON} Data extracted from the document
+     */
+    public process_bank_statement_from_stream(
+        file: fs.ReadStream,
+        file_name: string,
+        bounding_boxes?: boolean,
+        confidence_details?: boolean,
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
+     * Process bank statement and extract all the fields from it. https://docs.veryfi.com/api/bank-statements/process-a-bank-statement/
      * @example
      * veryfi_client.process_bank_statement('file/path')
      *
@@ -384,7 +416,7 @@ export declare class Client {
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
-    public process_bank_statement_url(
+    public process_bank_statement_from_url(
         file_url: string,
         bounding_boxes?: boolean,
         confidence_details?: boolean,
@@ -448,8 +480,21 @@ export declare class Client {
 
     /**
      * Process business card and extract all the fields from it. https://docs.veryfi.com/api/business-cards/process-a-business-card/
-     * @example
-     * veryfi_client.process_business_card_from_base64('file/path')
+     *
+     * @memberof Client
+     * @param {fs.ReadStream} file ReadStream of a file to submit for data extraction
+     * @param {String} file_name The file name including the extension
+     * @param {Object} kwargs Additional request parameters
+     * @returns {JSON} Data extracted from the document
+     */
+    public process_business_card_from_stream(
+        file: fs.ReadStream,
+        file_name: string,
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
+     * Process business card and extract all the fields from it. https://docs.veryfi.com/api/business-cards/process-a-business-card/
      *
      * @memberof Client
      * @param {String} file_name The file name including the extension
@@ -473,7 +518,7 @@ export declare class Client {
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
-    public process_business_card_url(
+    public process_business_card_from_url(
         file_url: string,
         {...kwargs}?: VeryfiExtraArgs
     ): Promise<JsonObject>;
@@ -540,8 +585,6 @@ export declare class Client {
 
     /**
      * Process check and extract all the fields from it. https://docs.veryfi.com/api/checks/process-a-check/
-     * @example
-     * veryfi_client.process_check_from_base64('file/path')
      *
      * @memberof Client
      * @param {String} file_name The file name including the extension
@@ -560,6 +603,25 @@ export declare class Client {
     ): Promise<JsonObject>;
 
     /**
+     * Process check and extract all the fields from it. https://docs.veryfi.com/api/checks/process-a-check/
+     *
+     * @memberof Client
+     * @param {fs.ReadStream} file file to submit for data extraction
+     * @param {String} file_name The file name including the extension
+     * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
+     * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+     * @param {Object} kwargs Additional request parameters
+     * @returns {JSON} Data extracted from the document
+     */
+    public process_check_from_stream(
+        file: fs.ReadStream,
+        file_name: string,
+        bounding_boxes?: boolean,
+        confidence_details?: boolean,
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
      * Process a check document and extract all the fields from it. https://docs.veryfi.com/api/checks/process-a-check/
      * @example
      * veryfi_client.process_check_url('file_url')
@@ -571,7 +633,7 @@ export declare class Client {
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
-    public process_check_url(
+    public process_check_from_url(
         file_url: string,
         bounding_boxes?: boolean,
         confidence_details?: boolean,
@@ -639,6 +701,25 @@ export declare class Client {
 
     /**
      * Process w2 and extract all the fields from it. https://docs.veryfi.com/api/w2s/process-a-w-2/
+     *
+     * @memberof Client
+     * @param {fs.ReadStream} file file to submit for data extraction
+     * @param {String} file_name The file name including the extension
+     * @param {boolean} auto_delete Delete this document from Veryfi after data has been extracted
+     * @param {int} max_pages_to_process When sending a long document to Veryfi for processing, this parameter controls how many pages of the document will be read and processed, starting from page 1.
+     * @param {Object} kwargs Additional request parameters
+     * @returns {JSON} Data extracted from the document
+     */
+    public process_w2_from_stream(
+        file: fs.ReadStream,
+        file_name: string,
+        auto_delete?: boolean,
+        max_pages_to_process?: number,
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
+     * Process w2 and extract all the fields from it. https://docs.veryfi.com/api/w2s/process-a-w-2/
      * @example
      * veryfi_client.process_w2_from_base64('file/path')
      *
@@ -672,7 +753,7 @@ export declare class Client {
      * @param {Object} kwargs Additional request parameters
      * @returns {JsonObject} Data extracted from the document
      */
-    public process_w2_url(
+    public process_w2_from_url(
         file_name: string,
         file_url: string,
         file_urls?: string[],
@@ -743,8 +824,25 @@ export declare class Client {
 
     /**
      * Process W-8BEN-E and extract all the fields from it. https://docs.veryfi.com/api/w-8ben-e/process-a-w-8-ben-e/
-     * @example
-     * veryfi_client.process_w8bene_from_base64('file/path')
+     *
+     * @memberof Client
+     * @param {fs.ReadStream} file file to submit for data extraction
+     * @param {String} file_name The file name including the extension.
+     * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
+     * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+     * @param {Object} kwargs Additional request parameters
+     * @returns {JSON} Data extracted from the document
+     */
+    public process_w8bene_from_stream(
+        file: fs.ReadStream,
+        file_name: string,
+        bounding_boxes?: boolean,
+        confidence_details?: boolean,
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
+     * Process W-8BEN-E and extract all the fields from it. https://docs.veryfi.com/api/w-8ben-e/process-a-w-8-ben-e/
      *
      * @memberof Client
      * @param {String} file_name The file name including the extension.
@@ -765,7 +863,7 @@ export declare class Client {
     /**
      * Process W-8BEN-E document and extract all the fields from it. https://docs.veryfi.com/api/w-8ben-e/process-a-w-8-ben-e/
      * @example
-     * veryfi_client.process_w8bene_url('file_url')
+     * veryfi_client.process_w8bene_from_url('file_url')
      *
      * @memberof Client
      * @param {String} file_url url file to submit for data extraction
@@ -774,7 +872,7 @@ export declare class Client {
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
-    public process_w8bene_url(
+    public process_w8bene_from_url(
         file_url: string,
         bounding_boxes?: boolean,
         confidence_details?: boolean,
@@ -843,6 +941,25 @@ export declare class Client {
 
     /**
      * Process w9 and extract all the fields from it. https://docs.veryfi.com/api/w9s/process-a-w-9/
+     *
+     * @memberof Client
+     * @param {fs.ReadStream} file file to submit for data extraction
+     * @param {String} file_name The file name including the extension.
+     * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
+     * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+     * @param {Object} kwargs Additional request parameters
+     * @returns {JSON} Data extracted from the document
+     */
+    public process_w9_from_stream(
+        file: fs.ReadStream,
+        file_name: string,
+        bounding_boxes?: boolean,
+        confidence_details?: boolean,
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
+     * Process w9 and extract all the fields from it. https://docs.veryfi.com/api/w9s/process-a-w-9/
      * @example
      * veryfi_client.process_w9_from_base64('file/path')
      *
@@ -874,7 +991,7 @@ export declare class Client {
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
      */
-    public process_w9_url(
+    public process_w9_from_url(
         file_url: string,
         bounding_boxes?: boolean,
         confidence_details?: boolean,

@@ -25,6 +25,7 @@ describe('Processing documents', () => {
                 const mockResponse = require('../mocks/receipt.json');
                 veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
             }
+
             let response = await veryfi_client.process_document('resources/receipt.png');
             expect(response['vendor']['name']).toContain('Home Depot');
         } catch (error) {
@@ -41,7 +42,7 @@ describe('Processing documents', () => {
                 const file_path = 'resources/receipt.png';
                 const image_file = fs.readFileSync(file_path, { encoding: 'base64' });
                 const base64_encoded_string = Buffer.from(image_file).toString('utf-8');
-                let response = await veryfi_client.process_document_base64string(
+                let response = await veryfi_client.process_document_from_base64(
                     base64_encoded_string,
                     'receipt.png'
                 );
@@ -59,7 +60,7 @@ describe('Processing documents', () => {
             }
             const file_path = 'resources/receipt.png';
             const file = fs.createReadStream(file_path);
-            let response = await veryfi_client.process_document_stream(
+            let response = await veryfi_client.process_document_from_stream(
                 file,
                 'receipt.png'
             );
@@ -75,7 +76,7 @@ describe('Processing documents', () => {
                 const mockResponse = require('../mocks/receipt.json');
                 veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
             }
-            let response = await veryfi_client.process_document_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
+            let response = await veryfi_client.process_document_from_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
             expect(response['vendor']['name']).toBeDefined();
         } catch (error) {
             throw new Error(error);
@@ -91,7 +92,7 @@ describe('Processing documents', () => {
             const settings = {
                 bounding_boxes: true
             };
-            let response = await veryfi_client.process_document('resources/receipt.png', null, null, settings);
+            let response = await veryfi_client.process_document('resources/receipt.png', null, false, settings);
             expect(response).toBeDefined()
         } catch (error) {
             throw new Error(error);
@@ -149,7 +150,7 @@ describe('Managing tags', () => {
                 const mockResponse = require('../mocks/addTag.json');
                 veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
             }
-            let tag_name = 'test_tag'
+            let tag_name = 'TEST_TAG'
             const doc_id = 252469322;
             let tag = await veryfi_client.add_tag(doc_id, tag_name);
             expect(tag.name).toBe(tag_name)
@@ -293,7 +294,7 @@ describe('Processing any documents', () => {
                 const mockResponse = require('../mocks/processAnyDocument.json');
                 veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
             }
-            let response = await veryfi_client.process_any_document_url('https://cdn-dev.veryfi.com/testing/veryfi-python/driver_license.png', 'us_driver_license');
+            let response = await veryfi_client.process_any_document_from_url('https://cdn-dev.veryfi.com/testing/veryfi-python/driver_license.png', 'us_driver_license');
             expect(response).toBeDefined();
         } catch (error) {
             throw new Error(error);
@@ -362,7 +363,7 @@ describe('Processing business cards', () => {
                 const mockResponse = require('../mocks/processBusinesscard.json');
                 veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
             }
-            let response = await veryfi_client.process_business_card_url('https://cdn-dev.veryfi.com/testing/veryfi-python/business_card.jpg');
+            let response = await veryfi_client.process_business_card_from_url('https://cdn-dev.veryfi.com/testing/veryfi-python/business_card.jpg');
             expect(response).toBeDefined();
         } catch (error) {
             throw new Error(error);
@@ -431,7 +432,7 @@ describe('Processing bank statement', () => {
                 const mockResponse = require('../mocks/processBankStatement.json');
                 veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
             }
-            let response = await veryfi_client.process_bank_statement_url('https://cdn-dev.veryfi.com/testing/veryfi-python/bankstatement.pdf');
+            let response = await veryfi_client.process_bank_statement_from_url('https://cdn-dev.veryfi.com/testing/veryfi-python/bankstatement.pdf');
             expect(response).toBeDefined();
         } catch (error) {
             throw new Error(error);
@@ -500,7 +501,7 @@ describe('Processing checks', () => {
                 const mockResponse = require('../mocks/processCheck.json');
                 veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
             }
-            let response = await veryfi_client.process_check_url('https://cdn-dev.veryfi.com/testing/veryfi-python/check.pdf');
+            let response = await veryfi_client.process_check_from_url('https://cdn-dev.veryfi.com/testing/veryfi-python/check.pdf');
             expect(response).toBeDefined();
         } catch (error) {
             throw new Error(error);
@@ -568,7 +569,7 @@ describe('Process w2 documents', () => {
                 const mockResponse = require('../mocks/processW2.json');
                 veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
             }
-            let response = await veryfi_client.process_w2_url(
+            let response = await veryfi_client.process_w2_from_url(
                 'w2.png',
                 'https://cdn.veryfi.com/wp-content/uploads/image.png',
                 null,
@@ -641,7 +642,7 @@ describe('Processing W-8BEN-E', () => {
                 const mockResponse = require('../mocks/processW8bene.json');
                 veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
             }
-            let response = await veryfi_client.process_w8bene_url('https://cdn-dev.veryfi.com/testing/veryfi-python/w8bene.pdf');
+            let response = await veryfi_client.process_w8bene_from_url('https://cdn-dev.veryfi.com/testing/veryfi-python/w8bene.pdf');
             expect(response).toBeDefined();
         } catch (error) {
             throw new Error(error);
@@ -710,7 +711,7 @@ describe('Processing W9s', () => {
                 const mockResponse = require('../mocks/processW9.json');
                 veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
             }
-            let response = await veryfi_client.process_w9_url('https://cdn-dev.veryfi.com/testing/veryfi-python/w9.pdf');
+            let response = await veryfi_client.process_w9_from_url('https://cdn-dev.veryfi.com/testing/veryfi-python/w9.pdf');
             expect(response).toBeDefined();
         } catch (error) {
             throw new Error(error);
