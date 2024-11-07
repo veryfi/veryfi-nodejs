@@ -1,13 +1,23 @@
 import {BoundingElement} from "./BoundingElement";
 
-
 export declare type LineItem = {
+    category?: null | string | BoundingElement;
+    country_of_origin?: null | string | BoundingElement;
+    custom_fields?: Record<string, unknown>;
     date?: null | string | BoundingElement;
     description?: null | string | BoundingElement;
     discount?: null | number | BoundingElement;
+    discount_price?: null | number | BoundingElement;
+    discount_rate?: null | number | BoundingElement;
     end_date?: null | string | BoundingElement;
+    full_description?: null | string | BoundingElement;
+    gross_total?: null | number | BoundingElement;
     hsn?: null | string;
     id?: null | number;
+    lot?: null | string | BoundingElement;
+    manufacturer?: null | string | BoundingElement;
+    net_total?: null | number | BoundingElement;
+    normalized_description?: null | string | BoundingElement;
     order?: null | number;
     price?: null | number | BoundingElement;
     quantity?: null | number | BoundingElement;
@@ -15,10 +25,15 @@ export declare type LineItem = {
     section?: null | string;
     sku?: null | string | BoundingElement;
     start_date?: null | string;
-    tags?: null | null[];
+    subtotal?: null | number | BoundingElement;
+    tags?: null | string[];
     tax?: null | number | BoundingElement;
+    tax_code?: null | string | BoundingElement;
     tax_rate?: null | number;
+    text?: null | string | BoundingElement;
     total?: null | number | BoundingElement;
     type?: null | string;
     unit_of_measure?: null | string;
+    upc?: null | string | BoundingElement;
+    weight?: null | number | BoundingElement;
 };

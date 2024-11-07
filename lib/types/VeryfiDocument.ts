@@ -16,7 +16,7 @@ export declare type VeryfiDocument = {
     account_number?: null | string | BoundingElement;
     accounting_entry_type?: null | string;
     balance?: null | string | BoundingElement;
-    barcodes?: null | string[] | BoundingElement[];
+    barcodes?: null | Array<{ data: string; type: string }>;
     bill_to?: null | BillTo;
     card_number?: null | string | BoundingElement;
     cashback?: null | number | BoundingElement;
@@ -51,16 +51,62 @@ export declare type VeryfiDocument = {
     is_document?: null | boolean;
     is_duplicate?: null | boolean;
     is_money_in?: null | boolean | BoundingElement;
+    language?: null | string[];
     license_plate_number?: null | string | BoundingElement;
     line_items?: null | LineItem[];
     line_items_with_scores?: null | LineItem[];
+    meta?: null | {
+        device_id?: null | string;
+        device_user_uuid?: null | string;
+        duplicates?: Array<{
+            id: number;
+            score: number;
+            url: string;
+        }>;
+        fraud?: {
+            attribution?: null | string;
+            color?: string;
+            custom_types?: string[];
+            decision?: string;
+            images?: Array<{
+                is_lcd: boolean;
+                score: number;
+            }>;
+            pages?: Array<{
+                is_lcd: {
+                    score: number;
+                    value: boolean;
+                };
+            }>;
+            score?: number;
+            submissions?: Record<string, unknown>;
+            types?: string[];
+            version?: null | string;
+        };
+    };
     notes?: null | string;
     ocr_text?: null | string;
     order_date?: null | string | BoundingElement;
+    owner?: null | string;
+    pages?: Array<{
+        height: number;
+        is_blurry: {
+            score: number;
+            value: boolean;
+        };
+        language: string[];
+        screenshot: {
+            score: number;
+            type: null | string;
+        };
+        width: number;
+    }>;
     payment?: null | Payment;
     pdf_url?: null | string;
     previous_balance?: null | number | BoundingElement;
+    processed_pages?: null | number;
     purchase_order_number?: null | string | BoundingElement;
+    reference_number?: null | string | BoundingElement;
     rounding?: null | number | BoundingElement;
     server_name?: null | string | BoundingElement;
     service_end_date?: null | string;
@@ -68,6 +114,12 @@ export declare type VeryfiDocument = {
     ship_date?: null | string | BoundingElement;
     ship_to?: null | ShipTo;
     shipping?: null | number | BoundingElement;
+    source?: null | string;
+    source_documents?: Array<{
+        height: number;
+        size_kb: number;
+        width: number;
+    }>;
     status?: null | string;
     store_number?: null | string | BoundingElement;
     subtotal?: null | number | BoundingElement;

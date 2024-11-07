@@ -44,7 +44,10 @@ describe('Processing documents', () => {
                 const base64_encoded_string = Buffer.from(image_file).toString('utf-8');
                 let response = await veryfi_client.process_document_from_base64(
                     base64_encoded_string,
-                    'receipt.png'
+                    'receipt.png',
+                    null,
+                    false,
+                    {device_data: {user_uuid: '7c4a4f92-9d31-4e56-8f2a-e62435f1b871'}}
                 );
             expect(response['total']).toBe(34.95);
         } catch (error) {
