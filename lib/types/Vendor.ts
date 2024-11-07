@@ -1,15 +1,35 @@
 import {BoundingElement} from "./BoundingElement";
 
 export declare type Vendor = {
+    abn_number?: null | string | BoundingElement;
+    account_currency?: null | string | BoundingElement;
+    account_number?: null | string | BoundingElement;
     address?: null | string | BoundingElement;
+    bank_breakdown?: Array<null | Record<string, unknown>>;
+    bank_name?: null | string | BoundingElement;
+    bank_number?: null | string | BoundingElement;
+    bank_swift?: null | string | BoundingElement;
+    biller_code?: null | string | BoundingElement;
     category?: null | string | BoundingElement;
+    country_code?: null | string | BoundingElement;
     email?: null | string | BoundingElement;
+    external_id?: null | string | BoundingElement;
+    external_ids?: Array<null | string>;
     fax_number?: null | string | BoundingElement;
+    iban?: null | string | BoundingElement;
+    lat?: number;
+    lng?: number;
+    logo?: null | string | BoundingElement;
+    logo_name?: null | string | BoundingElement;
+    map_url?: null | string | BoundingElement;
     name?: null | string | BoundingElement;
+    order_number?: null | string | BoundingElement;
+    parsed_address?: null | Record<string, unknown>;
     phone_number?: null | string | BoundingElement;
+    raw_address?: null | string | BoundingElement;
     raw_name?: null | string;
-    vendor_logo?: null | string | BoundingElement;
-    vendor_reg_number?: null | string | BoundingElement;
-    vendor_type?: null | string;
+    reg_number?: null | string | BoundingElement;
+    type?: null | string | BoundingElement;
+    vat_number?: null | string | BoundingElement;
     web?: null | string | BoundingElement;
 };
