@@ -83,28 +83,41 @@ export declare type VeryfiDocument = {
             types?: string[];
             version?: null | string;
         };
+        handwritten_fields?: null | string[];
+        language?: null | string[];
+        owner?: null | string;
+        pages?: Array<{
+            height: number;
+            is_blurry: {
+                score: number;
+                value: boolean;
+            };
+            language: string[];
+            screenshot: {
+                score: number;
+                type: null | string;
+            };
+            width: number;
+        }>;
+        processed_pages?: null | number;
+        source?: null | string;
+        source_documents?: Array<{
+            height: number;
+            size_kb: number;
+            width: number;
+        }>;
+        total_pages?: null | number;
+        warnings?: Array<{
+            message: string;
+            type: string;
+        }>;
     };
     notes?: null | string;
     ocr_text?: null | string;
     order_date?: null | string | BoundingElement;
-    owner?: null | string;
-    pages?: Array<{
-        height: number;
-        is_blurry: {
-            score: number;
-            value: boolean;
-        };
-        language: string[];
-        screenshot: {
-            score: number;
-            type: null | string;
-        };
-        width: number;
-    }>;
     payment?: null | Payment;
     pdf_url?: null | string;
     previous_balance?: null | number | BoundingElement;
-    processed_pages?: null | number;
     purchase_order_number?: null | string | BoundingElement;
     reference_number?: null | string | BoundingElement;
     rounding?: null | number | BoundingElement;
@@ -114,12 +127,6 @@ export declare type VeryfiDocument = {
     ship_date?: null | string | BoundingElement;
     ship_to?: null | ShipTo;
     shipping?: null | number | BoundingElement;
-    source?: null | string;
-    source_documents?: Array<{
-        height: number;
-        size_kb: number;
-        width: number;
-    }>;
     status?: null | string;
     store_number?: null | string | BoundingElement;
     subtotal?: null | number | BoundingElement;
@@ -128,7 +135,6 @@ export declare type VeryfiDocument = {
     tax_lines?: null | TaxLine[];
     tip?: null | number | BoundingElement;
     total?: null | number | BoundingElement;
-    total_pages?: null | number;
     total_quantity?: null | string | BoundingElement;
     total_weight?: null | string | BoundingElement;
     tracking_number?: null | string | BoundingElement;
