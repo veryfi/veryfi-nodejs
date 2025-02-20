@@ -137,7 +137,6 @@ export declare class Client {
      * @memberof Client
      * @param {stream.Readable} file ReadStream of a file to submit for data extraction
      * @param {String} file_name The file name including the extension
-     * @param {Array} categories List of categories Veryfi can use to categorize the document
      * @param {Boolean} auto_delete Delete this document from Veryfi after data has been extracted
      * @param {Object} kwargs Additional request parameters
      * @returns {JSON} Data extracted from the document
@@ -145,7 +144,6 @@ export declare class Client {
     public process_document_from_stream(
         file: stream.Readable,
         file_name: string,
-        categories?: string[],
         auto_delete?: boolean,
         {...kwargs}?: VeryfiExtraArgs
     ): Promise<VeryfiDocument>;

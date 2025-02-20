@@ -1,6 +1,6 @@
 {
   "name": "@veryfi/veryfi-sdk",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Node.js module for communicating with the Veryfi OCR API",
   "main": "lib/client/client.js",
   "typings": "lib/types/Client.ts",
