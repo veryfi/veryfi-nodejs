@@ -1,4 +1,3 @@
-import fs from "fs";
 import {VeryfiDocument} from "./VeryfiDocument";
 import {JsonObject, VeryfiExtraArgs} from "./VeryfiExtraArgs";
 import {Tag} from "./Tag";
@@ -319,6 +318,7 @@ export declare class Client {
      * @param {number} document_id The unique identifier of the document.
      * @param {boolean} bounding_boxes A field used to determine whether to return bounding_box and bounding_region for extracted fields in the Document response.
      * @param {boolean} confidence_details A field used to determine whether to return the score and ocr_score fields in the Document response.
+     * @param kwargs Additional request parameters
      * @returns {Promise<JsonObject>} Object of a previously processed blueprinted document.
      */
     public get_bank_statement(document_id: number,
