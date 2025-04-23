@@ -1,13 +1,15 @@
 {
   "name": "@veryfi/veryfi-sdk",
-  "version": "1.4.4",
+  "version": "0.0.1",
   "description": "Node.js module for communicating with the Veryfi OCR API",
   "main": "lib/client/client.js",
   "typings": "lib/types/Client.ts",
   "scripts": {
     "test": "jest",
     "doc": "jsdoc -d docs --configure jsconf.json main.js",
-    "generate-docs": "jsdoc --configure jsdoc.json --verbose"
+    "generate-docs": "jsdoc --configure jsdoc.json --verbose",
+    "postpublish": "npm run publish-npm",
+    "publish-npm": "npm publish --access public --ignore-scripts --@veryfi:registry='https://registry.npmjs.org'"
   },
   "author": "Veryfi <support@veryfi.com> (https://www.veryfi.com)",
   "homepage": "https://veryfi.github.io/veryfi-nodejs/",
