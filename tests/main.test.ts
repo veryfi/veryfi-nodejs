@@ -21,6 +21,97 @@ const mock_responses = true;
 let veryfi_client = new Client(client_id, client_secret, username, api_key, base_url, 240);
 jest.setTimeout(timeout);
 
+describe('Classify documents', () => {
+
+    test('classify document from base64 string', async () => {
+        try {
+            if (mock_responses) {
+                return assert(true)
+            }
+            const file_path = 'resources/receipt.png';
+            const image_file = fs.readFileSync(file_path, {encoding: 'base64'});
+            const base64_encoded_string = Buffer.from(image_file).toString('utf-8');
+            let response = await veryfi_client.classify_document_base64string(
+                base64_encoded_string,
+                'receipt.png'
+            );
+            expect(response.document_type).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Classify document from URL', async () => {
+        try {
+            if (mock_responses) {
+                return assert(true)
+            }
+            let response = await veryfi_client.classify_document_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
+            expect(response.document_type).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+});
+
+describe('Split documents', () => {
+
+    test('split document from base64 string', async () => {
+        try {
+            if (mock_responses) {
+                return assert(true)
+            }
+            const file_path = 'resources/split.pdf';
+            const image_file = fs.readFileSync(file_path, {encoding: 'base64'});
+            const base64_encoded_string = Buffer.from(image_file).toString('utf-8');
+            let response = await veryfi_client.split_document_base64string(
+                base64_encoded_string,
+                'split.pdf'
+            );
+            expect(response.document_type).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('split document from URL', async () => {
+        try {
+            if (mock_responses) {
+                return assert(true)
+            }
+            let response = await veryfi_client.split_document_url('https://cdn.veryfi.com/receipts/92233902-c94a-491d-a4f9-0d61f9407cd2.pdf');
+            expect(response.document_type).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test('Get split documents', async () => {
+        try {
+            if (mock_responses) {
+                return assert(true)
+            }
+            let docs = await veryfi_client.get_split_documents();
+            expect(docs.documents.length).toBeGreaterThan(0);
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test(`Get split document with id`, async () => {
+        try {
+            if (mock_responses) {
+                return assert(true)
+            }
+            let doc = await veryfi_client.get_split_document("351609");
+            expect(doc).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+});
+
 describe('Processing documents', () => {
     test('Process document from file_path', async () => {
         try {

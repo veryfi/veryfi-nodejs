@@ -45,6 +45,95 @@ export declare class Client {
      */
     public _request(http_verb: String, endpoint_name: String, request_arguments: Object, params: Object, has_files: boolean): Promise<any>;
 
+    /**
+     * Classify a document. https://docs.veryfi.com/api/classify/classify-a-document/
+     * @example
+     * veryfi_client.classify_document_from_base64('base64_encoded_string',
+     *                                'receipt.png',
+     *                                {'extra': 'parameters'})
+     *
+     * @memberof Client
+     * @param {String} base64_encoded_string Buffer string of a file to submit for classify and data extraction
+     * @param {String} file_name The file name including the extension
+     * @param {Object} kwargs Additional request parameters
+     * @returns {JSON} JSON of document classification
+     */
+    public classify_document_from_base64(
+        base64_encoded_string: string,
+        file_name: string,
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
+     * Classify document. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
+     * @memberof Client
+     * @param {string} file_url Required if file_urls isn't specified. Publicly accessible URL to a file, e.g. 'https://cdn.example.com/receipt.jpg'.
+     * @param {string[]} file_urls Required if file_url isn't specified. List of publicly accessible URLs to multiple files, e.g. ['https://cdn.example.com/receipt1.jpg', 'https://cdn.example.com/receipt2.jpg']
+     * @param {VeryfiExtraArgs} kwargs Additional request parameters
+     * @returns {JSON} JSON of document classification
+     */
+    public classify_document_from_url(
+        file_url?: string,
+        file_urls?: string[],
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
+     * Veryfi's PDF Splitter allows you to split a multipage PDF with different receipts and invoices inside into multiple Documents. This API supports .pdf,.zip. Min file size is 250bytes. The max pdf file size is 50mb. https://docs.veryfi.com/api/receipts-invoices/split-and-process-a-pdf/
+     * @memberof Client
+     * @param {string} file_url Required if file_urls isn't specified. Publicly accessible URL to a file, e.g. 'https://cdn.example.com/receipt.jpg'.
+     * @param {string[]} file_urls Required if file_url isn't specified. List of publicly accessible URLs to multiple files, e.g. ['https://cdn.example.com/receipt1.jpg', 'https://cdn.example.com/receipt2.jpg']
+     * @param {VeryfiExtraArgs} kwargs Additional request parameters
+     * @returns {JSON} JSON of document classification
+     */
+    public split_document_from_url(
+        file_url?: string,
+        file_urls?: string[],
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
+     * Veryfi's PDF Splitter allows you to split a multipage PDF with different receipts and invoices inside into multiple Documents. This API supports .pdf,.zip. Min file size is 250bytes. The max pdf file size is 50mb. https://docs.veryfi.com/api/receipts-invoices/split-and-process-a-pdf/
+     * @example
+     * veryfi_client.split_document_from_base64('base64_encoded_string',
+     *                                'receipt.png',
+     *                                {'extra': 'parameters'})
+     *
+     * @memberof Client
+     * @param {String} base64_encoded_string Buffer string of a file to submit for classify and data extraction
+     * @param {String} file_name The file name including the extension
+     * @param {Object} kwargs Additional request parameters
+     * @returns {JSON} JSON of document classification
+     */
+    public split_document_from_base64(
+        base64_encoded_string: string,
+        file_name: string,
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
+
+    /**
+     * Veryfi's Get a Documents from PDF endpoint allows you to retrieve a collection of previously processed documents. https://docs.veryfi.com/api/receipts-invoices/get-documents-from-pdf/
+     * @memberof Client
+     * @param {string} document_id ID of the document you'd like to retrieve
+     * @param {Object} kwargs Additional request parameters
+     * @returns {Promise<JsonObject>} Object of data extracted from the document
+     */
+    public get_split_document(document_id: string,
+                        {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+
+    /**
+     * Veryfi's Get a Submitted PDF endpoint allows you to retrieve a collection of previously processed documents. https://docs.veryfi.com/api/receipts-invoices/get-submitted-pdf/
+     * @memberof Client
+     * @param {number} page The page number. The response is capped to maximum of 50 results per page.
+     * @param {number} page_size The number of Documents per page.
+     * @param {Object} kwargs Additional request parameters
+     * @returns {Promise<JsonObject>} Object of previously processed documents
+     */
+    public get_split_documents(
+        page?: number,
+        page_size?: number,
+        {...kwargs}?: VeryfiExtraArgs
+    ): Promise<JsonObject>;
 
     /**
      * Delete document from Veryfi. https://docs.veryfi.com/api/receipts-invoices/delete-a-document/
