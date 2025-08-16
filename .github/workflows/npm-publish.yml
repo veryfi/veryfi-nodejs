@@ -28,7 +28,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm config set "@veryfi:registry" "https://nexus.veryfi.com/repository/npm/"
-      - run: npm config set "//nexus.veryfi.com/repository/npm/:_authToken" "${{secrets.nexus_npm_token}}"
+      - run: npm config set "//nexus.veryfi.com/repository/npm/:username" "${{ secrets.NEXUS_NPM_USERNAME }}"
+      - run: npm config set "//nexus.veryfi.com/repository/npm/:_password" "${{ secrets.NEXUS_NPM_PASSWORD }}"
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
