@@ -1105,6 +1105,16 @@ export declare class Client {
     public delete_tags(document_id: string): Promise<any>;
 
     /**
+     * Unlink a tag from a document. https://docs.veryfi.com/api/receipts-invoices/unlink-a-tag-from-a-document/
+     *
+     * @memberof Client
+     * @param {string} document_id ID of the document you'd like to unlink the tag from
+     * @param {string} tag_id ID of the tag you'd like to unlink
+     * @return {Promise<any>} response about the unlinked tag.
+     */
+    public delete_tag(document_id: string, tag_id: string): Promise<any>;
+
+    /**
      * Add multiple tags on an existing document. https://docs.veryfi.com/api/receipts-invoices/add-tags-to-a-document/
      *
      * @param {number} document_id ID of the document you'd like to add a Tag
