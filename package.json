@@ -40,7 +40,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/veryfi/veryfi-nodejs.git"
+    "url": "https://github.com/veryfi/veryfi-nodejs"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "nodejs",
