@@ -1,11 +1,12 @@
-# This workflow will install dependencies and publish when a release is published.
-# Public npm uses Trusted Publishing (OIDC); no NPM_TOKEN secret is required.
-# For more information see: https://docs.npmjs.com/trusted-publishers
+# Publish on GitHub release using npm Trusted Publishing (OIDC).
+# Docs: https://docs.npmjs.com/trusted-publishers
 #
-# On npmjs.com → @veryfi/veryfi-sdk → Settings → Trusted Publisher, configure:
+# Required on npmjs.com → @veryfi/veryfi-sdk → Settings → Trusted Publisher:
 #   Organization or user: veryfi
-#   Repository: veryfi-nodejs
-#   Workflow filename: npm-publish.yml  (filename only, not the full path)
+#   Repository:           veryfi-nodejs
+#   Workflow filename:    npm-publish.yml   ← filename only (not full path)
+#   Allowed actions:      npm publish       ← required for configs after May 20, 2026
+#   Environment name:     (leave empty unless you add a GitHub Environment below)
 
 name: Node.js Package
 
@@ -14,46 +15,56 @@ on:
     types: [published]
 
 permissions:
+  id-token: write # Required for OIDC
   contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: "24"
+          package-manager-cache: false
       - run: npm ci
 
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write # Required for OIDC trusted publishing
-      contents: read
     steps:
-      - uses: actions/checkout@v4
-      # Do not set registry-url here: setup-node writes an empty
-      # //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN} line that
-      # prevents npm from using the OIDC trusted-publisher flow.
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 24
-      # Trusted publishing requires npm >= 11.5.1
-      - run: npm install -g npm@latest
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false # never use caching in release builds
+      # Trusted publishing requires npm CLI >= 11.5.1 (Node 24 includes a recent npm)
+      - name: Ensure npm supports trusted publishing
+        run: npm install -g npm@latest
+      # setup-node writes //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}.
+      # With no NODE_AUTH_TOKEN that expands to empty and blocks the OIDC exchange,
+      # producing a misleading E404 / ENEEDAUTH. Strip it so npm uses OIDC.
+      # See: https://github.com/actions/setup-node/issues/1551
+      - name: Remove setup-node placeholder auth token
+        run: |
+          npmrc="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+          if [ -f "$npmrc" ]; then
+            sed -i '/_authToken/d' "$npmrc"
+          fi
       - run: npm ci
       - run: npm publish
-        # Do not set NODE_AUTH_TOKEN — OIDC handles auth
+        # Do not set NODE_AUTH_TOKEN — OIDC / trusted publishing handles auth
 
   publish-nexus:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: "24"
+          package-manager-cache: false
       - run: npm ci
       - run: npm config set "@veryfi:registry" "https://nexus.veryfi.com/repository/npm/"
       - run: npm config set "//nexus.veryfi.com/repository/npm/:username" "${{ secrets.NEXUS_NPM_USERNAME }}"
