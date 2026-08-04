@@ -6,7 +6,7 @@
 #   Repository:           veryfi-nodejs
 #   Workflow filename:    npm-publish.yml   ← filename only (not full path)
 #   Allowed actions:      npm publish       ← required for configs after May 20, 2026
-#   Environment name:     (leave empty unless you add a GitHub Environment below)
+#   Environment name:     (leave EMPTY — this workflow does not use a GitHub Environment)
 
 name: Node.js Package
 
@@ -34,27 +34,87 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      # Intentionally omit registry-url. setup-node writes an empty
+      # _authToken placeholder that blocks the OIDC exchange (E404).
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
-          registry-url: "https://registry.npmjs.org"
-          package-manager-cache: false # never use caching in release builds
-      # Trusted publishing requires npm CLI >= 11.5.1 (Node 24 includes a recent npm)
+          package-manager-cache: false
       - name: Ensure npm supports trusted publishing
-        run: npm install -g npm@latest
-      # setup-node writes //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}.
-      # With no NODE_AUTH_TOKEN that expands to empty and blocks the OIDC exchange,
-      # producing a misleading E404 / ENEEDAUTH. Strip it so npm uses OIDC.
-      # See: https://github.com/actions/setup-node/issues/1551
-      - name: Remove setup-node placeholder auth token
         run: |
-          npmrc="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
-          if [ -f "$npmrc" ]; then
-            sed -i '/_authToken/d' "$npmrc"
+          npm install -g npm@latest
+          npm --version
+      - name: Verify OIDC + trusted publisher exchange
+        run: |
+          set -euo pipefail
+          echo "node=$(node -v) npm=$(npm -v)"
+          echo "repository.url=$(node -p "require('./package.json').repository.url")"
+
+          if [ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" ] || [ -z "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]; then
+            echo "::error::GitHub OIDC is unavailable. Ensure permissions.id-token is write."
+            exit 1
           fi
+
+          AUDIENCE="npm:registry.npmjs.org"
+          ID_TOKEN="$(curl -fsSL \
+            -H "Authorization: Bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+            -H "Accept: application/json" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}" \
+            | node -pe "JSON.parse(require('fs').readFileSync(0,'utf8')).value")"
+
+          if [ -z "${ID_TOKEN}" ] || [ "${ID_TOKEN}" = "undefined" ]; then
+            echo "::error::Failed to mint a GitHub OIDC token for audience ${AUDIENCE}"
+            exit 1
+          fi
+          echo "Minted GitHub OIDC token for ${AUDIENCE}"
+
+          # Decode JWT claims (header.payload.signature) without verifying — for debugging only
+          ID_TOKEN="${ID_TOKEN}" node -e '
+            const token = process.env.ID_TOKEN;
+            const payload = JSON.parse(Buffer.from(token.split(".")[1], "base64url").toString());
+            console.log("OIDC claims relevant to trusted publishing:");
+            console.log(JSON.stringify({
+              iss: payload.iss,
+              aud: payload.aud,
+              sub: payload.sub,
+              repository: payload.repository,
+              repository_owner: payload.repository_owner,
+              workflow: payload.workflow,
+              workflow_ref: payload.workflow_ref,
+              job_workflow_ref: payload.job_workflow_ref,
+              ref: payload.ref,
+              event_name: payload.event_name,
+            }, null, 2));
+          '
+
+          HTTP_CODE="$(curl -sS -o /tmp/npm-oidc-exchange.json -w "%{http_code}" -X POST \
+            "https://registry.npmjs.org/-/npm/v1/oidc/token/exchange/package/@veryfi%2fveryfi-sdk" \
+            -H "Authorization: Bearer ${ID_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/json")"
+
+          echo "npm OIDC exchange HTTP status: ${HTTP_CODE}"
+          node -e '
+            const fs = require("fs");
+            const body = fs.readFileSync("/tmp/npm-oidc-exchange.json", "utf8");
+            let parsed;
+            try { parsed = JSON.parse(body); } catch { parsed = { raw: body }; }
+            if (parsed.token) {
+              console.log("npm OIDC exchange succeeded (token received)");
+              process.exit(0);
+            }
+            console.error("npm OIDC exchange failed. Response:");
+            console.error(JSON.stringify(parsed, null, 2));
+            console.error("This usually means the Trusted Publisher on npmjs.com does not match:");
+            console.error("  Organization/user: veryfi");
+            console.error("  Repository:        veryfi-nodejs");
+            console.error("  Workflow filename: npm-publish.yml");
+            console.error("  Allowed actions:   npm publish");
+            console.error("  Environment name:  (must be empty)");
+            process.exit(1);
+          '
       - run: npm ci
-      - run: npm publish
-        # Do not set NODE_AUTH_TOKEN — OIDC / trusted publishing handles auth
+      - run: npm publish --access public
 
   publish-nexus:
     needs: build
