@@ -53,7 +53,7 @@ jobs:
             sed -i '/_authToken/d' "$npmrc"
           fi
       - run: npm ci
-      - run: npm publish
+      - run: npm publish --access public
         # Do not set NODE_AUTH_TOKEN — OIDC / trusted publishing handles auth
 
   publish-nexus:
