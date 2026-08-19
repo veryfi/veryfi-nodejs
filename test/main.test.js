@@ -377,6 +377,31 @@ describe('Processing any documents', () => {
         }
     });
 
+    test('Get any document tags', async () => {
+        try {
+            if (mock_responses) {
+                const mockResponse = require('../mocks/getTags.json');
+                veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
+            }
+            const doc_id = 4559535;
+            let response = await veryfi_client.get_any_document_tags(doc_id);
+            expect(response.tags).toBeDefined();
+            expect(response.tags.length).toBeGreaterThan(0);
+            expect(response.tags[0].name).toBeDefined();
+            if (mock_responses) {
+                expect(veryfi_client._request).toHaveBeenCalledWith(
+                    "GET",
+                    `/any-documents/${doc_id}/tags/`,
+                    {},
+                    {},
+                    false
+                );
+            }
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
     test('Process any document from file_path', async () => {
         try {
             if (mock_responses) {

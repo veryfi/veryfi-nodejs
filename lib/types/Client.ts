@@ -318,6 +318,16 @@ export declare class Client {
                              {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
 
     /**
+     * Return all tags assigned to a specific any document. https://docs.veryfi.com/api/anydocs/get-A-doc-tags/
+     * @memberof Client
+     * @param {number} document_id The unique identifier of the document.
+     * @param {Object} kwargs Additional request parameters
+     * @returns {Promise<{tags: Tag[]}>} List of tags assigned to a specific any document.
+     */
+    public get_any_document_tags(document_id: number,
+                                 {...kwargs}?: VeryfiExtraArgs): Promise<{tags: Tag[]}>;
+
+    /**
      * Process any document and extract all the fields from it. https://docs.veryfi.com/api/anydocs/process-%E2%88%80-doc/
      * @example
      * veryfi_client.process_any_document('file/path','template_name')
