@@ -511,6 +511,22 @@ describe('Processing any documents', () => {
         }
     });
 
+    test('Unlink a tag from an any document', async () => {
+        try {
+            if (mock_responses) {
+                return assert(true)
+            }
+            let docs = await veryfi_client.get_any_documents();
+            const doc_id = docs.results[0].id;
+            const tags = await veryfi_client.get_any_document_tags(doc_id);
+            const tag_id = tags.tags[0].id;
+            let response = await veryfi_client.delete_any_document_tag(doc_id, tag_id);
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
     test('Get any document tags', async () => {
         try {
             if (mock_responses) {
