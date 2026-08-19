@@ -1,0 +1,4 @@
+{
+  "name": "veryfi-nodejs",
+  "install": "npm ci"
+}
