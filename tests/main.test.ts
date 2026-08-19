@@ -511,6 +511,20 @@ describe('Processing any documents', () => {
         }
     });
 
+    test('Get any document tags', async () => {
+        try {
+            if (mock_responses) {
+                return assert(true)
+            }
+            let docs = await veryfi_client.get_any_documents();
+            const doc_id = docs.results[0].id;
+            let response = await veryfi_client.get_any_document_tags(doc_id);
+            expect(response.tags).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
     test(`Get any doc with id `, async () => {
         try {
             if (mock_responses) {
