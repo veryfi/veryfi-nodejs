@@ -377,6 +377,28 @@ describe('Processing any documents', () => {
         }
     });
 
+    test('Unlink a tag from an any document', async () => {
+        try {
+            if (mock_responses) {
+                const mockResponse = require('../mocks/deleteTags.json');
+                veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
+            }
+            const doc_id = 4559535;
+            const tag_id = 12345;
+            let response = await veryfi_client.delete_any_document_tag(doc_id, tag_id);
+            expect(response).toBeDefined();
+            if (mock_responses) {
+                expect(veryfi_client._request).toHaveBeenCalledWith(
+                    "DELETE",
+                    `/any-documents/${doc_id}/tags/${tag_id}/`,
+                    {}
+                );
+            }
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
     test('Get any document tags', async () => {
         try {
             if (mock_responses) {

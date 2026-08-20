@@ -328,6 +328,16 @@ export declare class Client {
                                  {...kwargs}?: VeryfiExtraArgs): Promise<{tags: Tag[]}>;
 
     /**
+     * Unlink a tag from a specific any document. https://docs.veryfi.com/api/anydocs/unlink-a-tag-from-a-A-doc/
+     *
+     * @memberof Client
+     * @param {string} document_id ID of the document you'd like to unlink the tag from
+     * @param {string} tag_id ID of the tag you'd like to unlink
+     * @return {Promise<any>} response about the unlinked tag.
+     */
+    public delete_any_document_tag(document_id: string, tag_id: string): Promise<any>;
+
+    /**
      * Process any document and extract all the fields from it. https://docs.veryfi.com/api/anydocs/process-%E2%88%80-doc/
      * @example
      * veryfi_client.process_any_document('file/path','template_name')
