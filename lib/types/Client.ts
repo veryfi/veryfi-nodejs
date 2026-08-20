@@ -41,9 +41,12 @@ export declare class Client {
      * @param {{}} request_arguments JSON payload to send to Veryfi
      * @param params {{}} query params.
      * @param {Boolean} has_files Are there any files to be submitted as binary
+     * @param {Object} [options] Optional request options
+     * @param {string} [options.api_version] Override the default API version (v8)
+     * @param {boolean} [options.skip_partner] Skip the /partner path segment (used by some v1 routes)
      * @returns {JSON} A JSON of the response data.
      */
-    public _request(http_verb: String, endpoint_name: String, request_arguments: Object, params: Object, has_files: boolean): Promise<any>;
+    public _request(http_verb: String, endpoint_name: String, request_arguments: Object, params?: Object, has_files?: boolean, options?: { api_version?: string; skip_partner?: boolean }): Promise<any>;
 
     /**
      * Classify a document. https://docs.veryfi.com/api/classify/classify-a-document/
@@ -1151,6 +1154,519 @@ export declare class Client {
      * @return {Promise<Tag>} response about tags added.
      */
     public replace_tags(document_id: string, tags: string[]): Promise<Tag>;
+
+/**
+     * Classify a document. https://docs.veryfi.com/api/classify/classify-a-document/
+     */
+    public classify_document(file_path: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Classify a document from a file stream. https://docs.veryfi.com/api/classify/classify-a-document/
+     */
+    public classify_document_from_stream(file: stream.Readable, file_name: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Get document line items. https://docs.veryfi.com/api/receipts-invoices/get-document-line-items/ */
+    public get_document_line_items(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Create a line item. https://docs.veryfi.com/api/receipts-invoices/create-a-line-item/ */
+    public create_line_item(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Delete all document line items. https://docs.veryfi.com/api/receipts-invoices/delete-all-document-line-items/ */
+    public delete_document_line_items(document_id: string): Promise<any>;
+/** Get a line item. https://docs.veryfi.com/api/receipts-invoices/get-a-line-item/ */
+    public get_line_item(document_id: string, line_item_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Update a line item. https://docs.veryfi.com/api/receipts-invoices/update-a-line-item/ */
+    public update_line_item(document_id: string, line_item_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Delete a line item. https://docs.veryfi.com/api/receipts-invoices/delete-a-line-item/ */
+    public delete_line_item(document_id: string, line_item_id: string): Promise<any>;
+/** Get document tags. https://docs.veryfi.com/api/receipts-invoices/get-document-tags/ */
+    public get_document_tags(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<{tags: Tag[]}>;
+/** Get document tax lines. https://docs.veryfi.com/api/returns-a-list-of-document-tax-lines/ */
+    public get_tax_lines(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Create a tax line. https://docs.veryfi.com/api/create-a-tax-line/ */
+    public create_tax_line(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Get a document tax line. https://docs.veryfi.com/api/returns-document-tax-line/ */
+    public get_tax_line(document_id: string, tax_line_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Update a tax line. https://docs.veryfi.com/api/update-a-tax-line/ */
+    public update_tax_line(document_id: string, tax_line_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Delete a tax line. https://docs.veryfi.com/api/delete-a-tax-line/ */
+    public delete_tax_line(document_id: string, tax_line_id: string): Promise<any>;
+/** Bulk process multiple documents. https://docs.veryfi.com/api/receipts-invoices/bulk-process-multiple-documents/ */
+    public process_documents_bulk(file_urls: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Add a tag to a any document. https://docs.veryfi.com/api/anydocs/add-a-tag-to-a-A-doc/
+     */
+    public add_any_document_tag(document_id: string, tag: string): Promise<Tag>;
+/**
+     * Add tags to a any document. https://docs.veryfi.com/api/anydocs/add-tags-to-a-A-doc/
+     */
+    public add_any_document_tags(document_id: string, tags: string[]): Promise<Tag>;
+/**
+     * Unlink all tags from a any document. https://docs.veryfi.com/api/anydocs/unlink-all-tags-from-a-A-doc/
+     */
+    public delete_any_document_tags(document_id: string): Promise<any>;
+/**
+     * Update a any document. https://docs.veryfi.com/api/anydocs/update-a-A-doc/
+     */
+    public update_any_document(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get Blueprints. https://docs.veryfi.com/api/get-blueprints/
+     */
+    public get_blueprints({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Process a any document asynchronously. https://docs.veryfi.com/api/anydocs/process-a-A-doc-asynchronously/
+     */
+    public process_any_document_async(file_path: string, blueprint_name?: string, max_pages_to_process?: number, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a any document asynchronously from a file stream. https://docs.veryfi.com/api/anydocs/process-a-A-doc-asynchronously/
+     */
+    public process_any_document_async_from_stream(file: stream.Readable, file_name: string, blueprint_name?: string, max_pages_to_process?: number, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a any document asynchronously from a base64 string. https://docs.veryfi.com/api/anydocs/process-a-A-doc-asynchronously/
+     */
+    public process_any_document_async_from_base64(file_name: string, file_base64_string: string, blueprint_name?: string, max_pages_to_process?: number, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a any document asynchronously from a URL. https://docs.veryfi.com/api/anydocs/process-a-A-doc-asynchronously/
+     */
+    public process_any_document_async_from_url(file_url?: string, file_urls?: string[], blueprint_name?: string, max_pages_to_process?: number, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Add a tag to a bank statement. https://docs.veryfi.com/api/bank-statements/add-a-tag-to-a-bank-statement/
+     */
+    public add_bank_statement_tag(document_id: string, tag: string): Promise<Tag>;
+/**
+     * Add tags to a bank statement. https://docs.veryfi.com/api/bank-statements/add-tags-to-a-bank-statement/
+     */
+    public add_bank_statement_tags(document_id: string, tags: string[]): Promise<Tag>;
+/**
+     * Get tags assigned to a bank statement. https://docs.veryfi.com/api/bank-statements/get-bank-statement-tags/
+     */
+    public get_bank_statement_tags(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<{tags: Tag[]}>;
+/**
+     * Unlink a tag from a bank statement. https://docs.veryfi.com/api/bank-statements/unlink-a-tag-from-a-bank-statement/
+     */
+    public delete_bank_statement_tag(document_id: string, tag_id: string): Promise<any>;
+/**
+     * Unlink all tags from a bank statement. https://docs.veryfi.com/api/bank-statements/unlink-all-tags-from-a-bank-statement/
+     */
+    public delete_bank_statement_tags(document_id: string): Promise<any>;
+/**
+     * Update a bank statement. https://docs.veryfi.com/api/bank-statements/update-a-bank-statement/
+     */
+    public update_bank_statement(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Process a bank statement asynchronously. https://docs.veryfi.com/api/bank-statements/process-a-bank-statement-asynchronously/
+     */
+    public process_bank_statement_async(file_path: string, bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a bank statement asynchronously from a file stream. https://docs.veryfi.com/api/bank-statements/process-a-bank-statement-asynchronously/
+     */
+    public process_bank_statement_async_from_stream(file: stream.Readable, file_name: string, bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a bank statement asynchronously from a base64 string. https://docs.veryfi.com/api/bank-statements/process-a-bank-statement-asynchronously/
+     */
+    public process_bank_statement_async_from_base64(file_name: string, file_base64_string: string, bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a bank statement asynchronously from a URL. https://docs.veryfi.com/api/bank-statements/process-a-bank-statement-asynchronously/
+     */
+    public process_bank_statement_async_from_url(file_url?: string, file_urls?: string[], bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Split and process multiple bank statements. https://docs.veryfi.com/api/split-and-process-multiple-bank-statements/
+     */
+    public split_bank_statements(file_path: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Split and process multiple bank statements from a file stream. https://docs.veryfi.com/api/split-and-process-multiple-bank-statements/
+     */
+    public split_bank_statements_from_stream(file: stream.Readable, file_name: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Split and process multiple bank statements from a base64 string. https://docs.veryfi.com/api/split-and-process-multiple-bank-statements/
+     */
+    public split_bank_statements_from_base64(file_name: string, file_base64_string: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Split and process multiple bank statements from a URL. https://docs.veryfi.com/api/split-and-process-multiple-bank-statements/
+     */
+    public split_bank_statements_from_url(file_url?: string, file_urls?: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get Bank Statement sets. https://docs.veryfi.com/api/get-bank-statement-sets/
+     */
+    public get_bank_statement_sets(page?: number, page_size?: number, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get a Bank Statement set. https://docs.veryfi.com/api/get-a-bank-statement-set/
+     */
+    public get_bank_statement_set(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Add a tag to a business card. https://docs.veryfi.com/api/add-a-tag-to-a-business-card/
+     */
+    public add_business_card_tag(document_id: string, tag: string): Promise<Tag>;
+/**
+     * Add tags to a business card. https://docs.veryfi.com/api/add-tags-to-a-business-card/
+     */
+    public add_business_card_tags(document_id: string, tags: string[]): Promise<Tag>;
+/**
+     * Get tags assigned to a business card. https://docs.veryfi.com/api/get-business-card-tags/
+     */
+    public get_business_card_tags(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<{tags: Tag[]}>;
+/**
+     * Unlink a tag from a business card. https://docs.veryfi.com/api/unlink-a-tag-from-a-business-card/
+     */
+    public delete_business_card_tag(document_id: string, tag_id: string): Promise<any>;
+/**
+     * Unlink all tags from a business card. https://docs.veryfi.com/api/unlink-all-tags-from-a-business-card/
+     */
+    public delete_business_card_tags(document_id: string): Promise<any>;
+/**
+     * Update a business card. https://docs.veryfi.com/api/business-cards/update-a-business-card/
+     */
+    public update_business_card(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Add a tag to a check. https://docs.veryfi.com/api/checks/add-a-tag-to-a-check/
+     */
+    public add_check_tag(document_id: string, tag: string): Promise<Tag>;
+/**
+     * Add tags to a check. https://docs.veryfi.com/api/checks/add-tags-to-a-check/
+     */
+    public add_check_tags(document_id: string, tags: string[]): Promise<Tag>;
+/**
+     * Get tags assigned to a check. https://docs.veryfi.com/api/checks/get-check-tags/
+     */
+    public get_check_tags(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<{tags: Tag[]}>;
+/**
+     * Unlink a tag from a check. https://docs.veryfi.com/api/checks/unlink-a-tag-from-a-check/
+     */
+    public delete_check_tag(document_id: string, tag_id: string): Promise<any>;
+/**
+     * Unlink all tags from a check. https://docs.veryfi.com/api/checks/unlink-all-tags-from-a-check/
+     */
+    public delete_check_tags(document_id: string): Promise<any>;
+/**
+     * Update a check. https://docs.veryfi.com/api/checks/update-a-check/
+     */
+    public update_check(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Process a check asynchronously. https://docs.veryfi.com/api/checks/process-a-check-asynchronously/
+     */
+    public process_check_async(file_path: string, bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a check asynchronously from a file stream. https://docs.veryfi.com/api/checks/process-a-check-asynchronously/
+     */
+    public process_check_async_from_stream(file: stream.Readable, file_name: string, bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a check asynchronously from a base64 string. https://docs.veryfi.com/api/checks/process-a-check-asynchronously/
+     */
+    public process_check_async_from_base64(file_name: string, file_base64_string: string, bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a check asynchronously from a URL. https://docs.veryfi.com/api/checks/process-a-check-asynchronously/
+     */
+    public process_check_async_from_url(file_url?: string, file_urls?: string[], bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Process a check with remittance. https://docs.veryfi.com/api/checks/process-a-check-with-remittance/
+     */
+    public process_check_with_remittance(file_path: string, bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a check with remittance from a file stream. https://docs.veryfi.com/api/checks/process-a-check-with-remittance/
+     */
+    public process_check_with_remittance_from_stream(file: stream.Readable, file_name: string, bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a check with remittance from a base64 string. https://docs.veryfi.com/api/checks/process-a-check-with-remittance/
+     */
+    public process_check_with_remittance_from_base64(file_name: string, file_base64_string: string, bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a check with remittance from a URL. https://docs.veryfi.com/api/checks/process-a-check-with-remittance/
+     */
+    public process_check_with_remittance_from_url(file_url?: string, file_urls?: string[], bounding_boxes?: boolean, confidence_details?: boolean, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Add a tag to a W-2. https://docs.veryfi.com/api/add-a-tag-to-a-w-2/
+     */
+    public add_w2_tag(document_id: string, tag: string): Promise<Tag>;
+/**
+     * Add tags to a W-2. https://docs.veryfi.com/api/add-tags-to-a-w-2/
+     */
+    public add_w2_tags(document_id: string, tags: string[]): Promise<Tag>;
+/**
+     * Get tags assigned to a W-2. https://docs.veryfi.com/api/get-w-2-tags/
+     */
+    public get_w2_tags(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<{tags: Tag[]}>;
+/**
+     * Unlink a tag from a W-2. https://docs.veryfi.com/api/unlink-a-tag-from-a-w-2/
+     */
+    public delete_w2_tag(document_id: string, tag_id: string): Promise<any>;
+/**
+     * Unlink all tags from a W-2. https://docs.veryfi.com/api/unlink-all-tags-from-a-w-2/
+     */
+    public delete_w2_tags(document_id: string): Promise<any>;
+/**
+     * Update a W-2. https://docs.veryfi.com/api/w2s/update-a-w-2/
+     */
+    public update_w2(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Split and process a PDF with multiple W-2s. https://docs.veryfi.com/api/split-and-process-a-pdf-with-multiple-w-2-s/
+     */
+    public split_w2s(file_path: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Split and process a PDF with multiple W-2s from a file stream. https://docs.veryfi.com/api/split-and-process-a-pdf-with-multiple-w-2-s/
+     */
+    public split_w2s_from_stream(file: stream.Readable, file_name: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Split and process a PDF with multiple W-2s from a base64 string. https://docs.veryfi.com/api/split-and-process-a-pdf-with-multiple-w-2-s/
+     */
+    public split_w2s_from_base64(file_name: string, file_base64_string: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Split and process a PDF with multiple W-2s from a URL. https://docs.veryfi.com/api/split-and-process-a-pdf-with-multiple-w-2-s/
+     */
+    public split_w2s_from_url(file_url?: string, file_urls?: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get W-2 sets. https://docs.veryfi.com/api/get-w-2-sets/
+     */
+    public get_w2_sets(page?: number, page_size?: number, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get a W-2 set. https://docs.veryfi.com/api/get-a-w-2-set/
+     */
+    public get_w2_set(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Add a tag to a W-8BEN-E. https://docs.veryfi.com/api/add-a-tag-to-a-w-8-ben-e/
+     */
+    public add_w8bene_tag(document_id: string, tag: string): Promise<Tag>;
+/**
+     * Add tags to a W-8BEN-E. https://docs.veryfi.com/api/add-tags-to-a-w-8-ben-e/
+     */
+    public add_w8bene_tags(document_id: string, tags: string[]): Promise<Tag>;
+/**
+     * Get tags assigned to a W-8BEN-E. https://docs.veryfi.com/api/get-w-8-ben-e-tags/
+     */
+    public get_w8bene_tags(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<{tags: Tag[]}>;
+/**
+     * Unlink a tag from a W-8BEN-E. https://docs.veryfi.com/api/unlink-a-tag-from-a-w-8-ben-e/
+     */
+    public delete_w8bene_tag(document_id: string, tag_id: string): Promise<any>;
+/**
+     * Unlink all tags from a W-8BEN-E. https://docs.veryfi.com/api/unlink-all-tags-from-a-w-8-ben-e/
+     */
+    public delete_w8bene_tags(document_id: string): Promise<any>;
+/**
+     * Update a W-8BEN-E. https://docs.veryfi.com/api/w-8ben-e/update-a-w-8-ben-e/
+     */
+    public update_w8bene(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Add a tag to a W-9. https://docs.veryfi.com/api/add-a-tag-to-a-w-9/
+     */
+    public add_w9_tag(document_id: string, tag: string): Promise<Tag>;
+/**
+     * Add tags to a W-9. https://docs.veryfi.com/api/add-tags-to-a-w-9/
+     */
+    public add_w9_tags(document_id: string, tags: string[]): Promise<Tag>;
+/**
+     * Get tags assigned to a W-9. https://docs.veryfi.com/api/get-w-9-tags/
+     */
+    public get_w9_tags(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<{tags: Tag[]}>;
+/**
+     * Unlink a tag from a W-9. https://docs.veryfi.com/api/unlink-a-tag-from-a-w-9/
+     */
+    public delete_w9_tag(document_id: string, tag_id: string): Promise<any>;
+/**
+     * Unlink all tags from a W-9. https://docs.veryfi.com/api/unlink-all-tags-from-a-w-9/
+     */
+    public delete_w9_tags(document_id: string): Promise<any>;
+/**
+     * Update a W-9. https://docs.veryfi.com/api/w9s/update-a-w-9/
+     */
+    public update_w9(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Process a contract. https://docs.veryfi.com/api/contracts/process-a-contract/
+     */
+    public process_contract(file_path: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a contract from a file stream. https://docs.veryfi.com/api/contracts/process-a-contract/
+     */
+    public process_contract_from_stream(file: stream.Readable, file_name: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a contract from a base64 string. https://docs.veryfi.com/api/contracts/process-a-contract/
+     */
+    public process_contract_from_base64(file_name: string, file_base64_string: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a contract from a URL. https://docs.veryfi.com/api/contracts/process-a-contract/
+     */
+    public process_contract_from_url(file_url?: string, file_urls?: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get a contract. https://docs.veryfi.com/api/contracts/get-a-contract/
+     */
+    public get_contract(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get contracts. https://docs.veryfi.com/api/contracts/get-contracts/
+     */
+    public get_contracts(page?: number, page_size?: number, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Update a contract. https://docs.veryfi.com/api/contracts/update-a-contract/
+     */
+    public update_contract(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Delete a contract. https://docs.veryfi.com/api/contracts/delete-a-contract/
+     */
+    public delete_contract(document_id: string): Promise<any>;
+/**
+     * Add a tag to a contract. https://docs.veryfi.com/api/add-a-tag-to-a-contract/
+     */
+    public add_contract_tag(document_id: string, tag: string): Promise<Tag>;
+/**
+     * Add tags to a contract. https://docs.veryfi.com/api/add-tags-to-a-contract/
+     */
+    public add_contract_tags(document_id: string, tags: string[]): Promise<Tag>;
+/**
+     * Get tags assigned to a contract. https://docs.veryfi.com/api/get-contract-tags/
+     */
+    public get_contract_tags(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<{tags: Tag[]}>;
+/**
+     * Unlink a tag from a contract. https://docs.veryfi.com/api/unlink-a-tag-from-a-contract/
+     */
+    public delete_contract_tag(document_id: string, tag_id: string): Promise<any>;
+/**
+     * Unlink all tags from a contract. https://docs.veryfi.com/api/unlink-all-tags-from-a-contract/
+     */
+    public delete_contract_tags(document_id: string): Promise<any>;
+/**
+     * Convert a document to markdown. https://docs.veryfi.com/api/parse/convert-a-document-to-markdown/
+     */
+    public process_markdown_document(file_path: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Convert a document to markdown from a file stream. https://docs.veryfi.com/api/parse/convert-a-document-to-markdown/
+     */
+    public process_markdown_document_from_stream(file: stream.Readable, file_name: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Convert a document to markdown from a base64 string. https://docs.veryfi.com/api/parse/convert-a-document-to-markdown/
+     */
+    public process_markdown_document_from_base64(file_name: string, file_base64_string: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Convert a document to markdown from a URL. https://docs.veryfi.com/api/parse/convert-a-document-to-markdown/
+     */
+    public process_markdown_document_from_url(file_url?: string, file_urls?: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Process a markdown document asynchronously. https://docs.veryfi.com/api/parse/process-a-markdown-document-asynchronously/
+     */
+    public process_markdown_document_async(file_path: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a markdown document asynchronously from a file stream. https://docs.veryfi.com/api/parse/process-a-markdown-document-asynchronously/
+     */
+    public process_markdown_document_async_from_stream(file: stream.Readable, file_name: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a markdown document asynchronously from a base64 string. https://docs.veryfi.com/api/parse/process-a-markdown-document-asynchronously/
+     */
+    public process_markdown_document_async_from_base64(file_name: string, file_base64_string: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a markdown document asynchronously from a URL. https://docs.veryfi.com/api/parse/process-a-markdown-document-asynchronously/
+     */
+    public process_markdown_document_async_from_url(file_url?: string, file_urls?: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Process a markdown document set. https://docs.veryfi.com/api/parse/process-a-markdown-document-set/
+     */
+    public process_markdown_document_set(file_path: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a markdown document set from a file stream. https://docs.veryfi.com/api/parse/process-a-markdown-document-set/
+     */
+    public process_markdown_document_set_from_stream(file: stream.Readable, file_name: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a markdown document set from a base64 string. https://docs.veryfi.com/api/parse/process-a-markdown-document-set/
+     */
+    public process_markdown_document_set_from_base64(file_name: string, file_base64_string: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Process a markdown document set from a URL. https://docs.veryfi.com/api/parse/process-a-markdown-document-set/
+     */
+    public process_markdown_document_set_from_url(file_url?: string, file_urls?: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get Markdown Documents. https://docs.veryfi.com/api/parse/get-markdown-documents/
+     */
+    public get_markdown_documents(page?: number, page_size?: number, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get a Markdown Document. https://docs.veryfi.com/api/parse/get-a-markdown-document/
+     */
+    public get_markdown_document(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Update a Markdown Document. https://docs.veryfi.com/api/parse/update-a-markdown-document/
+     */
+    public update_markdown_document(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Delete a Markdown Document. https://docs.veryfi.com/api/parse/delete-a-markdown-document/
+     */
+    public delete_markdown_document(document_id: string): Promise<any>;
+/**
+     * Get Markdown Document Sets. https://docs.veryfi.com/api/parse/get-markdown-document-sets/
+     */
+    public get_markdown_document_sets(page?: number, page_size?: number, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get a Markdown Document Set. https://docs.veryfi.com/api/parse/get-a-markdown-document-set/
+     */
+    public get_markdown_document_set(document_id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Classify and possibly extract data from a document. https://docs.veryfi.com/api/classify-and-possibly-extract-data-from-a-document/
+     */
+    public extract_document(file_path: string, document_types: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Classify and possibly extract data from a document from a file stream. https://docs.veryfi.com/api/classify-and-possibly-extract-data-from-a-document/
+     */
+    public extract_document_from_stream(file: stream.Readable, file_name: string, document_types: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Classify and possibly extract data from a document from a base64 string. https://docs.veryfi.com/api/classify-and-possibly-extract-data-from-a-document/
+     */
+    public extract_document_from_base64(file_name: string, file_base64_string: string, document_types: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /**
+     * Classify and possibly extract data from a document from a URL. https://docs.veryfi.com/api/classify-and-possibly-extract-data-from-a-document/
+     */
+    public extract_document_from_url(file_url?: string, file_urls?: string[], document_types: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get devices from blocklist. https://docs.veryfi.com/api/get-devices-from-blocklist/
+     */
+    public get_fraud_blocklist({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Add devices to blocklist. https://docs.veryfi.com/api/add-devices-to-blocklist/
+     */
+    public add_devices_to_blocklist(device_ids: string[], {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Remove a device from blocklist. https://docs.veryfi.com/api/remove-a-device-from-blocklist/
+     */
+    public remove_device_from_blocklist(device_id: string): Promise<any>;
+/**
+     * Get ocr-counts. https://docs.veryfi.com/api/get-ocr-counts/
+     */
+    public get_ocr_counts(ocr_type?: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/**
+     * Get OpenAPI schema. https://docs.veryfi.com/api/get-open-api-schema/
+     */
+    public get_open_api_schema({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Get release notifications. https://docs.veryfi.com/api/get-release-notifications/ */
+    public get_release_notifications({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Retrieve api-keys list. https://docs.veryfi.com/api/settings/retrieve-api-keys-list/ */
+    public get_api_keys({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Create api-key. https://docs.veryfi.com/api/settings/create-api-key/ */
+    public create_api_key(name: any, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Retrieve api-key. https://docs.veryfi.com/api/settings/retrieve-api-key/ */
+    public get_api_key(id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Update api-key. https://docs.veryfi.com/api/settings/update-api-key/ */
+    public update_api_key(id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Revoke api-key. https://docs.veryfi.com/api/settings/revoke-api-key/ */
+    public revoke_api_key(id: string): Promise<any>;
+/** Rotate api-key. https://docs.veryfi.com/api/settings/rotate-api-key/ */
+    public rotate_api_key(id: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Available permissions. https://docs.veryfi.com/api/settings/available-permissions/ */
+    public get_api_key_permissions({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Verify the calling key. https://docs.veryfi.com/api/settings/verify-the-calling-key/ */
+    public verify_api_key({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Retrieve client-keys list. https://docs.veryfi.com/api/settings/retrieve-client-keys-list/ */
+    public get_client_keys({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Create client-keys. https://docs.veryfi.com/api/settings/create-client-keys/ */
+    public create_client_keys({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Remove a client-key. https://docs.veryfi.com/api/settings/remove-a-client-key/ */
+    public delete_client_key(id: string): Promise<any>;
+/** Reset client-keys. https://docs.veryfi.com/api/settings/reset-client-keys/ */
+    public reset_client_keys({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Get Tls Certificates. https://docs.veryfi.com/api/get-tls-certificates/ */
+    public get_tls_certificates({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Process a Tls Certificate. https://docs.veryfi.com/api/process-a-tls-certificate/ */
+    public process_tls_certificate({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Delete a Tls Certificate. https://docs.veryfi.com/api/delete-a-tls-certificate/ */
+    public delete_tls_certificate(certificate_id: string): Promise<any>;
+/** Get webhooks. https://docs.veryfi.com/api/settings/get-webhooks/ */
+    public get_webhooks({...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Add a webhook. https://docs.veryfi.com/api/settings/add-a-webhook/ */
+    public add_webhook(url: any, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Confirm a webhook. https://docs.veryfi.com/api/settings/confirm-a-webhook/ */
+    public confirm_webhook(url: any, secret: any, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+/** Split and process a PDF. https://docs.veryfi.com/api/receipts-invoices/split-and-process-a-pdf/ */
+    public split_document(file_path: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
+    /** Split and process a PDF from a file stream. */
+    public split_document_from_stream(file: stream.Readable, file_name: string, {...kwargs}?: VeryfiExtraArgs): Promise<JsonObject>;
 
 }
 

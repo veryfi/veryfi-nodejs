@@ -213,6 +213,34 @@ describe('Managing tags', () => {
         }
     });
 
+    test(`Delete a tag from a document`, async () => {
+        try {
+            if (mock_responses) {
+                const mockResponse = require('../mocks/deleteTags.json');
+                veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
+            }
+            const doc_id = 252469322;
+            let response = await veryfi_client.delete_tag(doc_id, '1');
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    test(`Get document tags`, async () => {
+        try {
+            if (mock_responses) {
+                const mockResponse = require('../mocks/getTags.json');
+                veryfi_client._request = jest.fn().mockResolvedValue(mockResponse);
+            }
+            const doc_id = 252469322;
+            let response = await veryfi_client.get_document_tags(doc_id);
+            expect(response).toBeDefined();
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
     test(`Replace tags in a document`, async () => {
         try {
             if (mock_responses) {
