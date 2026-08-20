@@ -63,7 +63,7 @@ This submits a document for processing (3-5 seconds for a response)
 
 ```js
 let veryfi_client = new Client(client_id, client_secret, username, api_key);
-let response = veryfi_client.process_document(file_path, categories=categories).then(response => {
+let response = veryfi_client.process_document(file_path, categories).then(response => {
   console.log(response)
 });
 ```
@@ -71,9 +71,26 @@ let response = veryfi_client.process_document(file_path, categories=categories).
 ...or with a URL
 
 ```js
-let response = veryfi_client.process_document_url(url, external_id=some_id).then(response => {
+let response = veryfi_client.process_document_from_url(url, null, categories, false, false, some_id).then(response => {
   console.log(response)
 });
+```
+
+### Line items, tags, and other products
+
+```js
+const document_id = '123';
+await veryfi_client.create_line_item(document_id, { description: 'Milk', total: 3.5 });
+await veryfi_client.get_document_line_items(document_id);
+await veryfi_client.add_tag(document_id, 'reviewed');
+await veryfi_client.get_document_tags(document_id);
+
+await veryfi_client.process_contract_from_url('https://cdn.example.com/contract.pdf');
+await veryfi_client.process_markdown_document_from_url('https://cdn.example.com/invoice.pdf');
+await veryfi_client.classify_document_from_url('https://cdn.example.com/receipt.jpg', null, {
+  document_types: ['receipt', 'invoice']
+});
+await veryfi_client.extract_document_from_url('https://cdn.example.com/receipt.jpg', null, ['receipt', 'invoice']);
 ```
 
 ### Response

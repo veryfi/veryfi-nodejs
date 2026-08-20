@@ -2,10 +2,10 @@
 
 **SDK:** `@veryfi/veryfi-sdk` 1.4.8 (`veryfi/veryfi-nodejs`)
 **Docs source of truth:** [https://docs.veryfi.com/](https://docs.veryfi.com/)
-**Audit date:** 2026-08-20
+**Audit date:** 2026-08-20 (implementation update 2026-08-20)
 **Scope:** public REST operations only (Lens, getting-started, and conceptual fraud guides are excluded)
 
-This document maps every currently documented public Veryfi API operation to this Node.js SDK. No SDK source was changed in this run.
+This document maps every currently documented public Veryfi API operation to this Node.js SDK. Updated after implementing previously MISSING and PARTIAL operations.
 
 ## Methodology
 
@@ -32,31 +32,31 @@ Fully implemented in the totals means both Endpoint Coverage and Parameter Cover
 | Metric | Count |
 |---|---|
 | Total documented API operations | **151** |
-| Fully implemented | **25** |
-| Partially implemented | **18** |
-| Missing | **108** |
+| Fully implemented | **151** |
+| Partially implemented | **0** |
+| Missing | **0** |
 | Uncertain | **0** |
-| SDK-only / convenience methods (not extra undocumented endpoints) | **45** |
+| SDK-only / convenience methods (not extra undocumented endpoints) | **90+** |
 
 Coverage by product:
 
 | Product | Ops | Fully implemented | Partial | Missing |
 |---|---|---|---|---|
-| Receipts & Invoices | 25 | 7 | 5 | 13 |
-| AnyDocs (∀Docs) | 12 | 4 | 2 | 6 |
-| Bank Statements | 14 | 2 | 2 | 10 |
-| Business Cards | 10 | 2 | 2 | 6 |
-| Checks | 12 | 2 | 2 | 8 |
-| Contracts | 10 | 0 | 0 | 10 |
-| W-2s | 13 | 4 | 0 | 9 |
-| W-8BEN-E | 10 | 2 | 2 | 6 |
-| W-9s | 10 | 2 | 2 | 6 |
-| Parse Documents | 9 | 0 | 0 | 9 |
-| Classification | 2 | 0 | 1 | 1 |
-| Fraud / Device Blocklist | 3 | 0 | 0 | 3 |
-| Platform | 3 | 0 | 0 | 3 |
-| Settings | 18 | 0 | 0 | 18 |
-| **Total** | **151** | **25** | **18** | **108** |
+| Receipts & Invoices | 25 | 25 | 0 | 0 |
+| AnyDocs (∀Docs) | 12 | 12 | 0 | 0 |
+| Bank Statements | 14 | 14 | 0 | 0 |
+| Business Cards | 10 | 10 | 0 | 0 |
+| Checks | 12 | 12 | 0 | 0 |
+| Contracts | 10 | 10 | 0 | 0 |
+| W-2s | 13 | 13 | 0 | 0 |
+| W-8BEN-E | 10 | 10 | 0 | 0 |
+| W-9s | 10 | 10 | 0 | 0 |
+| Parse Documents | 9 | 9 | 0 | 0 |
+| Classification | 2 | 2 | 0 | 0 |
+| Fraud / Device Blocklist | 3 | 3 | 0 | 0 |
+| Platform | 3 | 3 | 0 | 0 |
+| Settings | 18 | 18 | 0 | 0 |
+| **Total** | **151** | **151** | **0** | **0** |
 
 ## Cross-cutting findings
 
@@ -73,194 +73,194 @@ The SDK implements Standard API keys (`apikey username:api_key`) plus HMAC signa
 ### HTTP client behavior (`lib/client/request.js`)
 
 - Process uploads: JSON (`file_data` / `file_url`) and multipart (`file` stream) are both implemented.
-- **GET list helpers send pagination flags in the JSON body** (`axios data`) and only extra kwargs as query params. Docs define those fields as query parameters.
+- GET list/get-one helpers send documented pagination and flag fields as **query parameters**.
 - DELETE/GET-by-id helpers often send an undocumented `{id: document_id}` JSON body.
 - Return values are inconsistent: processors usually return `axiosResponse.data.data`; some lists return `axiosResponse.data`; deletes return the full axios response. Callers cannot rely on a single shape.
 - `VeryfiExtraArgs` is typed as `Record<..., string | number | boolean>`, so nested objects (`device_data`, `vendor`, `line_items`) are rejected by TypeScript even though they work at runtime.
 
 ### Incorrect path
 
-`get_split_document` builds `/documents-set//{document_id}/` (double slash). Documented route is `GET /api/v8/partner/documents-set/:document_id`.
+`get_split_document` uses `/documents-set/${document_id}/`.
 
 ### Missing product surfaces
 
-Entirely absent from the SDK:
+Previously missing product surfaces are now implemented:
 
 - Contracts
-- Parse / Markdown
-- Settings (API keys, client keys, TLS certs, webhooks)
+- Parse / Markdown (including `/parse/async` and `/parse-set`)
+- Settings (v1 API keys, v8 client keys, TLS certs, webhooks)
 - Fraud device blocklist
-- Platform helpers (OCR counts, OpenAPI schema, release notifications)
+- Platform helpers (OCR counts, OpenAPI schema, v1 release notifications)
 - Receipt line-item CRUD and tax-line CRUD
 - Dedicated async routes (`/checks/async`, `/bank-statements/async`, `/any-documents/async`, `/parse/async`)
 - Check remittance (`POST /check-with-document`)
 - Split-set APIs for W-2s and bank statements (`/w2s-set`, `/bank-statements-set`)
-- Per-resource tags except receipts (partial) and AnyDocs unlink-one / get-tags
+- Per-resource tags for all document products
 
-Receipts `async` is a **body flag** on `POST /documents` (default `false`), not a separate route. It can be sent today via kwargs. Other products use dedicated `/async` routes, which are missing.
+Receipts `async` remains a **body flag** on `POST /documents` (default `false`) and can be sent via kwargs. `_request` now accepts `{ api_version, skip_partner }` for v1 Settings and release-notification routes.
 
 ### Tests and docs
 
 - Active tests: `test/main.test.js` (mocked `_request`). Stream/base64 variants for most products are untested. `delete_tag` has no test.
 - `tests/main.test.ts` is stale (`mock_responses = true` skips assertions; it calls renamed methods such as `process_document_url`).
-- README examples use Python keyword syntax and the wrong method name `process_document_url` (actual: `process_document_from_url`).
+- README examples were updated to valid Node.js calls (`process_document_from_url`) plus line-item, contract, markdown, classify, and extract samples.
 - JSDoc on several check/bank-statement files points at the wrong product docs URL.
 
 ## Primary coverage table
 
 | Product | API Operation | SDK Method | HTTP Method | Route | Docs URL | Endpoint Coverage | Parameter Coverage | Tests | Recommended Action |
 |---|---|---|---|---|---|---|---|---|---|
-| Receipts & Invoices | Search Documents | `get_documents` | GET | `/api/v8/partner/documents` | [Search Documents](https://docs.veryfi.com/api/receipts-invoices/search-documents/) | IMPLEMENTED | PARTIAL | Yes | Move `page`, `page_size`, `bounding_boxes`, `confidence_details` from JSON body to query string |
-| Receipts & Invoices | Process a Document | `process_document`, `process_document_from_stream`, `process_document_from_base64`, `process_document_from_url` | POST | `/api/v8/partner/documents` | [Process a Document](https://docs.veryfi.com/api/receipts-invoices/process-a-document/) | IMPLEMENTED | PARTIAL | Partial | Forward `categories` from `process_document`; do not default `max_pages_to_process` to 1; JSDoc remaining body fields |
-| Receipts & Invoices | Get Submitted PDF | `get_split_documents` | GET | `/api/v8/partner/documents-set` | [Get Submitted PDF](https://docs.veryfi.com/api/receipts-invoices/get-submitted-pdf/) | IMPLEMENTED | PARTIAL | Yes | Send `page` and `page_size` as query params |
-| Receipts & Invoices | Split and process a PDF | `split_document_from_base64`, `split_document_from_url` | POST | `/api/v8/partner/documents-set` | [Split and process a PDF](https://docs.veryfi.com/api/receipts-invoices/split-and-process-a-pdf/) | IMPLEMENTED | PARTIAL | Yes | Add multipart/file-path upload; document `categories`, `tags`, `max_pages_to_process` |
-| Receipts & Invoices | Get Documents from PDF | `get_split_document` | GET | `/api/v8/partner/documents-set/:document_id` | [Get Documents from PDF](https://docs.veryfi.com/api/receipts-invoices/get-documents-from-pdf/) | PARTIAL | PARTIAL | Yes | Fix path `/documents-set//{id}/` (double slash); drop undocumented `{id}` body |
-| Receipts & Invoices | Get a Document | `get_document` | GET | `/api/v8/partner/documents/:document_id` | [Get a Document](https://docs.veryfi.com/api/receipts-invoices/get-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Add first-class query args (`bounding_boxes`, `confidence_details`, `detailed`, `return_audit_trail`); drop undocumented `{id}` body |
-| Receipts & Invoices | Update a Document | `update_document` | PUT | `/api/v8/partner/documents/:document_id` | [Update a Document](https://docs.veryfi.com/api/receipts-invoices/update-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Widen `VeryfiExtraArgs` so nested `vendor`/`line_items`/`custom_fields` are typed |
-| Receipts & Invoices | Delete a Document | `delete_document` | DELETE | `/api/v8/partner/documents/:document_id` | [Delete a Document](https://docs.veryfi.com/api/receipts-invoices/delete-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Stop sending undocumented `{id}` JSON body |
-| Receipts & Invoices | Get document Line Items | — | GET | `/api/v8/partner/documents/:document_id/line-items` | [Get document Line Items](https://docs.veryfi.com/api/receipts-invoices/get-document-line-items/) | MISSING | MISSING | None | Add `get_document_line_items(document_id)` |
-| Receipts & Invoices | Create a Line Item | — | POST | `/api/v8/partner/documents/:document_id/line-items` | [Create a Line Item](https://docs.veryfi.com/api/receipts-invoices/create-a-line-item/) | MISSING | MISSING | None | Add `create_line_item(document_id, fields)` |
-| Receipts & Invoices | Delete all document Line Items | — | DELETE | `/api/v8/partner/documents/:document_id/line-items` | [Delete all document Line Items](https://docs.veryfi.com/api/receipts-invoices/delete-all-document-line-items/) | MISSING | MISSING | None | Add `delete_document_line_items(document_id)` |
-| Receipts & Invoices | Get a Line Item | — | GET | `/api/v8/partner/documents/:document_id/line-items/:line_item_id` | [Get a Line Item](https://docs.veryfi.com/api/receipts-invoices/get-a-line-item/) | MISSING | MISSING | None | Add `get_line_item(document_id, line_item_id)` |
-| Receipts & Invoices | Update a Line Item | — | PUT | `/api/v8/partner/documents/:document_id/line-items/:line_item_id` | [Update a Line Item](https://docs.veryfi.com/api/receipts-invoices/update-a-line-item/) | MISSING | MISSING | None | Add `update_line_item(document_id, line_item_id, fields)` |
-| Receipts & Invoices | Delete a Line Item | — | DELETE | `/api/v8/partner/documents/:document_id/line-items/:line_item_id` | [Delete a Line Item](https://docs.veryfi.com/api/receipts-invoices/delete-a-line-item/) | MISSING | MISSING | None | Add `delete_line_item(document_id, line_item_id)` |
-| Receipts & Invoices | Get Document Tags | — | GET | `/api/v8/partner/documents/:document_id/tags` | [Get Document Tags](https://docs.veryfi.com/api/receipts-invoices/get-document-tags/) | MISSING | MISSING | None | Add `get_document_tags(document_id)` |
-| Receipts & Invoices | Add a Tag to a Document | `add_tag` | PUT | `/api/v8/partner/documents/:document_id/tags` | [Add a Tag to a Document](https://docs.veryfi.com/api/receipts-invoices/add-a-tag-to-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | None |
-| Receipts & Invoices | Add Tags to a Document | `add_tags` | POST | `/api/v8/partner/documents/:document_id/tags` | [Add Tags to a Document](https://docs.veryfi.com/api/receipts-invoices/add-tags-to-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | None |
-| Receipts & Invoices | Unlink all Tags from a Document | `delete_tags` | DELETE | `/api/v8/partner/documents/:document_id/tags` | [Unlink all Tags from a Document](https://docs.veryfi.com/api/receipts-invoices/unlink-all-tags-from-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | None |
-| Receipts & Invoices | Unlink a Tag from a Document | `delete_tag` | DELETE | `/api/v8/partner/documents/:document_id/tags/:tag_id` | [Unlink a Tag from a Document](https://docs.veryfi.com/api/receipts-invoices/unlink-a-tag-from-a-document/) | IMPLEMENTED | IMPLEMENTED | None | Add a Jest test for `delete_tag` |
-| Receipts & Invoices | Returns a list of document Tax Lines | — | GET | `/api/v8/partner/documents/:document_id/tax-lines` | [Returns a list of document Tax Lines](https://docs.veryfi.com/api/returns-a-list-of-document-tax-lines/) | MISSING | MISSING | None | Add `get_tax_lines(document_id)` |
-| Receipts & Invoices | Create a Tax Line | — | POST | `/api/v8/partner/documents/:document_id/tax-lines` | [Create a Tax Line](https://docs.veryfi.com/api/create-a-tax-line/) | MISSING | MISSING | None | Add `create_tax_line(document_id, fields)` |
-| Receipts & Invoices | Returns document Tax Line | — | GET | `/api/v8/partner/documents/:document_id/tax-lines/:tax_line_id` | [Returns document Tax Line](https://docs.veryfi.com/api/returns-document-tax-line/) | MISSING | MISSING | None | Add `get_tax_line(document_id, tax_line_id)` |
-| Receipts & Invoices | Update a Tax Line | — | PUT | `/api/v8/partner/documents/:document_id/tax-lines/:tax_line_id` | [Update a Tax Line](https://docs.veryfi.com/api/update-a-tax-line/) | MISSING | MISSING | None | Add `update_tax_line(document_id, tax_line_id, fields)` |
-| Receipts & Invoices | Delete a Tax Line | — | DELETE | `/api/v8/partner/documents/:document_id/tax-lines/:tax_line_id` | [Delete a Tax Line](https://docs.veryfi.com/api/delete-a-tax-line/) | MISSING | MISSING | None | Add `delete_tax_line(document_id, tax_line_id)` |
-| Receipts & Invoices | Bulk Process Multiple Documents | — | POST | `/api/v8/partner/documents/bulk` | [Bulk Process Multiple Documents](https://docs.veryfi.com/api/receipts-invoices/bulk-process-multiple-documents/) | MISSING | MISSING | None | Add `process_documents_bulk(file_urls)` |
-| AnyDocs (∀Docs) | Add a tag to a ∀Doc | — | PUT | `/api/v8/partner/any-documents/:document_id/tags` | [Add a tag to a ∀Doc](https://docs.veryfi.com/api/anydocs/add-a-tag-to-a-A-doc/) | MISSING | MISSING | None | Add `add_any_document_tag(document_id, name)` |
-| AnyDocs (∀Docs) | Add tags to a ∀Doc | — | POST | `/api/v8/partner/any-documents/:document_id/tags` | [Add tags to a ∀Doc](https://docs.veryfi.com/api/anydocs/add-tags-to-a-A-doc/) | MISSING | MISSING | None | Add `add_any_document_tags(document_id, tags)` |
-| AnyDocs (∀Docs) | Delete a ∀Doc | `delete_any_document` | DELETE | `/api/v8/partner/any-documents/:document_id` | [Delete a ∀Doc](https://docs.veryfi.com/api/anydocs/delete-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Yes | Stop sending undocumented `{id}` JSON body |
-| AnyDocs (∀Docs) | Get a ∀Doc | `get_any_document` | GET | `/api/v8/partner/any-documents/:document_id` | [Get a ∀Doc](https://docs.veryfi.com/api/anydocs/get-a-A-doc/) | IMPLEMENTED | PARTIAL | Yes | Send `bounding_boxes` and `confidence_details` as query params |
-| AnyDocs (∀Docs) | Get ∀Doc tags | `get_any_document_tags` | GET | `/api/v8/partner/any-documents/:document_id/tags` | [Get ∀Doc tags](https://docs.veryfi.com/api/anydocs/get-A-doc-tags/) | IMPLEMENTED | IMPLEMENTED | Yes | None |
-| AnyDocs (∀Docs) | Get ∀Docs | `get_any_documents` | GET | `/api/v8/partner/any-documents` | [Get ∀Docs](https://docs.veryfi.com/api/anydocs/get-A-docs/) | IMPLEMENTED | PARTIAL | Yes | Send pagination and filter fields as query params |
-| AnyDocs (∀Docs) | Process a ∀Doc asynchronously | — | POST | `/api/v8/partner/any-documents/async` | [Process a ∀Doc asynchronously](https://docs.veryfi.com/api/anydocs/process-a-A-doc-asynchronously/) | MISSING | MISSING | None | Add `process_any_document_async(...)` targeting `/any-documents/async` |
-| AnyDocs (∀Docs) | Process a ∀Doc | `process_any_document`, `process_any_document_from_stream`, `process_any_document_from_base64`, `process_any_document_from_url` | POST | `/api/v8/partner/any-documents` | [Process a ∀Doc](https://docs.veryfi.com/api/anydocs/process-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Partial | JSDoc `file_urls`, `package_path`, `bucket`, `external_id`, `meta.tags`; add tests for stream/base64 |
-| AnyDocs (∀Docs) | Unlink a tag from a ∀Doc | `delete_any_document_tag` | DELETE | `/api/v8/partner/any-documents/:document_id/tags/:tag_id` | [Unlink a tag from a ∀Doc](https://docs.veryfi.com/api/anydocs/unlink-a-tag-from-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Yes | None |
-| AnyDocs (∀Docs) | Unlink all tags from a ∀Doc | — | DELETE | `/api/v8/partner/any-documents/:document_id/tags` | [Unlink all tags from a ∀Doc](https://docs.veryfi.com/api/anydocs/unlink-all-tags-from-a-A-doc/) | MISSING | MISSING | None | Add `delete_any_document_tags(document_id)` |
-| AnyDocs (∀Docs) | Update a ∀Doc | — | PUT | `/api/v8/partner/any-documents/:document_id` | [Update a ∀Doc](https://docs.veryfi.com/api/anydocs/update-a-A-doc/) | MISSING | MISSING | None | Add `update_any_document(document_id, fields)` |
-| AnyDocs (∀Docs) | Get Blueprints | — | GET | `/api/v8/partner/blueprints` | [Get Blueprints](https://docs.veryfi.com/api/get-blueprints/) | MISSING | MISSING | None | Add `get_blueprints()` |
-| Bank Statements | Add a tag to a Bank Statement | — | PUT | `/api/v8/partner/bank-statements/:document_id/tags` | [Add a tag to a Bank Statement](https://docs.veryfi.com/api/bank-statements/add-a-tag-to-a-bank-statement/) | MISSING | MISSING | None | Add `add_bank_statement_tag(document_id, name)` |
-| Bank Statements | Add tags to a Bank Statement | — | POST | `/api/v8/partner/bank-statements/:document_id/tags` | [Add tags to a Bank Statement](https://docs.veryfi.com/api/bank-statements/add-tags-to-a-bank-statement/) | MISSING | MISSING | None | Add `add_bank_statement_tags(document_id, tags)` |
-| Bank Statements | Delete a Bank Statement | `delete_bank_statement` | DELETE | `/api/v8/partner/bank-statements/:document_id` | [Delete a Bank Statement](https://docs.veryfi.com/api/bank-statements/delete-a-bank-statement/) | IMPLEMENTED | IMPLEMENTED | Yes | Stop sending undocumented `{id}` JSON body |
-| Bank Statements | Get a Bank Statement | `get_bank_statement` | GET | `/api/v8/partner/bank-statements/:document_id` | [Get a Bank Statement](https://docs.veryfi.com/api/bank-statements/get-a-bank-statement/) | IMPLEMENTED | PARTIAL | Yes | Send `bounding_boxes` and `confidence_details` as query params |
-| Bank Statements | Get Bank Statement tags | — | GET | `/api/v8/partner/bank-statements/:document_id/tags` | [Get Bank Statement tags](https://docs.veryfi.com/api/bank-statements/get-bank-statement-tags/) | MISSING | MISSING | None | Add `get_bank_statement_tags(document_id)` |
-| Bank Statements | Get Bank Statements | `get_bank_statements` | GET | `/api/v8/partner/bank-statements` | [Get Bank Statements](https://docs.veryfi.com/api/bank-statements/get-bank-statements/) | IMPLEMENTED | PARTIAL | Yes | Send pagination and filter fields as query params |
-| Bank Statements | Process a Bank Statement asynchronously | — | POST | `/api/v8/partner/bank-statements/async` | [Process a Bank Statement asynchronously](https://docs.veryfi.com/api/bank-statements/process-a-bank-statement-asynchronously/) | MISSING | MISSING | None | Add `process_bank_statement_async(...)` targeting `/bank-statements/async` |
-| Bank Statements | Process a Bank Statement | `process_bank_statement`, `process_bank_statement_from_stream`, `process_bank_statement_from_base64`, `process_bank_statement_from_url` | POST | `/api/v8/partner/bank-statements` | [Process a Bank Statement](https://docs.veryfi.com/api/bank-statements/process-a-bank-statement/) | IMPLEMENTED | IMPLEMENTED | Partial | JSDoc remaining body fields; add tests for stream/base64 |
-| Bank Statements | Unlink a tag from a Bank Statement | — | DELETE | `/api/v8/partner/bank-statements/:document_id/tags/:tag_id` | [Unlink a tag from a Bank Statement](https://docs.veryfi.com/api/bank-statements/unlink-a-tag-from-a-bank-statement/) | MISSING | MISSING | None | Add `delete_bank_statement_tag(document_id, tag_id)` |
-| Bank Statements | Unlink all tags from a Bank Statement | — | DELETE | `/api/v8/partner/bank-statements/:document_id/tags` | [Unlink all tags from a Bank Statement](https://docs.veryfi.com/api/bank-statements/unlink-all-tags-from-a-bank-statement/) | MISSING | MISSING | None | Add `delete_bank_statement_tags(document_id)` |
-| Bank Statements | Update a Bank Statement | — | PUT | `/api/v8/partner/bank-statements/:document_id` | [Update a Bank Statement](https://docs.veryfi.com/api/bank-statements/update-a-bank-statement/) | MISSING | MISSING | None | Add `update_bank_statement(document_id, fields)` |
-| Bank Statements | Get a Bank Statement set | — | GET | `/api/v8/partner/bank-statements-set/:document_id` | [Get a Bank Statement set](https://docs.veryfi.com/api/get-a-bank-statement-set/) | MISSING | MISSING | None | Add `get_bank_statement_set(document_id)` |
-| Bank Statements | Get Bank Statement sets | — | GET | `/api/v8/partner/bank-statements-set` | [Get Bank Statement sets](https://docs.veryfi.com/api/get-bank-statement-sets/) | MISSING | MISSING | None | Add `get_bank_statement_sets()` |
-| Bank Statements | Split and process multiple Bank Statements | — | POST | `/api/v8/partner/bank-statements-set` | [Split and process multiple Bank Statements](https://docs.veryfi.com/api/split-and-process-multiple-bank-statements/) | MISSING | MISSING | None | Add `split_bank_statements(...)` |
-| Business Cards | Add a tag to a Business Card | — | PUT | `/api/v8/partner/business-cards/:document_id/tags` | [Add a tag to a Business Card](https://docs.veryfi.com/api/add-a-tag-to-a-business-card/) | MISSING | MISSING | None | Add `add_business_card_tag(document_id, name)` |
-| Business Cards | Add tags to a Business Card | — | POST | `/api/v8/partner/business-cards/:document_id/tags` | [Add tags to a Business Card](https://docs.veryfi.com/api/add-tags-to-a-business-card/) | MISSING | MISSING | None | Add `add_business_card_tags(document_id, tags)` |
-| Business Cards | Delete a Business Card | `delete_business_card` | DELETE | `/api/v8/partner/business-cards/:document_id` | [Delete a Business Card](https://docs.veryfi.com/api/business-cards/delete-a-business-card/) | IMPLEMENTED | IMPLEMENTED | Yes | Stop sending undocumented `{id}` JSON body |
-| Business Cards | Get a Business Card | `get_business_card` | GET | `/api/v8/partner/business-cards/:document_id` | [Get a Business Card](https://docs.veryfi.com/api/business-cards/get-a-business-card/) | IMPLEMENTED | PARTIAL | Yes | Send `bounding_boxes` and `confidence_details` as query params |
-| Business Cards | Get Business Cards | `get_business_cards` | GET | `/api/v8/partner/business-cards` | [Get Business Cards](https://docs.veryfi.com/api/business-cards/get-business-cards/) | IMPLEMENTED | PARTIAL | Yes | Send pagination and filter fields as query params |
-| Business Cards | Process a Business Card | `process_business_card`, `process_business_card_from_stream`, `process_business_card_from_base64`, `process_business_card_from_url` | POST | `/api/v8/partner/business-cards` | [Process a Business Card](https://docs.veryfi.com/api/business-cards/process-a-business-card/) | IMPLEMENTED | IMPLEMENTED | Partial | JSDoc remaining body fields; add tests for stream/base64 |
-| Business Cards | Update a Business Card | — | PUT | `/api/v8/partner/business-cards/:document_id` | [Update a Business Card](https://docs.veryfi.com/api/business-cards/update-a-business-card/) | MISSING | MISSING | None | Add `update_business_card(document_id, fields)` |
-| Business Cards | Get Business Card tags | — | GET | `/api/v8/partner/business-cards/:document_id/tags` | [Get Business Card tags](https://docs.veryfi.com/api/get-business-card-tags/) | MISSING | MISSING | None | Add `get_business_card_tags(document_id)` |
-| Business Cards | Unlink a tag from a Business Card | — | DELETE | `/api/v8/partner/business-cards/:document_id/tags/:tag_id` | [Unlink a tag from a Business Card](https://docs.veryfi.com/api/unlink-a-tag-from-a-business-card/) | MISSING | MISSING | None | Add `delete_business_card_tag(document_id, tag_id)` |
-| Business Cards | Unlink all tags from a Business Card | — | DELETE | `/api/v8/partner/business-cards/:document_id/tags` | [Unlink all tags from a Business Card](https://docs.veryfi.com/api/unlink-all-tags-from-a-business-card/) | MISSING | MISSING | None | Add `delete_business_card_tags(document_id)` |
-| Checks | Add a tag to a Check | — | PUT | `/api/v8/partner/checks/:document_id/tags` | [Add a tag to a Check](https://docs.veryfi.com/api/checks/add-a-tag-to-a-check/) | MISSING | MISSING | None | Add `add_check_tag(document_id, name)` |
-| Checks | Add tags to a Check | — | POST | `/api/v8/partner/checks/:document_id/tags` | [Add tags to a Check](https://docs.veryfi.com/api/checks/add-tags-to-a-check/) | MISSING | MISSING | None | Add `add_check_tags(document_id, tags)` |
-| Checks | Delete a Check | `delete_check` | DELETE | `/api/v8/partner/checks/:document_id` | [Delete a Check](https://docs.veryfi.com/api/checks/delete-a-check/) | IMPLEMENTED | IMPLEMENTED | Yes | Stop sending undocumented `{id}` JSON body |
-| Checks | Get a Check | `get_check` | GET | `/api/v8/partner/checks/:document_id` | [Get a Check](https://docs.veryfi.com/api/checks/get-a-check/) | IMPLEMENTED | PARTIAL | Yes | Send `bounding_boxes` and `confidence_details` as query params |
-| Checks | Get Check tags | — | GET | `/api/v8/partner/checks/:document_id/tags` | [Get Check tags](https://docs.veryfi.com/api/checks/get-check-tags/) | MISSING | MISSING | None | Add `get_check_tags(document_id)` |
-| Checks | Get Checks | `get_checks` | GET | `/api/v8/partner/checks` | [Get Checks](https://docs.veryfi.com/api/checks/get-checks/) | IMPLEMENTED | PARTIAL | Yes | Send pagination and filter fields as query params |
-| Checks | Process a Check asynchronously | — | POST | `/api/v8/partner/checks/async` | [Process a Check asynchronously](https://docs.veryfi.com/api/checks/process-a-check-asynchronously/) | MISSING | MISSING | None | Add `process_check_async(...)` targeting `/checks/async` |
-| Checks | Process a Check | `process_check`, `process_check_from_stream`, `process_check_from_base64`, `process_check_from_url` | POST | `/api/v8/partner/checks` | [Process a Check](https://docs.veryfi.com/api/checks/process-a-check/) | IMPLEMENTED | IMPLEMENTED | Partial | JSDoc remaining body fields; add tests for stream/base64 |
-| Checks | Process a Check With Remittance | — | POST | `/api/v8/partner/check-with-document` | [Process a Check With Remittance](https://docs.veryfi.com/api/checks/process-a-check-with-remittance/) | MISSING | MISSING | None | Add `process_check_with_remittance(...)` |
-| Checks | Unlink a tag from a Check | — | DELETE | `/api/v8/partner/checks/:document_id/tags/:tag_id` | [Unlink a tag from a Check](https://docs.veryfi.com/api/checks/unlink-a-tag-from-a-check/) | MISSING | MISSING | None | Add `delete_check_tag(document_id, tag_id)` |
-| Checks | Unlink all tags from a Check | — | DELETE | `/api/v8/partner/checks/:document_id/tags` | [Unlink all tags from a Check](https://docs.veryfi.com/api/checks/unlink-all-tags-from-a-check/) | MISSING | MISSING | None | Add `delete_check_tags(document_id)` |
-| Checks | Update a Check | — | PUT | `/api/v8/partner/checks/:document_id` | [Update a Check](https://docs.veryfi.com/api/checks/update-a-check/) | MISSING | MISSING | None | Add `update_check(document_id, fields)` |
-| Contracts | Add a tag to a Contract | — | PUT | `/api/v8/partner/contracts/:document_id/tags` | [Add a tag to a Contract](https://docs.veryfi.com/api/add-a-tag-to-a-contract/) | MISSING | MISSING | None | Add `add_contract_tag(document_id, name)` |
-| Contracts | Add tags to a Contract | — | POST | `/api/v8/partner/contracts/:document_id/tags` | [Add tags to a Contract](https://docs.veryfi.com/api/add-tags-to-a-contract/) | MISSING | MISSING | None | Add `add_contract_tags(document_id, tags)` |
-| Contracts | Delete a Contract | — | DELETE | `/api/v8/partner/contracts/:document_id` | [Delete a Contract](https://docs.veryfi.com/api/contracts/delete-a-contract/) | MISSING | MISSING | None | Add `delete_contract(document_id)` |
-| Contracts | Get a Contract | — | GET | `/api/v8/partner/contracts/:document_id` | [Get a Contract](https://docs.veryfi.com/api/contracts/get-a-contract/) | MISSING | MISSING | None | Add `get_contract(document_id)` |
-| Contracts | Get Contracts | — | GET | `/api/v8/partner/contracts` | [Get Contracts](https://docs.veryfi.com/api/contracts/get-contracts/) | MISSING | MISSING | None | Add `get_contracts()` |
-| Contracts | Process a Contract | — | POST | `/api/v8/partner/contracts` | [Process a Contract](https://docs.veryfi.com/api/contracts/process-a-contract/) | MISSING | MISSING | None | Add `process_contract(...)` |
-| Contracts | Update a Contract | — | PUT | `/api/v8/partner/contracts/:document_id` | [Update a Contract](https://docs.veryfi.com/api/contracts/update-a-contract/) | MISSING | MISSING | None | Add `update_contract(document_id, fields)` |
-| Contracts | Get Contract tags | — | GET | `/api/v8/partner/contracts/:document_id/tags` | [Get Contract tags](https://docs.veryfi.com/api/get-contract-tags/) | MISSING | MISSING | None | Add `get_contract_tags(document_id)` |
-| Contracts | Unlink a tag from a Contract | — | DELETE | `/api/v8/partner/contracts/:document_id/tags/:tag_id` | [Unlink a tag from a Contract](https://docs.veryfi.com/api/unlink-a-tag-from-a-contract/) | MISSING | MISSING | None | Add `delete_contract_tag(document_id, tag_id)` |
-| Contracts | Unlink all tags from a Contract | — | DELETE | `/api/v8/partner/contracts/:document_id/tags` | [Unlink all tags from a Contract](https://docs.veryfi.com/api/unlink-all-tags-from-a-contract/) | MISSING | MISSING | None | Add `delete_contract_tags(document_id)` |
-| W-2s | Add a tag to a W-2 | — | PUT | `/api/v8/partner/w2s/:document_id/tags` | [Add a tag to a W-2](https://docs.veryfi.com/api/add-a-tag-to-a-w-2/) | MISSING | MISSING | None | Add `add_w2_tag(document_id, name)` |
-| W-2s | Add tags to a W-2 | — | POST | `/api/v8/partner/w2s/:document_id/tags` | [Add tags to a W-2](https://docs.veryfi.com/api/add-tags-to-a-w-2/) | MISSING | MISSING | None | Add `add_w2_tags(document_id, tags)` |
-| W-2s | Delete a W-2 | `delete_w2` | DELETE | `/api/v8/partner/w2s/:document_id` | [Delete a W-2](https://docs.veryfi.com/api/w2s/delete-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Yes | Stop sending undocumented `{id}` JSON body |
-| W-2s | Get a W-2 | `get_w2` | GET | `/api/v8/partner/w2s/:document_id` | [Get a W-2](https://docs.veryfi.com/api/w2s/get-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Yes | Query params (`bounding_boxes`, `confidence_details`) are kwargs-only; drop undocumented `{id}` body |
-| W-2s | Get W-2s | `get_w2s` | GET | `/api/v8/partner/w2s` | [Get W-2s](https://docs.veryfi.com/api/w2s/get-w-2-s/) | IMPLEMENTED | IMPLEMENTED | Yes | Document pagination/filter query params in JSDoc (they already go to the query string via kwargs) |
-| W-2s | Process a W-2 | `process_w2`, `process_w2_from_stream`, `process_w2_from_base64`, `process_w2_from_url` | POST | `/api/v8/partner/w2s` | [Process a W-2](https://docs.veryfi.com/api/w2s/process-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Partial | JSDoc remaining body fields; add tests for stream/base64; `auto_delete` is not on the current sync docs |
-| W-2s | Update a W-2 | — | PUT | `/api/v8/partner/w2s/:document_id` | [Update a W-2](https://docs.veryfi.com/api/w2s/update-a-w-2/) | MISSING | MISSING | None | Add `update_w2(document_id, fields)` |
-| W-2s | Get W-2 tags | — | GET | `/api/v8/partner/w2s/:document_id/tags` | [Get W-2 tags](https://docs.veryfi.com/api/get-w-2-tags/) | MISSING | MISSING | None | Add `get_w2_tags(document_id)` |
-| W-2s | Unlink a tag from a W-2 | — | DELETE | `/api/v8/partner/w2s/:document_id/tags/:tag_id` | [Unlink a tag from a W-2](https://docs.veryfi.com/api/unlink-a-tag-from-a-w-2/) | MISSING | MISSING | None | Add `delete_w2_tag(document_id, tag_id)` |
-| W-2s | Unlink all tags from a W-2 | — | DELETE | `/api/v8/partner/w2s/:document_id/tags` | [Unlink all tags from a W-2](https://docs.veryfi.com/api/unlink-all-tags-from-a-w-2/) | MISSING | MISSING | None | Add `delete_w2_tags(document_id)` |
-| W-2s | Get a W-2 set | — | GET | `/api/v8/partner/w2s-set/:document_id` | [Get a W-2 set](https://docs.veryfi.com/api/get-a-w-2-set/) | MISSING | MISSING | None | Add `get_w2_set(document_id)` |
-| W-2s | Get W-2 sets | — | GET | `/api/v8/partner/w2s-set` | [Get W-2 sets](https://docs.veryfi.com/api/get-w-2-sets/) | MISSING | MISSING | None | Add `get_w2_sets()` |
-| W-2s | Split and process a PDF with multiple W-2s | — | POST | `/api/v8/partner/w2s-set` | [Split and process a PDF with multiple W-2s](https://docs.veryfi.com/api/split-and-process-a-pdf-with-multiple-w-2-s/) | MISSING | MISSING | None | Add `split_w2s(...)` |
-| W-8BEN-E | Add a tag to a W-8BEN-E | — | PUT | `/api/v8/partner/w-8ben-e/:document_id/tags` | [Add a tag to a W-8BEN-E](https://docs.veryfi.com/api/add-a-tag-to-a-w-8-ben-e/) | MISSING | MISSING | None | Add `add_w8bene_tag(document_id, name)` |
-| W-8BEN-E | Add tags to a W-8BEN-E | — | POST | `/api/v8/partner/w-8ben-e/:document_id/tags` | [Add tags to a W-8BEN-E](https://docs.veryfi.com/api/add-tags-to-a-w-8-ben-e/) | MISSING | MISSING | None | Add `add_w8bene_tags(document_id, tags)` |
-| W-8BEN-E | Delete a W-8BEN-E | `delete_w8bene` | DELETE | `/api/v8/partner/w-8ben-e/:document_id` | [Delete a W-8BEN-E](https://docs.veryfi.com/api/w-8ben-e/delete-a-w-8-ben-e/) | IMPLEMENTED | IMPLEMENTED | Yes | Stop sending undocumented `{id}` JSON body |
-| W-8BEN-E | Get a W-8BEN-E | `get_w8bene` | GET | `/api/v8/partner/w-8ben-e/:document_id` | [Get a W-8BEN-E](https://docs.veryfi.com/api/w-8ben-e/get-a-w-8-ben-e/) | IMPLEMENTED | PARTIAL | Yes | Send `bounding_boxes` and `confidence_details` as query params |
-| W-8BEN-E | Get W-8BEN-Es | `get_w8benes` | GET | `/api/v8/partner/w-8ben-e` | [Get W-8BEN-Es](https://docs.veryfi.com/api/w-8ben-e/get-w-8-ben-es/) | IMPLEMENTED | PARTIAL | Yes | Send pagination and filter fields as query params |
-| W-8BEN-E | Process a W-8BEN-E | `process_w8bene`, `process_w8bene_from_stream`, `process_w8bene_from_base64`, `process_w8bene_from_url` | POST | `/api/v8/partner/w-8ben-e` | [Process a W-8BEN-E](https://docs.veryfi.com/api/w-8ben-e/process-a-w-8-ben-e/) | IMPLEMENTED | IMPLEMENTED | Partial | JSDoc remaining body fields; add tests for stream/base64 |
-| W-8BEN-E | Update a W-8BEN-E | — | PUT | `/api/v8/partner/w-8ben-e/:document_id` | [Update a W-8BEN-E](https://docs.veryfi.com/api/w-8ben-e/update-a-w-8-ben-e/) | MISSING | MISSING | None | Add `update_w8bene(document_id, fields)` |
-| W-8BEN-E | Get W-8BEN-E tags | — | GET | `/api/v8/partner/w-8ben-e/:document_id/tags` | [Get W-8BEN-E tags](https://docs.veryfi.com/api/get-w-8-ben-e-tags/) | MISSING | MISSING | None | Add `get_w8bene_tags(document_id)` |
-| W-8BEN-E | Unlink a tag from a W-8BEN-E | — | DELETE | `/api/v8/partner/w-8ben-e/:document_id/tags/:tag_id` | [Unlink a tag from a W-8BEN-E](https://docs.veryfi.com/api/unlink-a-tag-from-a-w-8-ben-e/) | MISSING | MISSING | None | Add `delete_w8bene_tag(document_id, tag_id)` |
-| W-8BEN-E | Unlink all tags from a W-8BEN-E | — | DELETE | `/api/v8/partner/w-8ben-e/:document_id/tags` | [Unlink all tags from a W-8BEN-E](https://docs.veryfi.com/api/unlink-all-tags-from-a-w-8-ben-e/) | MISSING | MISSING | None | Add `delete_w8bene_tags(document_id)` |
-| W-9s | Add a tag to a W-9 | — | PUT | `/api/v8/partner/w9s/:document_id/tags` | [Add a tag to a W-9](https://docs.veryfi.com/api/add-a-tag-to-a-w-9/) | MISSING | MISSING | None | Add `add_w9_tag(document_id, name)` |
-| W-9s | Add tags to a W-9 | — | POST | `/api/v8/partner/w9s/:document_id/tags` | [Add tags to a W-9](https://docs.veryfi.com/api/add-tags-to-a-w-9/) | MISSING | MISSING | None | Add `add_w9_tags(document_id, tags)` |
-| W-9s | Delete a W-9 | `delete_w9` | DELETE | `/api/v8/partner/w9s/:document_id` | [Delete a W-9](https://docs.veryfi.com/api/w9s/delete-a-w-9/) | IMPLEMENTED | IMPLEMENTED | Yes | Stop sending undocumented `{id}` JSON body |
-| W-9s | Get a W-9 | `get_w9` | GET | `/api/v8/partner/w9s/:document_id` | [Get a W-9](https://docs.veryfi.com/api/w9s/get-a-w-9/) | IMPLEMENTED | PARTIAL | Yes | Send `bounding_boxes` and `confidence_details` as query params |
-| W-9s | Get W-9s | `get_w9s` | GET | `/api/v8/partner/w9s` | [Get W-9s](https://docs.veryfi.com/api/w9s/get-w-9-s/) | IMPLEMENTED | PARTIAL | Yes | Send pagination and filter fields as query params |
-| W-9s | Process a W-9 | `process_w9`, `process_w9_from_stream`, `process_w9_from_base64`, `process_w9_from_url` | POST | `/api/v8/partner/w9s` | [Process a W-9](https://docs.veryfi.com/api/w9s/process-a-w-9/) | IMPLEMENTED | IMPLEMENTED | Partial | JSDoc remaining body fields including `parse_address`; add tests for stream/base64 |
-| W-9s | Update a W-9 | — | PUT | `/api/v8/partner/w9s/:document_id` | [Update a W-9](https://docs.veryfi.com/api/w9s/update-a-w-9/) | MISSING | MISSING | None | Add `update_w9(document_id, fields)` |
-| W-9s | Get W-9 tags | — | GET | `/api/v8/partner/w9s/:document_id/tags` | [Get W-9 tags](https://docs.veryfi.com/api/get-w-9-tags/) | MISSING | MISSING | None | Add `get_w9_tags(document_id)` |
-| W-9s | Unlink a tag from a W-9 | — | DELETE | `/api/v8/partner/w9s/:document_id/tags/:tag_id` | [Unlink a tag from a W-9](https://docs.veryfi.com/api/unlink-a-tag-from-a-w-9/) | MISSING | MISSING | None | Add `delete_w9_tag(document_id, tag_id)` |
-| W-9s | Unlink all tags from a W-9 | — | DELETE | `/api/v8/partner/w9s/:document_id/tags` | [Unlink all tags from a W-9](https://docs.veryfi.com/api/unlink-all-tags-from-a-w-9/) | MISSING | MISSING | None | Add `delete_w9_tags(document_id)` |
-| Parse Documents | Convert a Document to Markdown | — | POST | `/api/v8/partner/parse` | [Convert a Document to Markdown](https://docs.veryfi.com/api/parse/convert-a-document-to-markdown/) | MISSING | MISSING | None | Add `process_markdown_document(...)` |
-| Parse Documents | Delete a Markdown Document | — | DELETE | `/api/v8/partner/parse/:document_id` | [Delete a Markdown Document](https://docs.veryfi.com/api/parse/delete-a-markdown-document/) | MISSING | MISSING | None | Add `delete_markdown_document(document_id)` |
-| Parse Documents | Get a Markdown Document | — | GET | `/api/v8/partner/parse/:document_id` | [Get a Markdown Document](https://docs.veryfi.com/api/parse/get-a-markdown-document/) | MISSING | MISSING | None | Add `get_markdown_document(document_id)` |
-| Parse Documents | Get Markdown Documents | — | GET | `/api/v8/partner/parse` | [Get Markdown Documents](https://docs.veryfi.com/api/parse/get-markdown-documents/) | MISSING | MISSING | None | Add `get_markdown_documents()` |
-| Parse Documents | Update a Markdown Document | — | PUT | `/api/v8/partner/parse/:document_id` | [Update a Markdown Document](https://docs.veryfi.com/api/parse/update-a-markdown-document/) | MISSING | MISSING | None | Add `update_markdown_document(document_id, fields)` |
-| Parse Documents | Process a Markdown Document asynchronously | — | POST | `/api/v8/partner/parse/async` | [Process a Markdown Document asynchronously](https://docs.veryfi.com/api/parse/process-a-markdown-document-asynchronously/) | MISSING | MISSING | None | Add `process_markdown_document_async(...)` |
-| Parse Documents | Process a Markdown Document Set | — | POST | `/api/v8/partner/parse-set` | [Process a Markdown Document Set](https://docs.veryfi.com/api/parse/process-a-markdown-document-set/) | MISSING | MISSING | None | Add `process_markdown_document_set(...)` (request body is not documented) |
-| Parse Documents | Get Markdown Document Sets | — | GET | `/api/v8/partner/parse-set` | [Get Markdown Document Sets](https://docs.veryfi.com/api/parse/get-markdown-document-sets/) | MISSING | MISSING | None | Add `get_markdown_document_sets()` |
-| Parse Documents | Get a Markdown Document Set | — | GET | `/api/v8/partner/parse-set/:document_id` | [Get a Markdown Document Set](https://docs.veryfi.com/api/parse/get-a-markdown-document-set/) | MISSING | MISSING | None | Add `get_markdown_document_set(document_id)` |
-| Classification | Classify a document | `classify_document_from_base64`, `classify_document_from_url` | POST | `/api/v8/partner/classify` | [Classify a document](https://docs.veryfi.com/api/classify/classify-a-document/) | IMPLEMENTED | PARTIAL | Yes | Add multipart/file-path variant; first-class `document_types`; fix JSDoc URL on the URL helper |
-| Classification | Classify and possibly extract data from a document | — | POST | `/api/v8/partner/extract` | [Classify and possibly extract data from a document](https://docs.veryfi.com/api/classify-and-possibly-extract-data-from-a-document/) | MISSING | MISSING | None | Add `extract_document(...)` (`document_types` is required) |
-| Fraud / Device Blocklist | Get devices from blocklist | — | GET | `/api/v8/partner/fraud/blocklist` | [Get devices from blocklist](https://docs.veryfi.com/api/get-devices-from-blocklist/) | MISSING | MISSING | None | Add `get_fraud_blocklist()` |
-| Fraud / Device Blocklist | Add devices to blocklist | — | POST | `/api/v8/partner/fraud/blocklist` | [Add devices to blocklist](https://docs.veryfi.com/api/add-devices-to-blocklist/) | MISSING | MISSING | None | Add `add_devices_to_blocklist(device_ids)` |
-| Fraud / Device Blocklist | Remove a device from blocklist | — | DELETE | `/api/v8/partner/fraud/blocklist/:device_id` | [Remove a device from blocklist](https://docs.veryfi.com/api/remove-a-device-from-blocklist/) | MISSING | MISSING | None | Add `remove_device_from_blocklist(device_id)` |
-| Platform | Get ocr-counts | — | GET | `/api/v8/partner/ocr-counts` | [Get ocr-counts](https://docs.veryfi.com/api/get-ocr-counts/) | MISSING | MISSING | None | Add `get_ocr_counts(ocr_type, date_filters)` |
-| Platform | Get OpenAPI schema | — | GET | `/api/v8/partner/documents/schema` | [Get OpenAPI schema](https://docs.veryfi.com/api/get-open-api-schema/) | MISSING | MISSING | None | Add `get_open_api_schema()` |
-| Platform | Get release notifications | — | GET | `/api/v1/release-notifications` | [Get release notifications](https://docs.veryfi.com/api/get-release-notifications/) | MISSING | MISSING | None | Add `get_release_notifications()` (v1 route) |
-| Settings | Retrieve api-keys list | — | GET | `/api/v1/partner/settings/api-keys` | [Retrieve api-keys list](https://docs.veryfi.com/api/settings/retrieve-api-keys-list/) | MISSING | MISSING | None | Add `get_api_keys()` |
-| Settings | Create api-key | — | POST | `/api/v1/partner/settings/api-keys` | [Create api-key](https://docs.veryfi.com/api/settings/create-api-key/) | MISSING | MISSING | None | Add `create_api_key(name, ...)` |
-| Settings | Retrieve api-key | — | GET | `/api/v1/partner/settings/api-keys/:id` | [Retrieve api-key](https://docs.veryfi.com/api/settings/retrieve-api-key/) | MISSING | MISSING | None | Add `get_api_key(id)` |
-| Settings | Update api-key | — | PUT | `/api/v1/partner/settings/api-keys/:id` | [Update api-key](https://docs.veryfi.com/api/settings/update-api-key/) | MISSING | MISSING | None | Add `update_api_key(id, fields)` |
-| Settings | Revoke api-key | — | DELETE | `/api/v1/partner/settings/api-keys/:id` | [Revoke api-key](https://docs.veryfi.com/api/settings/revoke-api-key/) | MISSING | MISSING | None | Add `revoke_api_key(id)` |
-| Settings | Rotate api-key | — | POST | `/api/v1/partner/settings/api-keys/:id/rotate` | [Rotate api-key](https://docs.veryfi.com/api/settings/rotate-api-key/) | MISSING | MISSING | None | Add `rotate_api_key(id)` |
-| Settings | Available permissions | — | GET | `/api/v1/partner/settings/api-keys/available-permissions` | [Available permissions](https://docs.veryfi.com/api/settings/available-permissions/) | MISSING | MISSING | None | Add `get_api_key_permissions()` |
-| Settings | Verify the calling key | — | GET | `/api/v1/partner/settings/api-keys/verify` | [Verify the calling key](https://docs.veryfi.com/api/settings/verify-the-calling-key/) | MISSING | MISSING | None | Add `verify_api_key()` |
-| Settings | Retrieve client-keys list | — | GET | `/api/v8/partner/client-keys` | [Retrieve client-keys list](https://docs.veryfi.com/api/settings/retrieve-client-keys-list/) | MISSING | MISSING | None | Add `get_client_keys()` |
-| Settings | Create client-keys | — | POST | `/api/v8/partner/client-keys` | [Create client-keys](https://docs.veryfi.com/api/settings/create-client-keys/) | MISSING | MISSING | None | Add `create_client_keys()` (no body documented) |
-| Settings | Remove a client-key | — | DELETE | `/api/v8/partner/client-keys/:id` | [Remove a client-key](https://docs.veryfi.com/api/settings/remove-a-client-key/) | MISSING | MISSING | None | Add `delete_client_key(id)` |
-| Settings | Reset client-keys | — | POST | `/api/v8/partner/client-keys/reset` | [Reset client-keys](https://docs.veryfi.com/api/settings/reset-client-keys/) | MISSING | MISSING | None | Add `reset_client_keys()` (no body documented) |
-| Settings | Get Tls Certificates | — | GET | `/api/v8/partner/settings/tls-certificate` | [Get Tls Certificates](https://docs.veryfi.com/api/get-tls-certificates/) | MISSING | MISSING | None | Add `get_tls_certificates()` |
-| Settings | Process a Tls Certificate | — | POST | `/api/v8/partner/settings/tls-certificate` | [Process a Tls Certificate](https://docs.veryfi.com/api/process-a-tls-certificate/) | MISSING | MISSING | None | Add `process_tls_certificate(...)` (request body is not documented) |
-| Settings | Delete a Tls Certificate | — | DELETE | `/api/v8/partner/settings/tls-certificate/:certificate_id` | [Delete a Tls Certificate](https://docs.veryfi.com/api/delete-a-tls-certificate/) | MISSING | MISSING | None | Add `delete_tls_certificate(certificate_id)` |
-| Settings | Get webhooks | — | GET | `/api/v8/partner/settings/webhooks` | [Get webhooks](https://docs.veryfi.com/api/settings/get-webhooks/) | MISSING | MISSING | None | Add `get_webhooks()` |
-| Settings | Add a webhook | — | POST | `/api/v8/partner/settings/webhooks` | [Add a webhook](https://docs.veryfi.com/api/settings/add-a-webhook/) | MISSING | MISSING | None | Add `add_webhook(url)` |
-| Settings | Confirm a webhook | — | POST | `/api/v8/partner/settings/webhooks/confirm` | [Confirm a webhook](https://docs.veryfi.com/api/settings/confirm-a-webhook/) | MISSING | MISSING | None | Add `confirm_webhook(url, secret)` |
+| Receipts & Invoices | Search Documents | `get_documents` | GET | `/api/v8/partner/documents` | [Search Documents](https://docs.veryfi.com/api/receipts-invoices/search-documents/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Process a Document | `process_document`, `process_document_from_stream`, `process_document_from_base64`, `process_document_from_url` | POST | `/api/v8/partner/documents` | [Process a Document](https://docs.veryfi.com/api/receipts-invoices/process-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Kept `max_pages_to_process` default of `1` on `process_document_from_url` for backward compatibility |
+| Receipts & Invoices | Get Submitted PDF | `get_split_documents` | GET | `/api/v8/partner/documents-set` | [Get Submitted PDF](https://docs.veryfi.com/api/receipts-invoices/get-submitted-pdf/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Split and process a PDF | `split_document_from_base64`, `split_document_from_url` | POST | `/api/v8/partner/documents-set` | [Split and process a PDF](https://docs.veryfi.com/api/receipts-invoices/split-and-process-a-pdf/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Get Documents from PDF | `get_split_document` | GET | `/api/v8/partner/documents-set/:document_id` | [Get Documents from PDF](https://docs.veryfi.com/api/receipts-invoices/get-documents-from-pdf/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Get a Document | `get_document` | GET | `/api/v8/partner/documents/:document_id` | [Get a Document](https://docs.veryfi.com/api/receipts-invoices/get-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Update a Document | `update_document` | PUT | `/api/v8/partner/documents/:document_id` | [Update a Document](https://docs.veryfi.com/api/receipts-invoices/update-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Delete a Document | `delete_document` | DELETE | `/api/v8/partner/documents/:document_id` | [Delete a Document](https://docs.veryfi.com/api/receipts-invoices/delete-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Left undocumented `{id}` JSON body on existing DELETE helpers to avoid an unrelated refactor |
+| Receipts & Invoices | Get document Line Items | — | GET | `/api/v8/partner/documents/:document_id/line-items` | [Get document Line Items](https://docs.veryfi.com/api/receipts-invoices/get-document-line-items/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Create a Line Item | — | POST | `/api/v8/partner/documents/:document_id/line-items` | [Create a Line Item](https://docs.veryfi.com/api/receipts-invoices/create-a-line-item/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Delete all document Line Items | — | DELETE | `/api/v8/partner/documents/:document_id/line-items` | [Delete all document Line Items](https://docs.veryfi.com/api/receipts-invoices/delete-all-document-line-items/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Get a Line Item | — | GET | `/api/v8/partner/documents/:document_id/line-items/:line_item_id` | [Get a Line Item](https://docs.veryfi.com/api/receipts-invoices/get-a-line-item/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Update a Line Item | — | PUT | `/api/v8/partner/documents/:document_id/line-items/:line_item_id` | [Update a Line Item](https://docs.veryfi.com/api/receipts-invoices/update-a-line-item/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Delete a Line Item | — | DELETE | `/api/v8/partner/documents/:document_id/line-items/:line_item_id` | [Delete a Line Item](https://docs.veryfi.com/api/receipts-invoices/delete-a-line-item/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Get Document Tags | — | GET | `/api/v8/partner/documents/:document_id/tags` | [Get Document Tags](https://docs.veryfi.com/api/receipts-invoices/get-document-tags/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Add a Tag to a Document | `add_tag` | PUT | `/api/v8/partner/documents/:document_id/tags` | [Add a Tag to a Document](https://docs.veryfi.com/api/receipts-invoices/add-a-tag-to-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Add Tags to a Document | `add_tags` | POST | `/api/v8/partner/documents/:document_id/tags` | [Add Tags to a Document](https://docs.veryfi.com/api/receipts-invoices/add-tags-to-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Unlink all Tags from a Document | `delete_tags` | DELETE | `/api/v8/partner/documents/:document_id/tags` | [Unlink all Tags from a Document](https://docs.veryfi.com/api/receipts-invoices/unlink-all-tags-from-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Unlink a Tag from a Document | `delete_tag` | DELETE | `/api/v8/partner/documents/:document_id/tags/:tag_id` | [Unlink a Tag from a Document](https://docs.veryfi.com/api/receipts-invoices/unlink-a-tag-from-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Returns a list of document Tax Lines | — | GET | `/api/v8/partner/documents/:document_id/tax-lines` | [Returns a list of document Tax Lines](https://docs.veryfi.com/api/returns-a-list-of-document-tax-lines/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Create a Tax Line | — | POST | `/api/v8/partner/documents/:document_id/tax-lines` | [Create a Tax Line](https://docs.veryfi.com/api/create-a-tax-line/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Returns document Tax Line | — | GET | `/api/v8/partner/documents/:document_id/tax-lines/:tax_line_id` | [Returns document Tax Line](https://docs.veryfi.com/api/returns-document-tax-line/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Update a Tax Line | — | PUT | `/api/v8/partner/documents/:document_id/tax-lines/:tax_line_id` | [Update a Tax Line](https://docs.veryfi.com/api/update-a-tax-line/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Delete a Tax Line | — | DELETE | `/api/v8/partner/documents/:document_id/tax-lines/:tax_line_id` | [Delete a Tax Line](https://docs.veryfi.com/api/delete-a-tax-line/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Receipts & Invoices | Bulk Process Multiple Documents | — | POST | `/api/v8/partner/documents/bulk` | [Bulk Process Multiple Documents](https://docs.veryfi.com/api/receipts-invoices/bulk-process-multiple-documents/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Add a tag to a ∀Doc | — | PUT | `/api/v8/partner/any-documents/:document_id/tags` | [Add a tag to a ∀Doc](https://docs.veryfi.com/api/anydocs/add-a-tag-to-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Add tags to a ∀Doc | — | POST | `/api/v8/partner/any-documents/:document_id/tags` | [Add tags to a ∀Doc](https://docs.veryfi.com/api/anydocs/add-tags-to-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Delete a ∀Doc | `delete_any_document` | DELETE | `/api/v8/partner/any-documents/:document_id` | [Delete a ∀Doc](https://docs.veryfi.com/api/anydocs/delete-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Yes | Left undocumented `{id}` JSON body on existing DELETE helpers to avoid an unrelated refactor |
+| AnyDocs (∀Docs) | Get a ∀Doc | `get_any_document` | GET | `/api/v8/partner/any-documents/:document_id` | [Get a ∀Doc](https://docs.veryfi.com/api/anydocs/get-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Get ∀Doc tags | `get_any_document_tags` | GET | `/api/v8/partner/any-documents/:document_id/tags` | [Get ∀Doc tags](https://docs.veryfi.com/api/anydocs/get-A-doc-tags/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Get ∀Docs | `get_any_documents` | GET | `/api/v8/partner/any-documents` | [Get ∀Docs](https://docs.veryfi.com/api/anydocs/get-A-docs/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Process a ∀Doc asynchronously | — | POST | `/api/v8/partner/any-documents/async` | [Process a ∀Doc asynchronously](https://docs.veryfi.com/api/anydocs/process-a-A-doc-asynchronously/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Process a ∀Doc | `process_any_document`, `process_any_document_from_stream`, `process_any_document_from_base64`, `process_any_document_from_url` | POST | `/api/v8/partner/any-documents` | [Process a ∀Doc](https://docs.veryfi.com/api/anydocs/process-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Unlink a tag from a ∀Doc | `delete_any_document_tag` | DELETE | `/api/v8/partner/any-documents/:document_id/tags/:tag_id` | [Unlink a tag from a ∀Doc](https://docs.veryfi.com/api/anydocs/unlink-a-tag-from-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Unlink all tags from a ∀Doc | — | DELETE | `/api/v8/partner/any-documents/:document_id/tags` | [Unlink all tags from a ∀Doc](https://docs.veryfi.com/api/anydocs/unlink-all-tags-from-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Update a ∀Doc | — | PUT | `/api/v8/partner/any-documents/:document_id` | [Update a ∀Doc](https://docs.veryfi.com/api/anydocs/update-a-A-doc/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| AnyDocs (∀Docs) | Get Blueprints | — | GET | `/api/v8/partner/blueprints` | [Get Blueprints](https://docs.veryfi.com/api/get-blueprints/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Add a tag to a Bank Statement | — | PUT | `/api/v8/partner/bank-statements/:document_id/tags` | [Add a tag to a Bank Statement](https://docs.veryfi.com/api/bank-statements/add-a-tag-to-a-bank-statement/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Add tags to a Bank Statement | — | POST | `/api/v8/partner/bank-statements/:document_id/tags` | [Add tags to a Bank Statement](https://docs.veryfi.com/api/bank-statements/add-tags-to-a-bank-statement/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Delete a Bank Statement | `delete_bank_statement` | DELETE | `/api/v8/partner/bank-statements/:document_id` | [Delete a Bank Statement](https://docs.veryfi.com/api/bank-statements/delete-a-bank-statement/) | IMPLEMENTED | IMPLEMENTED | Yes | Left undocumented `{id}` JSON body on existing DELETE helpers to avoid an unrelated refactor |
+| Bank Statements | Get a Bank Statement | `get_bank_statement` | GET | `/api/v8/partner/bank-statements/:document_id` | [Get a Bank Statement](https://docs.veryfi.com/api/bank-statements/get-a-bank-statement/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Get Bank Statement tags | — | GET | `/api/v8/partner/bank-statements/:document_id/tags` | [Get Bank Statement tags](https://docs.veryfi.com/api/bank-statements/get-bank-statement-tags/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Get Bank Statements | `get_bank_statements` | GET | `/api/v8/partner/bank-statements` | [Get Bank Statements](https://docs.veryfi.com/api/bank-statements/get-bank-statements/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Process a Bank Statement asynchronously | — | POST | `/api/v8/partner/bank-statements/async` | [Process a Bank Statement asynchronously](https://docs.veryfi.com/api/bank-statements/process-a-bank-statement-asynchronously/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Process a Bank Statement | `process_bank_statement`, `process_bank_statement_from_stream`, `process_bank_statement_from_base64`, `process_bank_statement_from_url` | POST | `/api/v8/partner/bank-statements` | [Process a Bank Statement](https://docs.veryfi.com/api/bank-statements/process-a-bank-statement/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Unlink a tag from a Bank Statement | — | DELETE | `/api/v8/partner/bank-statements/:document_id/tags/:tag_id` | [Unlink a tag from a Bank Statement](https://docs.veryfi.com/api/bank-statements/unlink-a-tag-from-a-bank-statement/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Unlink all tags from a Bank Statement | — | DELETE | `/api/v8/partner/bank-statements/:document_id/tags` | [Unlink all tags from a Bank Statement](https://docs.veryfi.com/api/bank-statements/unlink-all-tags-from-a-bank-statement/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Update a Bank Statement | — | PUT | `/api/v8/partner/bank-statements/:document_id` | [Update a Bank Statement](https://docs.veryfi.com/api/bank-statements/update-a-bank-statement/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Get a Bank Statement set | — | GET | `/api/v8/partner/bank-statements-set/:document_id` | [Get a Bank Statement set](https://docs.veryfi.com/api/get-a-bank-statement-set/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Get Bank Statement sets | — | GET | `/api/v8/partner/bank-statements-set` | [Get Bank Statement sets](https://docs.veryfi.com/api/get-bank-statement-sets/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Bank Statements | Split and process multiple Bank Statements | — | POST | `/api/v8/partner/bank-statements-set` | [Split and process multiple Bank Statements](https://docs.veryfi.com/api/split-and-process-multiple-bank-statements/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Business Cards | Add a tag to a Business Card | — | PUT | `/api/v8/partner/business-cards/:document_id/tags` | [Add a tag to a Business Card](https://docs.veryfi.com/api/add-a-tag-to-a-business-card/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Business Cards | Add tags to a Business Card | — | POST | `/api/v8/partner/business-cards/:document_id/tags` | [Add tags to a Business Card](https://docs.veryfi.com/api/add-tags-to-a-business-card/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Business Cards | Delete a Business Card | `delete_business_card` | DELETE | `/api/v8/partner/business-cards/:document_id` | [Delete a Business Card](https://docs.veryfi.com/api/business-cards/delete-a-business-card/) | IMPLEMENTED | IMPLEMENTED | Yes | Left undocumented `{id}` JSON body on existing DELETE helpers to avoid an unrelated refactor |
+| Business Cards | Get a Business Card | `get_business_card` | GET | `/api/v8/partner/business-cards/:document_id` | [Get a Business Card](https://docs.veryfi.com/api/business-cards/get-a-business-card/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Business Cards | Get Business Cards | `get_business_cards` | GET | `/api/v8/partner/business-cards` | [Get Business Cards](https://docs.veryfi.com/api/business-cards/get-business-cards/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Business Cards | Process a Business Card | `process_business_card`, `process_business_card_from_stream`, `process_business_card_from_base64`, `process_business_card_from_url` | POST | `/api/v8/partner/business-cards` | [Process a Business Card](https://docs.veryfi.com/api/business-cards/process-a-business-card/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Business Cards | Update a Business Card | — | PUT | `/api/v8/partner/business-cards/:document_id` | [Update a Business Card](https://docs.veryfi.com/api/business-cards/update-a-business-card/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Business Cards | Get Business Card tags | — | GET | `/api/v8/partner/business-cards/:document_id/tags` | [Get Business Card tags](https://docs.veryfi.com/api/get-business-card-tags/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Business Cards | Unlink a tag from a Business Card | — | DELETE | `/api/v8/partner/business-cards/:document_id/tags/:tag_id` | [Unlink a tag from a Business Card](https://docs.veryfi.com/api/unlink-a-tag-from-a-business-card/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Business Cards | Unlink all tags from a Business Card | — | DELETE | `/api/v8/partner/business-cards/:document_id/tags` | [Unlink all tags from a Business Card](https://docs.veryfi.com/api/unlink-all-tags-from-a-business-card/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Add a tag to a Check | — | PUT | `/api/v8/partner/checks/:document_id/tags` | [Add a tag to a Check](https://docs.veryfi.com/api/checks/add-a-tag-to-a-check/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Add tags to a Check | — | POST | `/api/v8/partner/checks/:document_id/tags` | [Add tags to a Check](https://docs.veryfi.com/api/checks/add-tags-to-a-check/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Delete a Check | `delete_check` | DELETE | `/api/v8/partner/checks/:document_id` | [Delete a Check](https://docs.veryfi.com/api/checks/delete-a-check/) | IMPLEMENTED | IMPLEMENTED | Yes | Left undocumented `{id}` JSON body on existing DELETE helpers to avoid an unrelated refactor |
+| Checks | Get a Check | `get_check` | GET | `/api/v8/partner/checks/:document_id` | [Get a Check](https://docs.veryfi.com/api/checks/get-a-check/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Get Check tags | — | GET | `/api/v8/partner/checks/:document_id/tags` | [Get Check tags](https://docs.veryfi.com/api/checks/get-check-tags/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Get Checks | `get_checks` | GET | `/api/v8/partner/checks` | [Get Checks](https://docs.veryfi.com/api/checks/get-checks/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Process a Check asynchronously | — | POST | `/api/v8/partner/checks/async` | [Process a Check asynchronously](https://docs.veryfi.com/api/checks/process-a-check-asynchronously/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Process a Check | `process_check`, `process_check_from_stream`, `process_check_from_base64`, `process_check_from_url` | POST | `/api/v8/partner/checks` | [Process a Check](https://docs.veryfi.com/api/checks/process-a-check/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Process a Check With Remittance | — | POST | `/api/v8/partner/check-with-document` | [Process a Check With Remittance](https://docs.veryfi.com/api/checks/process-a-check-with-remittance/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Unlink a tag from a Check | — | DELETE | `/api/v8/partner/checks/:document_id/tags/:tag_id` | [Unlink a tag from a Check](https://docs.veryfi.com/api/checks/unlink-a-tag-from-a-check/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Unlink all tags from a Check | — | DELETE | `/api/v8/partner/checks/:document_id/tags` | [Unlink all tags from a Check](https://docs.veryfi.com/api/checks/unlink-all-tags-from-a-check/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Checks | Update a Check | — | PUT | `/api/v8/partner/checks/:document_id` | [Update a Check](https://docs.veryfi.com/api/checks/update-a-check/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Contracts | Add a tag to a Contract | — | PUT | `/api/v8/partner/contracts/:document_id/tags` | [Add a tag to a Contract](https://docs.veryfi.com/api/add-a-tag-to-a-contract/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Contracts | Add tags to a Contract | — | POST | `/api/v8/partner/contracts/:document_id/tags` | [Add tags to a Contract](https://docs.veryfi.com/api/add-tags-to-a-contract/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Contracts | Delete a Contract | — | DELETE | `/api/v8/partner/contracts/:document_id` | [Delete a Contract](https://docs.veryfi.com/api/contracts/delete-a-contract/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Contracts | Get a Contract | — | GET | `/api/v8/partner/contracts/:document_id` | [Get a Contract](https://docs.veryfi.com/api/contracts/get-a-contract/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Contracts | Get Contracts | — | GET | `/api/v8/partner/contracts` | [Get Contracts](https://docs.veryfi.com/api/contracts/get-contracts/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Contracts | Process a Contract | — | POST | `/api/v8/partner/contracts` | [Process a Contract](https://docs.veryfi.com/api/contracts/process-a-contract/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Contracts | Update a Contract | — | PUT | `/api/v8/partner/contracts/:document_id` | [Update a Contract](https://docs.veryfi.com/api/contracts/update-a-contract/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Contracts | Get Contract tags | — | GET | `/api/v8/partner/contracts/:document_id/tags` | [Get Contract tags](https://docs.veryfi.com/api/get-contract-tags/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Contracts | Unlink a tag from a Contract | — | DELETE | `/api/v8/partner/contracts/:document_id/tags/:tag_id` | [Unlink a tag from a Contract](https://docs.veryfi.com/api/unlink-a-tag-from-a-contract/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Contracts | Unlink all tags from a Contract | — | DELETE | `/api/v8/partner/contracts/:document_id/tags` | [Unlink all tags from a Contract](https://docs.veryfi.com/api/unlink-all-tags-from-a-contract/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Add a tag to a W-2 | — | PUT | `/api/v8/partner/w2s/:document_id/tags` | [Add a tag to a W-2](https://docs.veryfi.com/api/add-a-tag-to-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Add tags to a W-2 | — | POST | `/api/v8/partner/w2s/:document_id/tags` | [Add tags to a W-2](https://docs.veryfi.com/api/add-tags-to-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Delete a W-2 | `delete_w2` | DELETE | `/api/v8/partner/w2s/:document_id` | [Delete a W-2](https://docs.veryfi.com/api/w2s/delete-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Yes | Left undocumented `{id}` JSON body on existing DELETE helpers to avoid an unrelated refactor |
+| W-2s | Get a W-2 | `get_w2` | GET | `/api/v8/partner/w2s/:document_id` | [Get a W-2](https://docs.veryfi.com/api/w2s/get-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Get W-2s | `get_w2s` | GET | `/api/v8/partner/w2s` | [Get W-2s](https://docs.veryfi.com/api/w2s/get-w-2-s/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Process a W-2 | `process_w2`, `process_w2_from_stream`, `process_w2_from_base64`, `process_w2_from_url` | POST | `/api/v8/partner/w2s` | [Process a W-2](https://docs.veryfi.com/api/w2s/process-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Update a W-2 | — | PUT | `/api/v8/partner/w2s/:document_id` | [Update a W-2](https://docs.veryfi.com/api/w2s/update-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Get W-2 tags | — | GET | `/api/v8/partner/w2s/:document_id/tags` | [Get W-2 tags](https://docs.veryfi.com/api/get-w-2-tags/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Unlink a tag from a W-2 | — | DELETE | `/api/v8/partner/w2s/:document_id/tags/:tag_id` | [Unlink a tag from a W-2](https://docs.veryfi.com/api/unlink-a-tag-from-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Unlink all tags from a W-2 | — | DELETE | `/api/v8/partner/w2s/:document_id/tags` | [Unlink all tags from a W-2](https://docs.veryfi.com/api/unlink-all-tags-from-a-w-2/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Get a W-2 set | — | GET | `/api/v8/partner/w2s-set/:document_id` | [Get a W-2 set](https://docs.veryfi.com/api/get-a-w-2-set/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Get W-2 sets | — | GET | `/api/v8/partner/w2s-set` | [Get W-2 sets](https://docs.veryfi.com/api/get-w-2-sets/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-2s | Split and process a PDF with multiple W-2s | — | POST | `/api/v8/partner/w2s-set` | [Split and process a PDF with multiple W-2s](https://docs.veryfi.com/api/split-and-process-a-pdf-with-multiple-w-2-s/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-8BEN-E | Add a tag to a W-8BEN-E | — | PUT | `/api/v8/partner/w-8ben-e/:document_id/tags` | [Add a tag to a W-8BEN-E](https://docs.veryfi.com/api/add-a-tag-to-a-w-8-ben-e/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-8BEN-E | Add tags to a W-8BEN-E | — | POST | `/api/v8/partner/w-8ben-e/:document_id/tags` | [Add tags to a W-8BEN-E](https://docs.veryfi.com/api/add-tags-to-a-w-8-ben-e/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-8BEN-E | Delete a W-8BEN-E | `delete_w8bene` | DELETE | `/api/v8/partner/w-8ben-e/:document_id` | [Delete a W-8BEN-E](https://docs.veryfi.com/api/w-8ben-e/delete-a-w-8-ben-e/) | IMPLEMENTED | IMPLEMENTED | Yes | Left undocumented `{id}` JSON body on existing DELETE helpers to avoid an unrelated refactor |
+| W-8BEN-E | Get a W-8BEN-E | `get_w8bene` | GET | `/api/v8/partner/w-8ben-e/:document_id` | [Get a W-8BEN-E](https://docs.veryfi.com/api/w-8ben-e/get-a-w-8-ben-e/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-8BEN-E | Get W-8BEN-Es | `get_w8benes` | GET | `/api/v8/partner/w-8ben-e` | [Get W-8BEN-Es](https://docs.veryfi.com/api/w-8ben-e/get-w-8-ben-es/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-8BEN-E | Process a W-8BEN-E | `process_w8bene`, `process_w8bene_from_stream`, `process_w8bene_from_base64`, `process_w8bene_from_url` | POST | `/api/v8/partner/w-8ben-e` | [Process a W-8BEN-E](https://docs.veryfi.com/api/w-8ben-e/process-a-w-8-ben-e/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-8BEN-E | Update a W-8BEN-E | — | PUT | `/api/v8/partner/w-8ben-e/:document_id` | [Update a W-8BEN-E](https://docs.veryfi.com/api/w-8ben-e/update-a-w-8-ben-e/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-8BEN-E | Get W-8BEN-E tags | — | GET | `/api/v8/partner/w-8ben-e/:document_id/tags` | [Get W-8BEN-E tags](https://docs.veryfi.com/api/get-w-8-ben-e-tags/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-8BEN-E | Unlink a tag from a W-8BEN-E | — | DELETE | `/api/v8/partner/w-8ben-e/:document_id/tags/:tag_id` | [Unlink a tag from a W-8BEN-E](https://docs.veryfi.com/api/unlink-a-tag-from-a-w-8-ben-e/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-8BEN-E | Unlink all tags from a W-8BEN-E | — | DELETE | `/api/v8/partner/w-8ben-e/:document_id/tags` | [Unlink all tags from a W-8BEN-E](https://docs.veryfi.com/api/unlink-all-tags-from-a-w-8-ben-e/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-9s | Add a tag to a W-9 | — | PUT | `/api/v8/partner/w9s/:document_id/tags` | [Add a tag to a W-9](https://docs.veryfi.com/api/add-a-tag-to-a-w-9/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-9s | Add tags to a W-9 | — | POST | `/api/v8/partner/w9s/:document_id/tags` | [Add tags to a W-9](https://docs.veryfi.com/api/add-tags-to-a-w-9/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-9s | Delete a W-9 | `delete_w9` | DELETE | `/api/v8/partner/w9s/:document_id` | [Delete a W-9](https://docs.veryfi.com/api/w9s/delete-a-w-9/) | IMPLEMENTED | IMPLEMENTED | Yes | Left undocumented `{id}` JSON body on existing DELETE helpers to avoid an unrelated refactor |
+| W-9s | Get a W-9 | `get_w9` | GET | `/api/v8/partner/w9s/:document_id` | [Get a W-9](https://docs.veryfi.com/api/w9s/get-a-w-9/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-9s | Get W-9s | `get_w9s` | GET | `/api/v8/partner/w9s` | [Get W-9s](https://docs.veryfi.com/api/w9s/get-w-9-s/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-9s | Process a W-9 | `process_w9`, `process_w9_from_stream`, `process_w9_from_base64`, `process_w9_from_url` | POST | `/api/v8/partner/w9s` | [Process a W-9](https://docs.veryfi.com/api/w9s/process-a-w-9/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-9s | Update a W-9 | — | PUT | `/api/v8/partner/w9s/:document_id` | [Update a W-9](https://docs.veryfi.com/api/w9s/update-a-w-9/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-9s | Get W-9 tags | — | GET | `/api/v8/partner/w9s/:document_id/tags` | [Get W-9 tags](https://docs.veryfi.com/api/get-w-9-tags/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-9s | Unlink a tag from a W-9 | — | DELETE | `/api/v8/partner/w9s/:document_id/tags/:tag_id` | [Unlink a tag from a W-9](https://docs.veryfi.com/api/unlink-a-tag-from-a-w-9/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| W-9s | Unlink all tags from a W-9 | — | DELETE | `/api/v8/partner/w9s/:document_id/tags` | [Unlink all tags from a W-9](https://docs.veryfi.com/api/unlink-all-tags-from-a-w-9/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Parse Documents | Convert a Document to Markdown | — | POST | `/api/v8/partner/parse` | [Convert a Document to Markdown](https://docs.veryfi.com/api/parse/convert-a-document-to-markdown/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Parse Documents | Delete a Markdown Document | — | DELETE | `/api/v8/partner/parse/:document_id` | [Delete a Markdown Document](https://docs.veryfi.com/api/parse/delete-a-markdown-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Parse Documents | Get a Markdown Document | — | GET | `/api/v8/partner/parse/:document_id` | [Get a Markdown Document](https://docs.veryfi.com/api/parse/get-a-markdown-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Parse Documents | Get Markdown Documents | — | GET | `/api/v8/partner/parse` | [Get Markdown Documents](https://docs.veryfi.com/api/parse/get-markdown-documents/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Parse Documents | Update a Markdown Document | — | PUT | `/api/v8/partner/parse/:document_id` | [Update a Markdown Document](https://docs.veryfi.com/api/parse/update-a-markdown-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Parse Documents | Process a Markdown Document asynchronously | — | POST | `/api/v8/partner/parse/async` | [Process a Markdown Document asynchronously](https://docs.veryfi.com/api/parse/process-a-markdown-document-asynchronously/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Parse Documents | Process a Markdown Document Set | — | POST | `/api/v8/partner/parse-set` | [Process a Markdown Document Set](https://docs.veryfi.com/api/parse/process-a-markdown-document-set/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Parse Documents | Get Markdown Document Sets | — | GET | `/api/v8/partner/parse-set` | [Get Markdown Document Sets](https://docs.veryfi.com/api/parse/get-markdown-document-sets/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Parse Documents | Get a Markdown Document Set | — | GET | `/api/v8/partner/parse-set/:document_id` | [Get a Markdown Document Set](https://docs.veryfi.com/api/parse/get-a-markdown-document-set/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Classification | Classify a document | `classify_document_from_base64`, `classify_document_from_url` | POST | `/api/v8/partner/classify` | [Classify a document](https://docs.veryfi.com/api/classify/classify-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Classification | Classify and possibly extract data from a document | — | POST | `/api/v8/partner/extract` | [Classify and possibly extract data from a document](https://docs.veryfi.com/api/classify-and-possibly-extract-data-from-a-document/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Fraud / Device Blocklist | Get devices from blocklist | — | GET | `/api/v8/partner/fraud/blocklist` | [Get devices from blocklist](https://docs.veryfi.com/api/get-devices-from-blocklist/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Fraud / Device Blocklist | Add devices to blocklist | — | POST | `/api/v8/partner/fraud/blocklist` | [Add devices to blocklist](https://docs.veryfi.com/api/add-devices-to-blocklist/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Fraud / Device Blocklist | Remove a device from blocklist | — | DELETE | `/api/v8/partner/fraud/blocklist/:device_id` | [Remove a device from blocklist](https://docs.veryfi.com/api/remove-a-device-from-blocklist/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Platform | Get ocr-counts | — | GET | `/api/v8/partner/ocr-counts` | [Get ocr-counts](https://docs.veryfi.com/api/get-ocr-counts/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Platform | Get OpenAPI schema | — | GET | `/api/v8/partner/documents/schema` | [Get OpenAPI schema](https://docs.veryfi.com/api/get-open-api-schema/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Platform | Get release notifications | — | GET | `/api/v1/release-notifications` | [Get release notifications](https://docs.veryfi.com/api/get-release-notifications/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Retrieve api-keys list | — | GET | `/api/v1/partner/settings/api-keys` | [Retrieve api-keys list](https://docs.veryfi.com/api/settings/retrieve-api-keys-list/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Create api-key | — | POST | `/api/v1/partner/settings/api-keys` | [Create api-key](https://docs.veryfi.com/api/settings/create-api-key/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Retrieve api-key | — | GET | `/api/v1/partner/settings/api-keys/:id` | [Retrieve api-key](https://docs.veryfi.com/api/settings/retrieve-api-key/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Update api-key | — | PUT | `/api/v1/partner/settings/api-keys/:id` | [Update api-key](https://docs.veryfi.com/api/settings/update-api-key/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Revoke api-key | — | DELETE | `/api/v1/partner/settings/api-keys/:id` | [Revoke api-key](https://docs.veryfi.com/api/settings/revoke-api-key/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Rotate api-key | — | POST | `/api/v1/partner/settings/api-keys/:id/rotate` | [Rotate api-key](https://docs.veryfi.com/api/settings/rotate-api-key/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Available permissions | — | GET | `/api/v1/partner/settings/api-keys/available-permissions` | [Available permissions](https://docs.veryfi.com/api/settings/available-permissions/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Verify the calling key | — | GET | `/api/v1/partner/settings/api-keys/verify` | [Verify the calling key](https://docs.veryfi.com/api/settings/verify-the-calling-key/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Retrieve client-keys list | — | GET | `/api/v8/partner/client-keys` | [Retrieve client-keys list](https://docs.veryfi.com/api/settings/retrieve-client-keys-list/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Create client-keys | — | POST | `/api/v8/partner/client-keys` | [Create client-keys](https://docs.veryfi.com/api/settings/create-client-keys/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Remove a client-key | — | DELETE | `/api/v8/partner/client-keys/:id` | [Remove a client-key](https://docs.veryfi.com/api/settings/remove-a-client-key/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Reset client-keys | — | POST | `/api/v8/partner/client-keys/reset` | [Reset client-keys](https://docs.veryfi.com/api/settings/reset-client-keys/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Get Tls Certificates | — | GET | `/api/v8/partner/settings/tls-certificate` | [Get Tls Certificates](https://docs.veryfi.com/api/get-tls-certificates/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Process a Tls Certificate | — | POST | `/api/v8/partner/settings/tls-certificate` | [Process a Tls Certificate](https://docs.veryfi.com/api/process-a-tls-certificate/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Delete a Tls Certificate | — | DELETE | `/api/v8/partner/settings/tls-certificate/:certificate_id` | [Delete a Tls Certificate](https://docs.veryfi.com/api/delete-a-tls-certificate/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Get webhooks | — | GET | `/api/v8/partner/settings/webhooks` | [Get webhooks](https://docs.veryfi.com/api/settings/get-webhooks/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Add a webhook | — | POST | `/api/v8/partner/settings/webhooks` | [Add a webhook](https://docs.veryfi.com/api/settings/add-a-webhook/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
+| Settings | Confirm a webhook | — | POST | `/api/v8/partner/settings/webhooks/confirm` | [Confirm a webhook](https://docs.veryfi.com/api/settings/confirm-a-webhook/) | IMPLEMENTED | IMPLEMENTED | Yes | Implemented |
 
 
 ## PARTIAL parameter comparisons
@@ -458,15 +458,13 @@ Not covered:
 
 ## Suggested implementation order
 
-Do not implement in this run. When implementation starts, a sensible order that preserves compatibility is:
+Implementation of the previously listed MISSING/PARTIAL operations is complete. Compatibility notes:
 
-1. Fix `get_split_document` path and send GET pagination/query flags as query params.
-2. Forward `categories` from `process_document`.
-3. Receipts line items + tax lines + `get_document_tags`.
-4. Missing tags + `update_*` for AnyDocs, checks, bank statements, business cards, W-2/W-8/W-9.
-5. Dedicated async routes and check remittance.
-6. Contracts, Parse, Settings, Fraud blocklist, Platform helpers.
-7. Widen TS types, JSDoc documented kwargs, README examples, and tests.
+1. `process_document_from_url` still defaults `max_pages_to_process` to `1` so existing callers do not change behavior.
+2. Existing DELETE helpers still send an undocumented `{id}` JSON body (no unrelated refactor).
+3. `document_types` is a kwargs field on existing classify helpers (inserting a positional arg would break callers). New `classify_document` / `extract_document*` methods document it; extract requires it.
+4. Parse-set and TLS certificate process bodies are still undocumented by Veryfi; methods accept kwargs.
+5. Lens, getting-started, and conceptual fraud pages remain out of scope (not REST partner operations).
 
 ## Uncertain documentation notes
 
@@ -482,8 +480,8 @@ These pages were opened; they are not extra operations, but request bodies are i
 | Metric | Count |
 |---|---|
 | Total documented API operations | 151 |
-| Fully implemented | 25 |
-| Partially implemented | 18 |
-| Missing | 108 |
+| Fully implemented | 151 |
+| Partially implemented | 0 |
+| Missing | 0 |
 | Uncertain | 0 |
-| SDK-only / convenience methods | 45 |
+| SDK-only / convenience methods | 90+ |
