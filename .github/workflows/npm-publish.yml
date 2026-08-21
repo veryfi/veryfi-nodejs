@@ -1,6 +1,11 @@
 # Publish on GitHub release using npm Trusted Publishing (OIDC).
 # Docs: https://docs.npmjs.com/trusted-publishers
 #
+# Versioning: npm rejects republishing the same version. Before publish, CI sets
+# the package version from the GitHub release tag (v1.5.0 → 1.5.0). If that
+# version is already on the registry, the patch number is incremented until it
+# is unpublished. Bump major/minor by tagging the release (for example v1.6.0).
+#
 # Required on npmjs.com → @veryfi/veryfi-sdk → Settings → Trusted Publisher:
 #   Organization or user: veryfi
 #   Repository:           veryfi-nodejs
@@ -28,12 +33,25 @@ jobs:
           node-version: "24"
           package-manager-cache: false
       - run: npm ci
+      - name: Set unpublished package version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: node scripts/set-publish-version.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package-version
+          path: |
+            package.json
+            package-lock.json
 
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v4
+        with:
+          name: package-version
       # Intentionally omit registry-url. setup-node writes an empty
       # _authToken placeholder that blocks the OIDC exchange (E404).
       - uses: actions/setup-node@v6
@@ -121,6 +139,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v4
+        with:
+          name: package-version
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
