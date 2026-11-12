@@ -76,6 +76,14 @@ let response = veryfi_client.process_document_from_url(url, null, categories, fa
 });
 ```
 
+Run thinking on the line items with `thinking` (`'light'` or `'deep'`; omit it to turn it off). Every `process_document*` method accepts it in the extra parameters, and `'deep'` takes longer than `'light'`. It only takes effect if thinking mode is enabled for your account.
+
+```js
+let response = veryfi_client.process_document(file_path, categories, false, {thinking: 'light'}).then(response => {
+  console.log(response)
+});
+```
+
 ### Line items, tags, and other products
 
 ```js

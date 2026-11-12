@@ -139,6 +139,54 @@ describe('Processing documents', () => {
     });
 });
 
+describe('Thinking parameter', () => {
+    const newClient = () => {
+        const client = new Client('client_id', undefined, 'username', 'api_key');
+        client._request = jest.fn().mockResolvedValue({data: {}});
+        return client;
+    };
+    // request_arguments is the third argument of _request
+    const sentArguments = (client) => client._request.mock.calls[0][2];
+
+    test.each(['light', 'deep'])('process_document sends thinking=%s', async (mode) => {
+        const client = newClient();
+        await client.process_document('resources/receipt.png', null, false, {thinking: mode});
+        expect(sentArguments(client).thinking).toBe(mode);
+    });
+
+    test('process_document does not send thinking when omitted', async () => {
+        const client = newClient();
+        await client.process_document('resources/receipt.png');
+        expect(sentArguments(client)).not.toHaveProperty('thinking');
+    });
+
+    test.each(['light', 'deep'])('process_document_from_base64 sends thinking=%s', async (mode) => {
+        const client = newClient();
+        await client.process_document_from_base64('ZmFrZQ==', 'receipt.png', null, false, {thinking: mode});
+        expect(sentArguments(client).thinking).toBe(mode);
+    });
+
+    test.each(['light', 'deep'])('process_document_from_stream sends thinking=%s', async (mode) => {
+        const client = newClient();
+        const stream = fs.createReadStream('resources/receipt.png');
+        await client.process_document_from_stream(stream, 'receipt.png', false, {thinking: mode});
+        stream.destroy();
+        expect(sentArguments(client).thinking).toBe(mode);
+    });
+
+    test.each(['light', 'deep'])('process_document_from_url sends thinking=%s', async (mode) => {
+        const client = newClient();
+        await client.process_document_from_url('https://cdn.example.com/receipt.jpg', null, null, false, false, null, 1, {thinking: mode});
+        expect(sentArguments(client).thinking).toBe(mode);
+    });
+
+    test('process_document_from_url does not send thinking when omitted', async () => {
+        const client = newClient();
+        await client.process_document_from_url('https://cdn.example.com/receipt.jpg');
+        expect(sentArguments(client)).not.toHaveProperty('thinking');
+    });
+});
+
 describe('Managing documents', () => {
     test('Get documents', async () => {
         try {
