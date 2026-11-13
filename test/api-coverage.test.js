@@ -137,6 +137,62 @@ describe('API coverage call contracts', () => {
         expect(mock.mock.calls[0][2]).toEqual(expect.objectContaining({"categories":["Food"]}));
     });
 
+    test("process_document forwards thinking light", async () => {
+        const mock = mockRequest();
+        await client.process_document('resources/receipt.png', ['Food'], false, {thinking: 'light'});
+        expect(mock.mock.calls[0][0]).toBe("POST");
+        expect(mock.mock.calls[0][1]).toBe("/documents/");
+        expect(mock.mock.calls[0][4]).toBe(true);
+        expect(mock.mock.calls[0][2]).toEqual(expect.objectContaining({
+            "categories": ["Food"],
+            "thinking": "light"
+        }));
+    });
+
+    test("process_document_from_stream forwards thinking deep", async () => {
+        const mock = mockRequest();
+        const {Readable} = require('stream');
+        await client.process_document_from_stream(Readable.from(Buffer.from('pdf')), 'invoice.pdf', false, {thinking: 'deep'});
+        expect(mock.mock.calls[0][1]).toBe("/documents/");
+        expect(mock.mock.calls[0][4]).toBe(true);
+        expect(mock.mock.calls[0][2]).toEqual(expect.objectContaining({"thinking": "deep", "file_name": "invoice.pdf"}));
+    });
+
+    test("process_document_from_base64 forwards thinking", async () => {
+        const mock = mockRequest();
+        await client.process_document_from_base64('abc123', 'invoice.pdf', null, false, {thinking: 'light'});
+        expect(mock.mock.calls[0][1]).toBe("/documents/");
+        expect(mock.mock.calls[0][4]).toBe(false);
+        expect(mock.mock.calls[0][2]).toEqual(expect.objectContaining({
+            "file_data": "abc123",
+            "thinking": "light"
+        }));
+    });
+
+    test("process_document_from_url forwards thinking and omits null", async () => {
+        const mock = mockRequest();
+        await client.process_document_from_url(
+            'https://example.com/invoice.pdf',
+            null,
+            null,
+            false,
+            false,
+            null,
+            1,
+            {thinking: 'deep', tags: ['reviewed']}
+        );
+        expect(mock.mock.calls[0][1]).toBe("/documents/");
+        expect(mock.mock.calls[0][4]).toBe(false);
+        expect(mock.mock.calls[0][2]).toEqual(expect.objectContaining({
+            "file_url": "https://example.com/invoice.pdf",
+            "thinking": "deep",
+            "tags": ["reviewed"]
+        }));
+
+        await client.process_document_from_url('https://example.com/invoice.pdf', null, null, false, false, null, 1, {thinking: null});
+        expect(mock.mock.calls[1][2]).not.toHaveProperty('thinking');
+    });
+
     test("add_any_document_tag PUTs {name}", async () => {
         const mock = mockRequest();
         await client.add_any_document_tag('11', 'urgent');

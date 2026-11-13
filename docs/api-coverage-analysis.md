@@ -290,7 +290,7 @@ Kwargs that merge into the **body** are marked **kwargs (body)**. Kwargs passed 
 | all variants | `compute` | `boolean \| null` | no (default `true`) | kwargs (body) | JSDoc | [docs](https://docs.veryfi.com/api/receipts-invoices/process-a-document/) |
 | all variants | `country` | `string \| null` | no | kwargs (body) | JSDoc | [docs](https://docs.veryfi.com/api/receipts-invoices/process-a-document/) |
 | all variants | `document_type` | `string \| null` | no | kwargs (body) | JSDoc | [docs](https://docs.veryfi.com/api/receipts-invoices/process-a-document/) |
-| all variants | `thinking`, `thinking_llm_version` | `string \| null` | no | kwargs (body) | JSDoc | [docs](https://docs.veryfi.com/api/receipts-invoices/process-a-document/) |
+| all variants | `thinking` | `"light" \| "deep" \| null` | no | kwargs (body); omitted when null | None | [docs](https://docs.veryfi.com/api/receipts-invoices/process-a-document/) |
 | all variants | `allowed_async_enrichments` | `DocumentEnrichment[]` | no | kwargs (body); TS type too narrow | Widen `VeryfiExtraArgs` | [docs](https://docs.veryfi.com/api/receipts-invoices/process-a-document/) |
 | all variants | `device_data` | object | no | kwargs (body); TS type too narrow | Widen `VeryfiExtraArgs` | [docs](https://docs.veryfi.com/api/receipts-invoices/process-a-document/) |
 | all variants | `emailed_receipt_id`, `receipt_id` | `integer \| null` | no | kwargs (body) | JSDoc | [docs](https://docs.veryfi.com/api/receipts-invoices/process-a-document/) |

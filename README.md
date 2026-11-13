@@ -76,6 +76,16 @@ let response = veryfi_client.process_document_from_url(url, null, categories, fa
 });
 ```
 
+Thinking Mode reviews receipt and invoice extraction before the response is returned. Pass `light` or `deep`, and leave it out for the standard pipeline. It has to be enabled on the account. See [Process a Document](https://docs.veryfi.com/api/receipts-invoices/process-a-document/).
+
+```js
+let response = veryfi_client.process_document(file_path, categories, false, {
+  thinking: 'light'
+}).then(response => {
+  console.log(response)
+});
+```
+
 ### Line items, tags, and other products
 
 ```js
