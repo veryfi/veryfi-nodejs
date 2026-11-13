@@ -1,5 +1,7 @@
 import {VeryfiDocument} from "./VeryfiDocument";
-import {JsonObject, VeryfiExtraArgs} from "./VeryfiExtraArgs";
+import {DocumentProcessArgs, JsonObject, VeryfiExtraArgs} from "./VeryfiExtraArgs";
+
+export type {DocumentProcessArgs, ThinkingMode} from "./VeryfiExtraArgs";
 import {Tag} from "./Tag";
 import * as stream from "node:stream";
 
@@ -187,14 +189,14 @@ export declare class Client {
      * @param {string} file_path Path on disk to a file to submit for data extraction
      * @param {string[]} categories List of categories Veryfi can use to categorize the document
      * @param {boolean} auto_delete Delete this document from Veryfi after data has been extracted
-     * @param {VeryfiExtraArgs} kwargs Additional request parameters
+     * @param {DocumentProcessArgs} kwargs Additional request parameters. `thinking` is `light` or `deep` for Thinking Mode on receipts and invoices. Omit it for the standard pipeline. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
      * @returns {Promise<VeryfiDocument>} Object of data extracted from the document
      */
     public process_document(
         file_path: string,
         categories?: string[],
         auto_delete?: boolean,
-        {...kwargs}?: VeryfiExtraArgs
+        {...kwargs}?: DocumentProcessArgs
     ): Promise<VeryfiDocument>;
 
     /**
@@ -211,7 +213,7 @@ export declare class Client {
      * @param {String} file_name The file name including the extension
      * @param {Array} categories List of categories Veryfi can use to categorize the document
      * @param {Boolean} auto_delete Delete this document from Veryfi after data has been extracted
-     * @param {Object} kwargs Additional request parameters
+     * @param {DocumentProcessArgs} kwargs Additional request parameters. `thinking` is `light` or `deep` for Thinking Mode on receipts and invoices. Omit it for the standard pipeline. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
      * @returns {JSON} Data extracted from the document
      */
     public process_document_from_base64(
@@ -219,7 +221,7 @@ export declare class Client {
         file_name: string,
         categories?: string[],
         auto_delete?: boolean,
-        {...kwargs}?: VeryfiExtraArgs
+        {...kwargs}?: DocumentProcessArgs
     ): Promise<VeryfiDocument>;
 
     /**
@@ -229,14 +231,14 @@ export declare class Client {
      * @param {stream.Readable} file ReadStream of a file to submit for data extraction
      * @param {String} file_name The file name including the extension
      * @param {Boolean} auto_delete Delete this document from Veryfi after data has been extracted
-     * @param {Object} kwargs Additional request parameters
+     * @param {DocumentProcessArgs} kwargs Additional request parameters. `thinking` is `light` or `deep` for Thinking Mode on receipts and invoices. Omit it for the standard pipeline. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
      * @returns {JSON} Data extracted from the document
      */
     public process_document_from_stream(
         file: stream.Readable,
         file_name: string,
         auto_delete?: boolean,
-        {...kwargs}?: VeryfiExtraArgs
+        {...kwargs}?: DocumentProcessArgs
     ): Promise<VeryfiDocument>;
 
     /**
@@ -249,7 +251,7 @@ export declare class Client {
      * @param {boolean} boost_mode Flag that tells Veryfi whether boost mode should be enabled. When set to 1, Veryfi will skip data enrichment steps, but will process the document faster. Default value for this flag is 0
      * @param {string} external_id Optional custom document identifier. Use this if you would like to assign your own ID to documents
      * @param {number} max_pages_to_process When sending a long document to Veryfi for processing, this parameter controls how many pages of the document will be read and processed, starting from page 1.
-     * @param {VeryfiExtraArgs} kwargs Additional request parameters
+     * @param {DocumentProcessArgs} kwargs Additional request parameters. `thinking` is `light` or `deep` for Thinking Mode on receipts and invoices. Omit it for the standard pipeline. https://docs.veryfi.com/api/receipts-invoices/process-a-document/
      * @return {Promise<VeryfiDocument>} Object of data extracted from the document
      */
     public process_document_from_url(
@@ -260,7 +262,7 @@ export declare class Client {
         boost_mode?: boolean,
         external_id?: string,
         max_pages_to_process?: number,
-        {...kwargs}?: VeryfiExtraArgs
+        {...kwargs}?: DocumentProcessArgs
     ): Promise<VeryfiDocument>;
 
     /**
